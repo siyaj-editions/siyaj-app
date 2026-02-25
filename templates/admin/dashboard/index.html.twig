@@ -1,0 +1,78 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin - SIYAG{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Dashboard Admin</h1>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Commandes</h5>
+                <p class="card-text display-4">{{ totalOrders }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Livres</h5>
+                <p class="card-text display-4">{{ totalBooks }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Utilisateurs</h5>
+                <p class="card-text display-4">{{ totalUsers }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="list-group">
+            <a href="{{ path('app_admin_book_index') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-book"></i> Gérer les livres
+            </a>
+            <a href="{{ path('app_admin_author_index') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-person"></i> Gérer les auteurs
+            </a>
+            <a href="{{ path('app_admin_order_index') }}" class="list-group-item list-group-item-action">
+                <i class="bi bi-cart"></i> Gérer les commandes
+            </a>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-3">Dernières commandes</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Référence</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in recentOrders %}
+                <tr>
+                    <td>{{ order.reference }}</td>
+                    <td>{{ order.user.fullName }}</td>
+                    <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                    <td><span class="badge bg-{{ order.status.badgeClass }}">{{ order.status.label }}</span></td>
+                    <td>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                    <td><a href="{{ path('app_admin_order_show', {id: order.id}) }}" class="btn btn-sm btn-primary">Voir</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

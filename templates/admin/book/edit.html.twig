@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier livre - SIYAG{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Modifier le livre : {{ book.title }}</h1>
+
+{{ form_start(bookForm) }}
+    {{ form_widget(bookForm) }}
+    <button type="submit" class="btn btn-primary">Enregistrer</button>
+    <a href="{{ path('app_admin_book_index') }}" class="btn btn-secondary">Annuler</a>
+{{ form_end(bookForm) }}
+{% endblock %}

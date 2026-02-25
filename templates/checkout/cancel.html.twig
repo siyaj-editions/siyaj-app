@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement annulé - SIYAG{% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <i class="bi bi-x-circle-fill text-warning" style="font-size: 5rem;"></i>
+    <h1 class="mt-4">Paiement annulé</h1>
+    <p class="lead">Votre paiement a été annulé.</p>
+    <div class="mt-4">
+        <a href="{{ path('app_cart') }}" class="btn btn-primary">Retour au panier</a>
+        <a href="{{ path('app_catalog') }}" class="btn btn-secondary">Continuer les achats</a>
+    </div>
+</div>
+{% endblock %}

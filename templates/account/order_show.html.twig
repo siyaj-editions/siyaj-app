@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commande {{ order.reference }} - SIYAG{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Commande {{ order.reference }}</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Informations</h5>
+                <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
+                <p><strong>Statut :</strong> <span class="badge bg-{{ order.status.badgeClass }}">{{ order.status.label }}</span></p>
+                <p><strong>Total :</strong> {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-3">Articles commandés</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Livre</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.orderItems %}
+                <tr>
+                    <td>{{ item.titleSnapshot }}</td>
+                    <td>{{ (item.priceSnapshot / 100)|number_format(2, ',', ' ') }} €</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ (item.total / 100)|number_format(2, ',', ' ') }} €</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-end">Total :</th>
+                <th>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<a href="{{ path('app_account_orders') }}" class="btn btn-secondary">Retour à mes commandes</a>
+{% endblock %}

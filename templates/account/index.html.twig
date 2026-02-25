@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte - SIYAG{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Mon compte</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Informations personnelles</h5>
+                <p><strong>Nom :</strong> {{ user.fullName }}</p>
+                <p><strong>Email :</strong> {{ user.email }}</p>
+                <a href="{{ path('app_account_profile') }}" class="btn btn-primary">Modifier mon profil</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Mes commandes</h5>
+                <a href="{{ path('app_account_orders') }}" class="btn btn-primary">Voir toutes mes commandes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="mt-4 mb-3">Dernières commandes</h3>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Référence</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in recentOrders %}
+                <tr>
+                    <td>{{ order.reference }}</td>
+                    <td>{{ order.createdAt|date('d/m/Y') }}</td>
+                    <td><span class="badge bg-{{ order.status.badgeClass }}">{{ order.status.label }}</span></td>
+                    <td>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                    <td><a href="{{ path('app_account_order_show', {id: order.id}) }}" class="btn btn-sm btn-primary">Voir</a></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5">Aucune commande</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

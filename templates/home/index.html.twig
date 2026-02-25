@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - SIYAG{% endblock %}
+
+{% block body %}
+<div class="jumbotron bg-light p-5 rounded-3 mb-4">
+    <h1 class="display-4">Bienvenue chez SIYAG</h1>
+    <p class="lead">Découvrez notre sélection de livres</p>
+    <a class="btn btn-primary btn-lg" href="{{ path('app_catalog') }}">Voir le catalogue</a>
+</div>
+
+<h2 class="mb-4">Dernières parutions</h2>
+
+<div class="row">
+    {% for book in latestBooks %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if book.coverImage %}
+                    <img src="{{ book.coverImage }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="bi bi-book" style="font-size: 5rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text text-muted">{{ book.authorsNames }}</p>
+                    <p class="card-text">
+                        <strong>{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</strong>
+                    </p>
+                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-primary">Voir détails</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Aucun livre disponible pour le moment.</p>
+    {% endfor %}
+</div>
+{% endblock %}

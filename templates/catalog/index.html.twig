@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catalogue - SIYAG{% endblock %}
+
+{% block body %}
+<h1 class="mb-4">Catalogue</h1>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <input type="text" name="search" class="form-control" placeholder="Rechercher..." value="{{ currentSearch }}">
+            </div>
+            <div class="col-md-3">
+                <select name="author" class="form-control">
+                    <option value="">Tous les auteurs</option>
+                    {% for author in authors %}
+                        <option value="{{ author.id }}" {% if currentAuthor == author.id %}selected{% endif %}>{{ author.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="format" class="form-control">
+                    <option value="">Tous les formats</option>
+                    <option value="physical" {% if currentFormat == 'physical' %}selected{% endif %}>Physique</option>
+                    <option value="digital" {% if currentFormat == 'digital' %}selected{% endif %}>Numérique</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    {% for book in books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if book.coverImage %}
+                    <img src="{{ book.coverImage }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="bi bi-book" style="font-size: 5rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text text-muted">{{ book.authorsNames }}</p>
+                    <p class="card-text"><strong>{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</strong></p>
+                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-primary">Voir détails</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>Aucun livre trouvé.</p>
+    {% endfor %}
+</div>
+{% endblock %}
