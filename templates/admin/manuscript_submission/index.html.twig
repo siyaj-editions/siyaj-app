@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manuscrits - Admin SIYAG{% endblock %}
+
+{% block body %}
+<section class="py-12 md:py-16">
+    <div class="container space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+                <p class="text-sm text-sage">Administration</p>
+                <h1 class="text-4xl md:text-5xl text-ink">Soumissions auteurs</h1>
+            </div>
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary px-6 py-3">Retour dashboard</a>
+        </div>
+
+        <section class="card p-0 overflow-hidden">
+            <div class="px-6 py-5 border-b border-black/5">
+                <h2 class="text-2xl text-ink">Demandes reçues</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-paper text-ink/70 uppercase text-xs tracking-wide">
+                        <tr>
+                            <th class="text-left px-6 py-4">Auteur</th>
+                            <th class="text-left px-6 py-4">Manuscrit</th>
+                            <th class="text-left px-6 py-4">Contact</th>
+                            <th class="text-left px-6 py-4">Traitement</th>
+                            <th class="text-left px-6 py-4">Lecture</th>
+                            <th class="text-left px-6 py-4">Date</th>
+                            <th class="text-right px-6 py-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in submissions %}
+                            <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors align-top">
+                                <td class="px-6 py-4 text-ink font-medium">
+                                    {{ item.fullName }}<br>
+                                    {% if item.phone %}
+                                        <span class="text-xs text-ink/60">{{ item.phone }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-ink/80">
+                                    <p class="font-medium text-ink">{{ item.bookTitle }}</p>
+                                    {% if item.genre %}
+                                        <p class="text-xs text-ink/60 mt-1">{{ item.genre }}</p>
+                                    {% endif %}
+                                    <p class="text-xs text-ink/70 mt-2 max-w-xl">{{ item.synopsis|slice(0, 220) }}{% if item.synopsis|length > 220 %}...{% endif %}</p>
+                                    {% if item.manuscriptUrl %}
+                                        <a href="{{ item.manuscriptUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex mt-2 text-xs text-gold hover:text-ink transition-colors">
+                                            Ouvrir le lien manuscrit
+                                        </a>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-ink/70">{{ item.email }}</td>
+                                <td class="px-6 py-4">
+                                    {% set statusClass = {
+                                        'new': 'bg-amber-100 text-amber-800',
+                                        'in_review': 'bg-blue-100 text-blue-800',
+                                        'accepted': 'bg-emerald-100 text-emerald-800',
+                                        'rejected': 'bg-rose-100 text-rose-800'
+                                    }[item.status]|default('bg-slate-100 text-slate-700') %}
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ statusClass }}">
+                                        {{ item.status }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    {% if item.isReadByAdmin %}
+                                        <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800">Lu</span>
+                                    {% else %}
+                                        <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Non lu</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-ink/70">{{ item.createdAt|date('d/m/Y H:i') }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    {% if item.isReadByAdmin %}
+                                        <form method="post" action="{{ path('app_admin_manuscript_mark_unread', {id: item.id}) }}" class="inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('mark_manuscript_unread_' ~ item.id) }}">
+                                            <button type="submit" class="inline-flex items-center px-3 py-2 rounded-lg bg-paper text-ink text-xs font-medium hover:bg-cream transition-colors">
+                                                Marquer non lu
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form method="post" action="{{ path('app_admin_manuscript_mark_read', {id: item.id}) }}" class="inline">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('mark_manuscript_read_' ~ item.id) }}">
+                                            <button type="submit" class="inline-flex items-center px-3 py-2 rounded-lg bg-ink text-white text-xs font-medium hover:bg-gold transition-colors">
+                                                Marquer lu
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr class="border-t border-black/5">
+                                <td colspan="7" class="px-6 py-8 text-center text-sage">Aucune proposition reçue pour le moment.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}

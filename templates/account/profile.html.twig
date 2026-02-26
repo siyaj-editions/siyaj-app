@@ -48,6 +48,13 @@
                         </svg>
                         Mes commandes
                     </a>
+                    <a href="{{ path('app_account_address') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"/>
+                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Mon adresse
+                    </a>
                     <a href="{{ path('app_logout') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-wine hover:bg-wine/5 transition-all duration-200">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
@@ -86,6 +93,12 @@
                             {{ form_label(profileForm.email, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
                             {{ form_widget(profileForm.email, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none'}}) }}
                             {{ form_errors(profileForm.email) }}
+                        </div>
+
+                        <div class="mt-4">
+                            {{ form_label(profileForm.numero, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(profileForm.numero, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none', 'placeholder': '06 12 34 56 78'}}) }}
+                            {{ form_errors(profileForm.numero) }}
                         </div>
                     </div>
 

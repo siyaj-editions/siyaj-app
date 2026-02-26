@@ -1,278 +1,327 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="SIYAG Éditions - Maison d'édition indépendante. Découvrez notre catalogue de livres soigneusement sélectionnés.">
-        <title>{% block title %}SIYAG Éditions{% endblock %}</title>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="SIYAG Éditions - Maison d'édition indépendante. Découvrez notre catalogue de livres soigneusement sélectionnés.">
+		<title>
+			{% block title %}SIYAG Éditions
+			{% endblock %}
+		</title>
+		<link
+		rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
-        {# Fonts - Modern editorial combination #}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		{# Fonts - Modern editorial combination #}
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preconnect" href="https://m.media-amazon.com" crossorigin>
+		<link rel="preconnect" href="https://upload.wikimedia.org" crossorigin>
+		<link
+		href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-        {# Tailwind CSS #}
-        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+		{# Tailwind CSS #}
+		<link rel="stylesheet" href="{{ asset('styles/app.css') }}"> {% block stylesheets %}{% endblock %}
+		</head>
+		<body
+			class="min-h-screen flex flex-col antialiased">
+			{# Navigation #}
+			<nav class="sticky top-0 z-50 glass border-b border-black/5">
+				<div class="container">
+					<div
+						class="flex items-center justify-between h-16 lg:h-20">
+						{# Logo #}
+						<a href="{{ path('app_home') }}" class="inline-flex items-center">
+							<img src="{{ asset('logo.png') }}" alt="SIYAG" class="h-10 lg:h-12 w-auto">
+						</a>
 
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body class="min-h-screen flex flex-col antialiased">
-        {# Navigation #}
-        <nav class="sticky top-0 z-50 glass border-b border-black/5">
-            <div class="container">
-                <div class="flex items-center justify-between h-16 lg:h-20">
-                    {# Logo #}
-                    <a href="{{ path('app_home') }}" class="font-display text-2xl lg:text-3xl font-semibold tracking-[0.15em] uppercase text-ink hover:text-gold transition-colors duration-300">
-                        SIYAG
-                    </a>
+						{# Desktop Navigation #}
+						<div class="hidden lg:flex items-center gap-8">
+							<a href="{{ path('app_home') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
+								Accueil
+								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+							</a>
+							<a href="{{ path('app_catalog') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
+								Catalogue
+								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+							</a>
+							<a href="{{ path('app_about') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
+								À propos
+								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+							</a>
+							<a href="{{ path('app_author_manuscript_submit') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
+								Auteurs
+								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+							</a>
+						</div>
 
-                    {# Desktop Navigation #}
-                    <div class="hidden lg:flex items-center gap-8">
-                        <a href="{{ path('app_home') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
-                            Accueil
-                            <span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                        </a>
-                        <a href="{{ path('app_catalog') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
-                            Catalogue
-                            <span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-                        </a>
-                    </div>
+						{# Right Side Actions #}
+						<div class="flex items-center gap-2 lg:gap-4">
+							{% set cartSession = app.session ? app.session.get('cart', {}) : {} %}
+							{% set cartCount = 0 %}
+							{% for cartItem in cartSession %}
+								{% set cartCount = cartCount + (cartItem.quantity ?? 0) %}
+							{% endfor %}
 
-                    {# Right Side Actions #}
-                    <div class="flex items-center gap-2 lg:gap-4">
-                        {# Cart #}
-                        <a href="{{ path('app_cart') }}" class="relative p-2.5 rounded-xl hover:bg-cream transition-colors duration-200 group">
-                            <svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                            </svg>
-                        </a>
+							{# Cart #}
+							<a href="{{ path('app_cart') }}" class="group">
+								<span class="relative inline-flex items-center justify-center p-2.5 rounded-xl hover:bg-cream transition-colors duration-200">
+									<svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+									</svg>
+									{% if cartCount > 0 %}
+										<span class="absolute w-4 h-4 rounded-full bg-gold text-white text-[10px] font-semibold flex items-center justify-center shadow-md ring-2 ring-paper pointer-events-none" style="top: -1px; right: -1px;">
+											{{ cartCount > 99 ? '99' : cartCount }}
+										</span>
+									{% endif %}
+									</span>
+							</a>
 
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('app_admin_dashboard') }}" class="hidden lg:flex p-2.5 rounded-xl hover:bg-cream transition-colors duration-200 group">
-                                <svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-                                </svg>
-                            </a>
-                        {% endif %}
+							{% if is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('app_admin_dashboard') }}" class="hidden lg:flex p-2.5 rounded-xl hover:bg-cream transition-colors duration-200 group">
+									<svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="1.5">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
+									</svg>
+								</a>
+							{% endif %}
 
-                        {% if app.user %}
-                            {# User Menu #}
-                            <div class="hidden lg:flex items-center gap-3">
-                                <a href="{{ path('app_account') }}" class="p-2.5 rounded-xl hover:bg-cream transition-colors duration-200 group">
-                                    <svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                                    </svg>
-                                </a>
-                                <a href="{{ path('app_logout') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.08em] transition-colors duration-200">
-                                    Déconnexion
-                                </a>
-                            </div>
-                        {% else %}
-                            <div class="hidden lg:flex items-center gap-3">
-                                <a href="{{ path('app_login') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.08em] transition-colors duration-200">
-                                    Connexion
-                                </a>
-                                <a href="{{ path('app_register') }}" class="btn btn-primary text-sm px-5 py-2.5">
-                                    Inscription
-                                </a>
-                            </div>
-                        {% endif %}
+							{% if app.user %}
+								{# User Menu #}
+								<div class="hidden lg:flex items-center gap-3">
+									<a href="{{ path('app_account') }}" class="p-2.5 rounded-xl hover:bg-cream transition-colors duration-200 group">
+										<svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="1.5">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+										</svg>
+									</a>
+									<a href="{{ path('app_logout') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.08em] transition-colors duration-200">
+										Déconnexion
+									</a>
+								</div>
+							{% else %}
+								<div class="hidden lg:flex items-center gap-3">
+									<a href="{{ path('app_login') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.08em] transition-colors duration-200">
+										Connexion
+									</a>
+									<a href="{{ path('app_register') }}" class="btn btn-primary text-sm px-5 py-2.5">
+										Inscription
+									</a>
+								</div>
+							{% endif %}
 
-                        {# Mobile Menu Button #}
-                        <button type="button" class="lg:hidden p-2.5 rounded-xl hover:bg-cream transition-colors duration-200" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                            <svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+							{# Mobile Menu Button #}
+							<button type="button" class="lg:hidden p-2.5 rounded-xl hover:bg-cream transition-colors duration-200" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+								<svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="1.5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+								</svg>
+							</button>
+						</div>
+					</div>
 
-                {# Mobile Menu #}
-                <div id="mobile-menu" class="hidden lg:hidden pb-4">
-                    <div class="flex flex-col gap-1 pt-4 border-t border-black/5">
-                        <a href="{{ path('app_home') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
-                            Accueil
-                        </a>
-                        <a href="{{ path('app_catalog') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
-                            Catalogue
-                        </a>
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ path('app_admin_dashboard') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
-                                Administration
-                            </a>
-                        {% endif %}
-                        <div class="h-px bg-black/5 my-2"></div>
-                        {% if app.user %}
-                            <a href="{{ path('app_account') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
-                                Mon compte
-                            </a>
-                            <a href="{{ path('app_logout') }}" class="px-4 py-3 text-sm font-medium text-wine hover:bg-wine/5 rounded-xl transition-all duration-200">
-                                Déconnexion
-                            </a>
-                        {% else %}
-                            <a href="{{ path('app_login') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
-                                Connexion
-                            </a>
-                            <a href="{{ path('app_register') }}" class="mx-4 mt-2 btn btn-primary text-sm text-center">
-                                Inscription
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </nav>
+					{# Mobile Menu #}
+					<div id="mobile-menu" class="hidden lg:hidden pb-4">
+						<div class="flex flex-col gap-1 pt-4 border-t border-black/5">
+							<a href="{{ path('app_home') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+								Accueil
+							</a>
+							<a href="{{ path('app_catalog') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+								Catalogue
+							</a>
+							<a href="{{ path('app_about') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+								À propos
+							</a>
+							<a href="{{ path('app_author_manuscript_submit') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+								Espace auteurs
+							</a>
+							{% if is_granted('ROLE_ADMIN') %}
+								<a href="{{ path('app_admin_dashboard') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+									Administration
+								</a>
+							{% endif %}
+							<div class="h-px bg-black/5 my-2"></div>
+							{% if app.user %}
+								<a href="{{ path('app_account') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+									Mon compte
+								</a>
+								<a href="{{ path('app_logout') }}" class="px-4 py-3 text-sm font-medium text-wine hover:bg-wine/5 rounded-xl transition-all duration-200">
+									Déconnexion
+								</a>
+							{% else %}
+								<a href="{{ path('app_login') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+									Connexion
+								</a>
+								<a href="{{ path('app_register') }}" class="mx-4 mt-2 btn btn-primary text-sm text-center">
+									Inscription
+								</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</nav>
 
-        {# Flash Messages #}
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="container mt-6 animate-fade-in">
-                    <div class="relative px-5 py-4 rounded-xl border-l-4
-                        {% if label == 'success' %}bg-sage/10 border-sage text-sage
-                        {% elseif label == 'error' or label == 'danger' %}bg-wine/10 border-wine text-wine
-                        {% elseif label == 'warning' %}bg-gold/15 border-gold text-ink
-                        {% else %}bg-ink/5 border-ink text-ink{% endif %}">
-                        <div class="flex items-start gap-3">
-                            {% if label == 'success' %}
-                                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            {% elseif label == 'error' or label == 'danger' %}
-                                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                </svg>
-                            {% else %}
-                                <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                            {% endif %}
-                            <p class="text-sm font-medium flex-1">{{ message }}</p>
-                            <button type="button" class="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity" onclick="this.closest('div.container').remove()">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-        {% endfor %}
+			{# Flash Messages #}
+			{% for label, messages in app.flashes %}
+				{% for message in messages %}
+					<div class="container mt-6 animate-fade-in">
+						<div class="relative px-5 py-4 rounded-xl border-l-4
+								                        {% if label == 'success' %}bg-sage/10 border-sage text-sage
+								                        {% elseif label == 'error' or label == 'danger' %}bg-wine/10 border-wine text-wine
+								                        {% elseif label == 'warning' %}bg-gold/15 border-gold text-ink
+								                        {% else %}bg-ink/5 border-ink text-ink{% endif %}">
+							<div class="flex items-start gap-3">
+								{% if label == 'success' %}
+									<svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="2">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+									</svg>
+								{% elseif label == 'error' or label == 'danger' %}
+									<svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="2">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+									</svg>
+								{% else %}
+									<svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="2">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+									</svg>
+								{% endif %}
+								<p class="text-sm font-medium flex-1">{{ message }}</p>
+								<button type="button" class="flex-shrink-0 opacity-60 hover:opacity-100 transition-opacity" onclick="this.closest('div.container').remove()">
+									<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="2">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+									</svg>
+								</button>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			{% endfor %}
 
-        {# Main Content #}
-        <main class="flex-1">
-            {% block body %}{% endblock %}
-        </main>
+			{# Main Content #}
+			<main class="flex-1"> {% block body %}{% endblock %}
+				</main>
 
-        {# Footer #}
-        <footer class="bg-ink text-white mt-auto">
-            <div class="container py-16 lg:py-20">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
-                    {# Brand #}
-                    <div class="lg:col-span-1">
-                        <a href="{{ path('app_home') }}" class="inline-block font-display text-3xl font-semibold tracking-[0.15em] text-white mb-4">
-                            SIYAG
-                        </a>
-                        <p class="text-white/60 text-sm leading-relaxed">
-                            Maison d'édition indépendante, nous publions des ouvrages qui nourrissent l'esprit et éveillent l'imagination.
-                        </p>
-                    </div>
+				{# Footer #}
+				<footer class="bg-ink text-white mt-auto">
+					<div class="container py-16 lg:py-20">
+						<div
+							class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
+							{# Brand #}
+							<div class="lg:col-span-1">
+								<a href="{{ path('app_home') }}" class="inline-flex items-center mb-4">
+									<img src="{{ asset('logo.png') }}" alt="SIYAG" class="h-12 w-auto">
+								</a>
+								<p class="text-white/60 text-sm leading-relaxed">
+									Maison d'édition indépendante, nous publions des ouvrages qui nourrissent l'esprit et éveillent l'imagination.
+								</p>
+							</div>
 
-                    {# Navigation #}
-                    <div>
-                        <h5 class="font-display text-lg font-semibold text-gold mb-5">Navigation</h5>
-                        <ul class="space-y-3">
-                            <li>
-                                <a href="{{ path('app_home') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                    Accueil
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ path('app_catalog') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                    Catalogue
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+							{# Navigation #}
+							<div>
+								<h5 class="font-display text-lg font-semibold text-gold mb-5">Navigation</h5>
+								<ul class="space-y-3">
+									<li>
+										<a href="{{ path('app_home') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+											Accueil
+										</a>
+									</li>
+									<li>
+										<a href="{{ path('app_catalog') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+											Catalogue
+										</a>
+									</li>
+									<li>
+										<a href="{{ path('app_about') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+											À propos
+										</a>
+									</li>
+									<li>
+										<a href="{{ path('app_author_manuscript_submit') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+											Soumettre un manuscrit
+										</a>
+									</li>
+								</ul>
+							</div>
 
-                    {# Account #}
-                    <div>
-                        <h5 class="font-display text-lg font-semibold text-gold mb-5">Compte</h5>
-                        <ul class="space-y-3">
-                            <li>
-                                <a href="{{ path('app_cart') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                    Panier
-                                </a>
-                            </li>
-                            {% if app.user %}
-                                <li>
-                                    <a href="{{ path('app_account') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                        Mon compte
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('app_account_orders') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                        Mes commandes
-                                    </a>
-                                </li>
-                            {% else %}
-                                <li>
-                                    <a href="{{ path('app_login') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                        Connexion
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('app_register') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
-                                        Inscription
-                                    </a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
+							{# Account #}
+							<div>
+								<h5 class="font-display text-lg font-semibold text-gold mb-5">Compte</h5>
+								<ul class="space-y-3">
+									<li>
+										<a href="{{ path('app_cart') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+											Panier
+										</a>
+									</li>
+									{% if app.user %}
+										<li>
+											<a href="{{ path('app_account') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+												Mon compte
+											</a>
+										</li>
+										<li>
+											<a href="{{ path('app_account_orders') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+												Mes commandes
+											</a>
+										</li>
+									{% else %}
+										<li>
+											<a href="{{ path('app_login') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+												Connexion
+											</a>
+										</li>
+										<li>
+											<a href="{{ path('app_register') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+												Inscription
+											</a>
+										</li>
+									{% endif %}
+								</ul>
+							</div>
 
-                    {# Contact #}
-                    <div>
-                        <h5 class="font-display text-lg font-semibold text-gold mb-5">Contact</h5>
-                        <ul class="space-y-3">
-                            <li class="flex items-center gap-3 text-sm text-white/60">
-                                <svg class="w-4 h-4 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
-                                </svg>
-                                contact@siyag-editions.fr
-                            </li>
-                            <li class="flex items-center gap-3 text-sm text-white/60">
-                                <svg class="w-4 h-4 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                                </svg>
-                                Paris, France
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+							{# Contact #}
+							<div>
+								<h5 class="font-display text-lg font-semibold text-gold mb-5">Contact</h5>
+								<ul class="space-y-3">
+									<li class="flex items-center gap-3 text-sm text-white/60">
+										<svg class="w-4 h-4 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="1.5">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+										</svg>
+										contact@siyag-editions.fr
+									</li>
+									<li class="flex items-center gap-3 text-sm text-white/60">
+										<svg class="w-4 h-4 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="1.5">
+											<path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
+											<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
+										</svg>
+										Paris, France
+									</li>
+								</ul>
+							</div>
+						</div>
 
-                {# Bottom Footer #}
-                <div class="mt-12 pt-8 border-t border-white/10">
-                    <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p class="text-xs text-white/40">
-                            &copy; {{ 'now'|date('Y') }} SIYAG Éditions. Tous droits réservés.
-                        </p>
-                        <div class="flex items-center gap-6">
-                            <a href="#" class="text-xs text-white/40 hover:text-gold transition-colors duration-200">
-                                Mentions légales
-                            </a>
-                            <a href="#" class="text-xs text-white/40 hover:text-gold transition-colors duration-200">
-                                CGV
-                            </a>
-                            <a href="#" class="text-xs text-white/40 hover:text-gold transition-colors duration-200">
-                                Confidentialité
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
+						{# Bottom Footer #}
+						<div class="mt-12 pt-8 border-t border-white/10">
+							<div class="flex flex-col md:flex-row items-center justify-between gap-4">
+								<p class="text-xs text-white/40">
+									&copy;
+									{{ 'now'|date('Y') }}
+									SIYAG Éditions. Tous droits réservés.
+								</p>
+								<div class="flex items-center gap-6">
+									<a href="{{ path('app_legal_mentions') }}" class="text-xs text-white/40 hover:text-gold transition-colors duration-200">
+										Mentions légales
+									</a>
+									<a href="{{ path('app_cgv') }}" class="text-xs text-white/40 hover:text-gold transition-colors duration-200">
+										CGV
+									</a>
+									<a href="{{ path('app_privacy') }}" class="text-xs text-white/40 hover:text-gold transition-colors duration-200">
+										Confidentialité
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</footer>
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </body>
-</html>
+				{% block javascripts %}
+					{% block importmap %}
+						{{ importmap('app') }}
+					{% endblock %}
+				{% endblock %}
+			</body>
+		</html>

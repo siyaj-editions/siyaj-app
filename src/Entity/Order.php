@@ -33,6 +33,17 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
 
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Address $shippingAddress = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Address $billingAddress = null;
+
+    #[ORM\Column]
+    private bool $billingSameAsShipping = true;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -115,6 +126,42 @@ class Order
     public function setStripeSessionId(?string $stripeSessionId): static
     {
         $this->stripeSessionId = $stripeSessionId;
+
+        return $this;
+    }
+
+    public function getShippingAddress(): ?Address
+    {
+        return $this->shippingAddress;
+    }
+
+    public function setShippingAddress(Address $shippingAddress): static
+    {
+        $this->shippingAddress = $shippingAddress;
+
+        return $this;
+    }
+
+    public function getBillingAddress(): ?Address
+    {
+        return $this->billingAddress;
+    }
+
+    public function setBillingAddress(Address $billingAddress): static
+    {
+        $this->billingAddress = $billingAddress;
+
+        return $this;
+    }
+
+    public function isBillingSameAsShipping(): bool
+    {
+        return $this->billingSameAsShipping;
+    }
+
+    public function setBillingSameAsShipping(bool $billingSameAsShipping): static
+    {
+        $this->billingSameAsShipping = $billingSameAsShipping;
 
         return $this;
     }

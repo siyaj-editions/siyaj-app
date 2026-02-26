@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Address;
 use App\Entity\User;
+use App\Form\AddressFormType;
 use App\Form\ProfileFormType;
+use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +23,7 @@ class AccountController extends AbstractController
     #[Route('', name: 'app_account')]
     public function index(OrderRepository $orderRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         $recentOrders = $orderRepository->findBy(
             ['user' => $user],
@@ -31,6 +35,71 @@ class AccountController extends AbstractController
             'user' => $user,
             'recentOrders' => $recentOrders,
         ]);
+    }
+
+    #[Route('/adresse', name: 'app_account_address')]
+    public function address(
+        Request $request,
+        AddressRepository $addressRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+        $addresses = $addressRepository->findByUser($user);
+
+        $address = new Address();
+        $address->setUser($user);
+        $address->setFirstname($user->getFirstname());
+        $address->setLastname($user->getLastname());
+        $address->setNumero($user->getNumero());
+        $address->setCountry('France');
+
+        $addressForm = $this->createForm(AddressFormType::class, $address);
+        $addressForm->handleRequest($request);
+
+        if ($addressForm->isSubmitted() && $addressForm->isValid()) {
+            $address->setUser($user);
+            $entityManager->persist($address);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Adresse enregistrée. Elle sera préremplie au checkout.');
+
+            return $this->redirectToRoute('app_account_address');
+        }
+
+        return $this->render('account/address.html.twig', [
+            'addresses' => $addresses,
+            'addressForm' => $addressForm,
+        ]);
+    }
+
+    #[Route('/adresse/{id}/supprimer', name: 'app_account_address_delete', methods: ['POST'])]
+    public function deleteAddress(
+        int $id,
+        Request $request,
+        AddressRepository $addressRepository,
+        EntityManagerInterface $entityManager
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+        $address = $addressRepository->findOneByIdAndUser($id, $user);
+
+        if (!$address) {
+            throw $this->createNotFoundException('Adresse non trouvée.');
+        }
+
+        if (!$this->isCsrfTokenValid('delete_address_' . $address->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+
+            return $this->redirectToRoute('app_account_address');
+        }
+
+        $entityManager->remove($address);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Adresse supprimée.');
+
+        return $this->redirectToRoute('app_account_address');
     }
 
     #[Route('/profil', name: 'app_account_profile')]
@@ -86,6 +155,20 @@ class AccountController extends AbstractController
         }
 
         return $this->render('account/order_show.html.twig', [
+            'order' => $order,
+        ]);
+    }
+
+    #[Route('/commandes/{id}/facture', name: 'app_account_order_invoice')]
+    public function invoice(int $id, OrderRepository $orderRepository): Response
+    {
+        $order = $orderRepository->find($id);
+
+        if (!$order || $order->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException('Commande non trouvée.');
+        }
+
+        return $this->render('account/invoice.html.twig', [
             'order' => $order,
         ]);
     }

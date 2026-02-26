@@ -51,6 +51,26 @@
                             <span class="text-sm text-ink/60">Articles</span>
                             <span class="text-sm font-medium text-ink">{{ order.orderItems|length }}</span>
                         </div>
+                        {% if order.shippingAddress %}
+                            <div class="pt-3 border-t border-black/5 space-y-2">
+                                <p class="text-xs uppercase tracking-wider text-ink/40">Livraison</p>
+                                <p class="text-xs text-ink/70">{{ order.shippingAddress.fullName }}</p>
+                                <p class="text-xs text-ink/70">{{ order.shippingAddress.inline }}</p>
+                                {% if order.shippingAddress.numero %}
+                                    <p class="text-xs text-ink/70">Tél: {{ order.shippingAddress.numero }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        {% if order.billingAddress %}
+                            <div class="pt-3 border-t border-black/5 space-y-2">
+                                <p class="text-xs uppercase tracking-wider text-ink/40">Facturation</p>
+                                <p class="text-xs text-ink/70">{{ order.billingAddress.fullName }}</p>
+                                <p class="text-xs text-ink/70">{{ order.billingAddress.inline }}</p>
+                                {% if order.billingAddress.numero %}
+                                    <p class="text-xs text-ink/70">Tél: {{ order.billingAddress.numero }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                     </div>
 
                     <div class="flex justify-between items-center pt-6 border-t-2 border-ink">
@@ -73,7 +93,7 @@
                                 {# Cover #}
                                 <div class="w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-cream">
                                     {% if item.book and item.book.coverImage %}
-                                        <img src="{{ item.book.coverImage }}" alt="{{ item.titleSnapshot }}" class="w-full h-full object-cover">
+                                        <img src="{{ item.book.coverImage }}" alt="{{ item.titleSnapshot }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover">
                                     {% else %}
                                         <div class="w-full h-full flex items-center justify-center text-ink/20">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -115,6 +135,9 @@
 
         {# Actions #}
         <div class="flex flex-col sm:flex-row gap-3 justify-end">
+            <a href="{{ path('app_account_order_invoice', {id: order.id}) }}" class="btn btn-secondary">
+                Editer la facture
+            </a>
             <a href="{{ path('app_account_orders') }}" class="btn btn-secondary">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <polyline points="15 18 9 12 15 6"/>

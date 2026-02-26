@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Informations de commande - SIYAG Éditions{% endblock %}
+
+{% block body %}
+<section class="bg-gradient-to-br from-paper to-cream py-10 lg:py-14">
+    <div class="container">
+        <h1 class="font-display text-3xl sm:text-4xl text-ink">Livraison et facturation</h1>
+        <p class="text-ink/60 mt-2">Complétez vos informations avant le paiement Stripe.</p>
+    </div>
+</section>
+
+<section class="py-10 lg:py-14">
+    <div class="container">
+        <div class="grid lg:grid-cols-3 gap-8 items-start">
+            <div class="lg:col-span-2">
+                <div class="card p-6 lg:p-8">
+                    {{ form_start(checkoutForm, {'attr': {'class': 'space-y-8', 'id': 'checkout-form'}}) }}
+
+                    <div class="space-y-4">
+                        <h2 class="font-display text-2xl text-ink">Sélectionnez votre adresse de livraison</h2>
+                        <div>
+                            {{ form_label(checkoutForm.shippingAddressId, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(checkoutForm.shippingAddressId, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            {{ form_errors(checkoutForm.shippingAddressId) }}
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 pt-6 border-t border-black/5">
+                        <div class="flex items-center gap-3">
+                            {{ form_widget(checkoutForm.billingSameAsShipping, {'attr': {'class': 'w-5 h-5 rounded border-black/20'}}) }}
+                            {{ form_label(checkoutForm.billingSameAsShipping, null, {'label_attr': {'class': 'text-sm text-ink/70'}}) }}
+                        </div>
+
+                        <div id="billing-fields" class="space-y-4 hidden">
+                            <h2 class="font-display text-2xl text-ink">Sélectionnez votre adresse de facturation</h2>
+                            <div>
+                                {{ form_label(checkoutForm.billingAddressId, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                                {{ form_widget(checkoutForm.billingAddressId, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                                {{ form_errors(checkoutForm.billingAddressId) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-black/5">
+                        <p class="text-sm text-ink/60">
+                            Besoin d'ajouter une nouvelle adresse ?
+                            <a href="{{ path('app_account_address') }}" class="text-gold hover:underline">Gérer mes adresses</a>
+                        </p>
+                    </div>
+
+                    <div class="pt-6 border-t border-black/5">
+                        <button type="submit" class="btn btn-primary w-full sm:w-auto px-8 py-4">Continuer vers le paiement</button>
+                    </div>
+                    {{ form_end(checkoutForm) }}
+                </div>
+            </div>
+
+            <aside class="lg:sticky lg:top-24">
+                <div class="card p-6">
+                    <h3 class="font-display text-xl text-ink mb-4">Récapitulatif</h3>
+                    <div class="mb-4 p-4 rounded-xl bg-paper border border-black/5">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-ink/40 mb-2">Adresses disponibles</p>
+                        <div class="space-y-2 text-xs text-ink/70">
+                            {% for address in addresses %}
+                                <p>{{ address.fullName }} - {{ address.inline }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="space-y-2 text-sm text-ink/70">
+                        {% for item in cart %}
+                            <div class="flex justify-between gap-3">
+                                <span>{{ item.book.title }} x{{ item.quantity }}</span>
+                                <span>{{ ((item.book.priceCents * item.quantity) / 100)|number_format(2, ',', ' ') }} €</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-black/10 flex justify-between items-center">
+                        <span class="font-semibold text-ink">Total</span>
+                        <span class="font-display text-2xl text-ink">{{ total|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<script>
+    (function () {
+        var checkbox = document.getElementById('{{ checkoutForm.billingSameAsShipping.vars.id }}');
+        var billingFields = document.getElementById('billing-fields');
+        if (!checkbox || !billingFields) return;
+
+        var toggle = function () {
+            if (checkbox.checked) {
+                billingFields.classList.add('hidden');
+            } else {
+                billingFields.classList.remove('hidden');
+            }
+        };
+
+        checkbox.addEventListener('change', toggle);
+        toggle();
+    })();
+</script>
+{% endblock %}

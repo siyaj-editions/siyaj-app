@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Newsletter - Admin SIYAG{% endblock %}
+
+{% block body %}
+<section class="py-12 md:py-16">
+    <div class="container space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+                <p class="text-sm text-sage">Administration</p>
+                <h1 class="text-4xl md:text-5xl text-ink">Newsletter</h1>
+            </div>
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary px-6 py-3">Retour dashboard</a>
+        </div>
+
+        <section class="card p-0 overflow-hidden">
+            <div class="px-6 py-5 border-b border-black/5">
+                <h2 class="text-2xl text-ink">Adresses inscrites</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-paper text-ink/70 uppercase text-xs tracking-wide">
+                        <tr>
+                            <th class="text-left px-6 py-4">Email</th>
+                            <th class="text-left px-6 py-4">Date d'inscription</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in subscriptions %}
+                            <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors">
+                                <td class="px-6 py-4 text-ink font-medium">{{ item.email }}</td>
+                                <td class="px-6 py-4 text-ink/70">{{ item.createdAt|date('d/m/Y H:i') }}</td>
+                            </tr>
+                        {% else %}
+                            <tr class="border-t border-black/5">
+                                <td colspan="2" class="px-6 py-8 text-center text-sage">Aucune inscription newsletter.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}

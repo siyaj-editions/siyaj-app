@@ -19,7 +19,7 @@
                 <div class="sticky top-28">
                     {% if book.coverImage %}
                         <div class="card overflow-hidden">
-                            <img src="{{ book.coverImage }}" alt="{{ book.title }}" class="w-full aspect-book object-cover">
+                            <img src="{{ book.coverImage }}" alt="{{ book.title }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full aspect-book object-cover">
                         </div>
                     {% else %}
                         <div class="card aspect-book bg-cream flex items-center justify-center text-sage">

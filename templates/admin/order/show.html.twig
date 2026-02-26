@@ -29,6 +29,22 @@
                     <p><span class="text-ink/50">Date:</span> {{ order.createdAt|date('d/m/Y H:i') }}</p>
                     <p><span class="text-ink/50">Total:</span> {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</p>
                 </div>
+                {% if order.shippingAddress %}
+                    <div class="pt-4 border-t border-black/5 space-y-2 text-xs text-ink/70">
+                        <p class="uppercase tracking-wider text-ink/40">Livraison</p>
+                        <p>{{ order.shippingAddress.fullName }}</p>
+                        <p>{{ order.shippingAddress.inline }}</p>
+                        {% if order.shippingAddress.numero %}<p>Tél: {{ order.shippingAddress.numero }}</p>{% endif %}
+                    </div>
+                {% endif %}
+                {% if order.billingAddress %}
+                    <div class="pt-4 border-t border-black/5 space-y-2 text-xs text-ink/70">
+                        <p class="uppercase tracking-wider text-ink/40">Facturation</p>
+                        <p>{{ order.billingAddress.fullName }}</p>
+                        <p>{{ order.billingAddress.inline }}</p>
+                        {% if order.billingAddress.numero %}<p>Tél: {{ order.billingAddress.numero }}</p>{% endif %}
+                    </div>
+                {% endif %}
                 <div>
                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ statusClass }}">{{ order.status.label }}</span>
                 </div>

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CGV - SIYAG Éditions{% endblock %}
+
+{% block body %}
+<section class="bg-gradient-to-br from-paper to-cream py-12 lg:py-16">
+    <div class="container">
+        <h1 class="font-display text-4xl lg:text-5xl text-ink">Conditions Générales de Vente</h1>
+        <p class="text-ink/60 mt-3">Conditions applicables à la vente de livres sur le site SIYAG Éditions.</p>
+    </div>
+</section>
+
+<section class="py-12 lg:py-16">
+    <div class="container max-w-4xl">
+        <article class="card p-7 lg:p-10 space-y-6 text-sm text-ink/80 leading-relaxed">
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">1. Objet</h2>
+                <p>Les présentes CGV encadrent les ventes réalisées sur le site SIYAG Éditions, à destination des particuliers.</p>
+            </div>
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">2. Produits et prix</h2>
+                <p>Les prix sont indiqués en euros TTC. Les caractéristiques essentielles des ouvrages sont présentées sur chaque fiche produit.</p>
+            </div>
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">3. Commande</h2>
+                <p>La commande est validée après confirmation du paiement. Un email de confirmation est adressé au client.</p>
+            </div>
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">4. Paiement</h2>
+                <p>Le paiement est sécurisé via Stripe. Les données bancaires ne transitent pas par les serveurs de SIYAG Éditions.</p>
+            </div>
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">5. Livraison</h2>
+                <p>Les délais sont indicatifs. En cas de retard significatif, le service client peut être contacté à contact@siyag-editions.fr.</p>
+            </div>
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">6. Rétractation et retours</h2>
+                <p>Le client dispose d’un délai légal de 14 jours pour exercer son droit de rétractation pour les livres physiques, hors exceptions légales.</p>
+            </div>
+            <div>
+                <h2 class="font-display text-2xl text-ink mb-2">7. Service client</h2>
+                <p>Pour toute demande, écrire à contact@siyag-editions.fr avec la référence de commande.</p>
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}

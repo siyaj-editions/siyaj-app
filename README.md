@@ -1,179 +1,125 @@
-# SIYAG - E-commerce Maison d'Édition
+# SIYAG - E-commerce Maison d'Edition
 
-Site e-commerce développé avec **Symfony 8.0** pour la vente de livres en ligne.
+Application e-commerce Symfony 8 pour la vente de livres (catalogue, panier, paiement Stripe, espace client et admin).
 
-## 🚀 Installation Rapide
+## Prerequis
 
-### Prérequis
 - PHP 8.4+
 - Composer
 - Docker Desktop
+- Make
 
-### Installation complète (première fois)
+## Installation rapide
+
 ```bash
 make setup
 ```
 
-Cette commande effectue :
-- Installation des dépendances
-- Démarrage de Docker (PostgreSQL)
-- Création de la base de données
-- Exécution des migrations
-- Chargement des données de test
+Cette commande:
+- installe les dependances
+- demarre PostgreSQL via Docker
+- cree la base
+- execute les migrations
+- charge les fixtures
 
-### Démarrer le serveur
+Lancer l'application:
+
 ```bash
 make serve
-# ou
-php -S localhost:8000 -t public/
 ```
 
-**L'application est accessible sur** : http://localhost:8000
+Application: `http://127.0.0.1:8000`
 
-## 📝 Commandes Make Disponibles
+## Stack
 
-```bash
-make help              # Affiche toutes les commandes disponibles
-make install          # Installe les dépendances
-make start            # Démarre Docker
-make stop             # Arrête Docker
-make serve            # Lance le serveur Symfony
-make db-create        # Crée la base de données
-make db-migrate       # Exécute les migrations
-make db-reset         # Reset complet de la BDD
-make fixtures         # Charge les données de test
-make cache-clear      # Vide le cache
-make test             # Lance les tests
-make setup            # Installation complète (first install)
-make reload           # Reset BDD + recharge fixtures
-```
+- Symfony 8 / PHP 8.4
+- Doctrine ORM + PostgreSQL 16
+- Twig + Tailwind CSS v4
+- Stripe Checkout + webhook
 
-## 👥 Comptes de Test
+## Paiement Stripe
 
-Après `make setup` ou `make fixtures`, deux comptes sont disponibles :
-
-**Administrateur**
-- Email : `admin@siyag.com`
-- Mot de passe : `admin123`
-- Accès : http://localhost:8000/admin
-
-**Client**
-- Email : `client@test.com`
-- Mot de passe : `client123`
-
-## 📊 Données de Test
-
-- **15 livres** (physiques et numériques)
-- **8 auteurs** (classiques français)
-- **2 utilisateurs** (admin + client)
-
-## 🛠️ Stack Technique
-
-- **Backend** : Symfony 8.0 + PHP 8.4
-- **Base de données** : PostgreSQL 16
-- **ORM** : Doctrine
-- **Frontend** : Twig + Bootstrap 5 + Stimulus
-- **Paiement** : Stripe Checkout
-
-## ⚙️ Configuration Stripe
-
-Pour tester les paiements, créer un fichier `.env.local` :
+Creer `.env.local`:
 
 ```env
-STRIPE_PUBLIC_KEY=pk_test_votre_cle
-STRIPE_SECRET_KEY=sk_test_votre_cle
-STRIPE_WEBHOOK_SECRET=whsec_votre_secret
+STRIPE_PUBLIC_KEY=pk_test_xxx
+STRIPE_SECRET_KEY=sk_test_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
 ```
 
-### Webhook en local
+Webhook local:
+
 ```bash
 stripe listen --forward-to localhost:8000/stripe/webhook
 ```
 
-### Carte de test Stripe
-- Numéro : `4242 4242 4242 4242`
-- Date : n'importe quelle date future
-- CVC : `123`
+Carte de test:
+- `4242 4242 4242 4242`
+- date future
+- CVC `123`
 
-## 📖 Fonctionnalités
+## Fonctionnalites
 
-### Public
-- Catalogue de livres avec filtres (auteur, format, recherche)
-- Fiche détaillée de livre
-- Panier dynamique
-- Inscription / Connexion
+### Front-office
+- Accueil + catalogue filtre (recherche/auteur/format)
+- Fiche livre
+- Panier
+- Checkout avec:
+  - adresse de livraison
+  - adresse de facturation
+  - option "adresse de facturation identique"
+- Authentification / inscription
 
-### Espace Client
-- Dashboard personnel
-- Gestion du profil
+### Espace client
+- Profil utilisateur
+- Champ `numero` (telephone)
 - Historique des commandes
+- Detail commande avec adresses livraison/facturation
 
-### Paiement
-- Intégration Stripe Checkout
-- Validation du stock
-- Confirmation par webhook
-- Gestion des statuts de commande
-
-### Back-Office Admin
-- CRUD Livres
-- CRUD Auteurs
+### Admin
+- Dashboard
+- CRUD livres
+- CRUD auteurs
 - Gestion des commandes
-- Dashboard avec statistiques
 
-## 📂 Structure du Projet
+## Modele de donnees (nouveau)
 
-```
-src/
-├── Controller/        # Contrôleurs (Public, Client, Admin, Checkout)
-├── Entity/           # Entités Doctrine (User, Book, Author, Order, OrderItem)
-├── Enum/             # Énumérations (BookFormat, OrderStatus)
-├── Form/             # Formulaires Symfony
-├── Repository/       # Repositories Doctrine
-├── Service/          # Services métier (CartService, StripeService)
-└── DataFixtures/     # Fixtures de données
+- `User.numero` ajoute
+- Nouvelle entite `Address`
+- `Order.shippingAddress`
+- `Order.billingAddress`
+- `Order.billingSameAsShipping`
 
-templates/            # Templates Twig
-config/               # Configuration Symfony
-migrations/           # Migrations Doctrine
-```
-
-## 🔒 Sécurité
-
-- Authentification par formulaire (form_login)
-- Protection CSRF activée
-- Hashage des mots de passe (bcrypt auto)
-- Access Control :
-  - `/admin` → ROLE_ADMIN
-  - `/mon-compte` → ROLE_USER
-  - `/checkout` → ROLE_USER
-
-## 🧪 Tests
+## Commandes utiles
 
 ```bash
+make help
+make start
+make stop
+make db-migrate
+make fixtures
 make test
+php bin/console tailwind:build
+php bin/console lint:twig templates
 ```
 
-## 📚 Documentation
+## Comptes fixtures
 
-Voir [CLAUDE.md](CLAUDE.md) pour la documentation complète du projet destinée à Claude Code.
+- Admin: `admin@siyag.com` / `admin123`
+- Client: `client@test.com` / `client123`
 
-## 🚧 Avant la Production
+## Migrations
 
-- [ ] Configurer les clés Stripe de production
-- [ ] Configurer le webhook Stripe en production
-- [ ] Générer un `APP_SECRET` sécurisé
-- [ ] Activer HTTPS
-- [ ] Optimiser l'autoloader : `composer install --no-dev --optimize-autoloader`
-- [ ] Cache de production : `php bin/console cache:clear --env=prod`
+Apres update:
 
-## 📞 Support
+```bash
+php bin/console doctrine:migrations:migrate
+```
 
-Pour toute question concernant le développement, consultez [CLAUDE.md](CLAUDE.md).
+## Production checklist
 
-## 📄 Licence
-
-Propriétaire - SIYAG
-
----
-
-**Développé avec Symfony 8.0** 🎵
+- Configurer les cles Stripe prod
+- Configurer le webhook prod
+- HTTPS
+- `composer install --no-dev --optimize-autoloader`
+- `php bin/console cache:clear --env=prod`
