@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Form\ProfileFormType;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -38,6 +39,7 @@ class AccountController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
+        /** @var User $user */
         $user = $this->getUser();
         $form = $this->createForm(ProfileFormType::class, $user);
         $form->handleRequest($request);

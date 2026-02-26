@@ -87,7 +87,7 @@ STRIPE_WEBHOOK_SECRET=whsec_votre_secret
 
 ### Webhook en local
 ```bash
-stripe listen --forward-to localhost:8000/checkout/webhook
+stripe listen --forward-to localhost:8000/stripe/webhook
 ```
 
 ### Carte de test Stripe

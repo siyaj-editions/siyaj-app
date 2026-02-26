@@ -1,52 +1,130 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Commande {{ order.reference }} - SIYAG{% endblock %}
+{% block title %}Commande {{ order.reference }} - SIYAG Éditions{% endblock %}
 
 {% block body %}
-<h1 class="mb-4">Commande {{ order.reference }}</h1>
+{# Header #}
+<section class="bg-gradient-to-br from-paper to-cream py-8 lg:py-12">
+    <div class="container">
+        <a href="{{ path('app_account_orders') }}" class="inline-flex items-center gap-1.5 text-sm text-ink/60 hover:text-ink mb-4 transition-colors duration-200">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+            Retour aux commandes
+        </a>
+        <h1 class="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold text-ink mb-1">
+            Commande {{ order.reference }}
+        </h1>
+        <p class="text-ink/60">
+            Passée le {{ order.createdAt|date('d/m/Y à H:i') }}
+        </p>
+    </div>
+</section>
 
-<div class="row mb-4">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Informations</h5>
-                <p><strong>Date :</strong> {{ order.createdAt|date('d/m/Y H:i') }}</p>
-                <p><strong>Statut :</strong> <span class="badge bg-{{ order.status.badgeClass }}">{{ order.status.label }}</span></p>
-                <p><strong>Total :</strong> {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</p>
-            </div>
+{# Content #}
+<section class="py-12 lg:py-16">
+    <div class="container">
+        <div class="grid lg:grid-cols-3 gap-8 lg:gap-12 items-start mb-8">
+            {# Order Summary Card #}
+            <aside class="lg:sticky lg:top-24">
+                <div class="bg-white rounded-2xl border border-black/5 p-6">
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-black/5">
+                        <h2 class="font-display text-lg font-semibold text-ink">Récapitulatif</h2>
+                        <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded
+                            {% if order.status.value == 'pending' %}bg-gold/15 text-yellow-700
+                            {% elseif order.status.value == 'paid' %}bg-sage/15 text-sage
+                            {% else %}bg-wine/10 text-wine{% endif %}">
+                            {{ order.status.label }}
+                        </span>
+                    </div>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Numéro de commande</span>
+                            <span class="text-sm font-medium text-ink">{{ order.reference }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Date</span>
+                            <span class="text-sm font-medium text-ink">{{ order.createdAt|date('d/m/Y à H:i') }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Articles</span>
+                            <span class="text-sm font-medium text-ink">{{ order.orderItems|length }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-6 border-t-2 border-ink">
+                        <span class="font-semibold text-ink">Total de la commande</span>
+                        <span class="font-display text-2xl font-bold text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                </div>
+            </aside>
+
+            {# Order Items #}
+            <main class="lg:col-span-2">
+                <div class="bg-white rounded-2xl border border-black/5 p-6">
+                    <h2 class="font-display text-lg font-semibold text-ink mb-6 pb-4 border-b border-black/5">
+                        Articles commandés
+                    </h2>
+
+                    <div class="space-y-4">
+                        {% for item in order.orderItems %}
+                            <div class="flex items-center gap-4 p-4 bg-paper rounded-xl">
+                                {# Cover #}
+                                <div class="w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-cream">
+                                    {% if item.book and item.book.coverImage %}
+                                        <img src="{{ item.book.coverImage }}" alt="{{ item.titleSnapshot }}" class="w-full h-full object-cover">
+                                    {% else %}
+                                        <div class="w-full h-full flex items-center justify-center text-ink/20">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                {# Details #}
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-display font-semibold text-ink truncate">{{ item.titleSnapshot }}</h3>
+                                    <p class="text-xs text-ink/50">{{ (item.priceSnapshot / 100)|number_format(2, ',', ' ') }} € / unité</p>
+                                </div>
+
+                                {# Quantity #}
+                                <div class="text-center px-4">
+                                    <span class="text-[10px] font-semibold uppercase tracking-wider text-ink/40 block">Qté</span>
+                                    <span class="font-semibold text-ink">{{ item.quantity }}</span>
+                                </div>
+
+                                {# Total #}
+                                <div class="font-display text-lg font-semibold text-ink min-w-[80px] text-right">
+                                    {{ (item.total / 100)|number_format(2, ',', ' ') }} €
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {# Footer Total #}
+                    <div class="flex justify-between items-center mt-6 pt-6 border-t border-black/5">
+                        <span class="font-semibold text-ink">Total</span>
+                        <span class="font-display text-xl font-semibold text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        {# Actions #}
+        <div class="flex flex-col sm:flex-row gap-3 justify-end">
+            <a href="{{ path('app_account_orders') }}" class="btn btn-secondary">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                Retour aux commandes
+            </a>
+            <a href="{{ path('app_catalog') }}" class="btn btn-primary">
+                Continuer les achats
+            </a>
         </div>
     </div>
-</div>
-
-<h3 class="mb-3">Articles commandés</h3>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Livre</th>
-                <th>Prix unitaire</th>
-                <th>Quantité</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order.orderItems %}
-                <tr>
-                    <td>{{ item.titleSnapshot }}</td>
-                    <td>{{ (item.priceSnapshot / 100)|number_format(2, ',', ' ') }} €</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ (item.total / 100)|number_format(2, ',', ' ') }} €</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="3" class="text-end">Total :</th>
-                <th>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</th>
-            </tr>
-        </tfoot>
-    </table>
-</div>
-
-<a href="{{ path('app_account_orders') }}" class="btn btn-secondary">Retour à mes commandes</a>
+</section>
 {% endblock %}

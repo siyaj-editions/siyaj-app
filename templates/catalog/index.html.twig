@@ -1,59 +1,276 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Catalogue - SIYAG{% endblock %}
+{% block title %}Catalogue - SIYAG Éditions{% endblock %}
 
 {% block body %}
-<h1 class="mb-4">Catalogue</h1>
-
-<div class="row mb-4">
-    <div class="col-md-12">
-        <form method="get" class="row g-3">
-            <div class="col-md-4">
-                <input type="text" name="search" class="form-control" placeholder="Rechercher..." value="{{ currentSearch }}">
-            </div>
-            <div class="col-md-3">
-                <select name="author" class="form-control">
-                    <option value="">Tous les auteurs</option>
-                    {% for author in authors %}
-                        <option value="{{ author.id }}" {% if currentAuthor == author.id %}selected{% endif %}>{{ author.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-md-3">
-                <select name="format" class="form-control">
-                    <option value="">Tous les formats</option>
-                    <option value="physical" {% if currentFormat == 'physical' %}selected{% endif %}>Physique</option>
-                    <option value="digital" {% if currentFormat == 'digital' %}selected{% endif %}>Numérique</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-            </div>
-        </form>
+{# Header #}
+<section class="bg-gradient-to-br from-paper to-cream py-16 lg:py-20">
+    <div class="container text-center">
+        <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
+            Notre collection
+        </span>
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold text-ink mb-4">
+            Catalogue
+        </h1>
+        <p class="text-lg text-ink/60 max-w-2xl mx-auto">
+            Explorez notre sélection d'ouvrages littéraires
+        </p>
     </div>
-</div>
+</section>
 
-<div class="row">
-    {% for book in books %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if book.coverImage %}
-                    <img src="{{ book.coverImage }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
-                {% else %}
-                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
-                        <i class="bi bi-book" style="font-size: 5rem;"></i>
+{# Main Content #}
+<section class="py-12 lg:py-16">
+    <div class="container">
+        {# Filters #}
+        <div class="bg-white rounded-2xl border border-black/5 p-6 mb-8 shadow-sm">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                {# Search #}
+                <div class="lg:col-span-2">
+                    <label for="search" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
+                        Recherche
+                    </label>
+                    <div class="relative">
+                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ink/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input
+                            type="text"
+                            name="search"
+                            id="search"
+                            class="w-full pl-12 pr-4 py-3 rounded-xl"
+                            placeholder="Titre, ISBN..."
+                            value="{{ currentSearch }}"
+                        >
                     </div>
+                </div>
+
+                {# Author #}
+                <div>
+                    <label for="author" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
+                        Auteur
+                    </label>
+                    <select name="author" id="author" class="w-full py-3 rounded-xl">
+                        <option value="">Tous les auteurs</option>
+                        {% for author in authors %}
+                            <option value="{{ author.id }}" {% if currentAuthor == author.id %} selected {% endif %}>
+                                {{ author.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {# Format #}
+                <div>
+                    <label for="format" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
+                        Format
+                    </label>
+                    <select name="format" id="format" class="w-full py-3 rounded-xl">
+                        <option value="">Tous les formats</option>
+                        <option value="physical" {% if currentFormat == 'physical' %} selected {% endif %}>Physique</option>
+                        <option value="digital" {% if currentFormat == 'digital' %} selected {% endif %}>Numérique</option>
+                    </select>
+                </div>
+
+                {# Actions #}
+                <div class="flex items-center gap-3">
+                    <button type="submit" class="btn btn-primary flex-1 py-3">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                        </svg>
+                        Filtrer
+                    </button>
+                    {% if currentSearch or currentAuthor or currentFormat %}
+                        <a href="{{ path('app_catalog') }}" class="text-sm text-ink/50 hover:text-ink underline whitespace-nowrap transition-colors">
+                            Réinitialiser
+                        </a>
+                    {% endif %}
+                </div>
+
+                {# Per Page - Hidden on mobile, visible inline on desktop #}
+                <input type="hidden" name="perPage" value="{{ perPage }}">
+            </form>
+        </div>
+
+        {# Results Header #}
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-black/5">
+            <p class="text-sm text-ink/70">
+                <span class="font-semibold text-ink">{{ totalBooks }}</span> ouvrage{% if totalBooks > 1 %}s{% endif %} trouvé{% if totalBooks > 1 %}s{% endif %}
+            </p>
+            <div class="flex items-center gap-4">
+                {% if totalPages > 1 %}
+                    <span class="text-sm text-ink/50">Page {{ currentPage }} sur {{ totalPages }}</span>
                 {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ book.title }}</h5>
-                    <p class="card-text text-muted">{{ book.authorsNames }}</p>
-                    <p class="card-text"><strong>{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</strong></p>
-                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-primary">Voir détails</a>
+                <div class="flex items-center gap-2">
+                    <label for="perPageSelect" class="text-xs text-ink/50">Afficher</label>
+                    <select id="perPageSelect" onchange="window.location.href=this.value" class="py-1.5 px-3 text-sm rounded-lg border border-black/10">
+                        {% for option in allowedPerPage %}
+                            <option value="{{ path('app_catalog', {page: 1, perPage: option, search: currentSearch, author: currentAuthor, format: currentFormat}) }}" {% if perPage == option %} selected {% endif %}>
+                                {{ option }}
+                            </option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
         </div>
-    {% else %}
-        <p>Aucun livre trouvé.</p>
-    {% endfor %}
-</div>
+
+        {% if books|length > 0 %}
+            {# Books Grid #}
+            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mb-12">
+                {% for book in books %}
+                    <article class="group">
+                        <div class="card h-full flex flex-col">
+                            {# Cover #}
+                            <div class="relative aspect-book overflow-hidden bg-cream">
+                                {% if book.coverImage %}
+                                    <img
+                                        src="{{ book.coverImage }}"
+                                        alt="{{ book.title }}"
+                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    >
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-ink/20">
+                                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+
+                                {# Format Badge #}
+                                {% if book.format.value == 'digital' %}
+                                    <span class="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-ink text-white rounded-md z-10">
+                                        Numérique
+                                    </span>
+                                {% endif %}
+
+                                {# Overlay #}
+                                <div class="absolute inset-0 bg-ink/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-gold px-5 py-2.5 text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                        Découvrir
+                                    </a>
+                                </div>
+                            </div>
+
+                            {# Content #}
+                            <div class="p-4 lg:p-5 flex flex-col flex-1">
+                                <h3 class="font-display text-base lg:text-lg font-semibold text-ink mb-1 line-clamp-2 group-hover:text-gold transition-colors duration-200">
+                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}">
+                                        {{ book.title }}
+                                    </a>
+                                </h3>
+                                <p class="text-xs lg:text-sm text-ink/50 mb-3 lg:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
+
+                                <div class="mt-auto pt-3 lg:pt-4 border-t border-black/5 flex items-center justify-between">
+                                    <span class="font-display text-lg lg:text-xl font-semibold text-ink">
+                                        {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
+                                    </span>
+
+                                    {% if book.isInStock %}
+                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post">
+                                            <button type="submit" class="w-9 h-9 lg:w-10 lg:h-10 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
+                                                <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="text-[10px] lg:text-xs font-medium text-ink/40 uppercase tracking-wider">
+                                            Indisponible
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            {# Pagination #}
+            {% if totalPages > 1 %}
+                <nav aria-label="Pagination" class="flex justify-center">
+                    <ul class="flex items-center gap-1.5 flex-wrap justify-center">
+                        {# Previous #}
+                        <li>
+                            <a href="{{ path('app_catalog', {page: currentPage - 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                               class="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-xl border border-black/10 transition-all duration-200 {% if currentPage == 1 %}opacity-40 pointer-events-none{% else %}hover:bg-cream hover:border-gold text-ink{% endif %}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <polyline points="15 18 9 12 15 6"/>
+                                </svg>
+                                <span class="hidden sm:inline">Précédent</span>
+                            </a>
+                        </li>
+
+                        {# Page Numbers #}
+                        {% set startPage = max(1, currentPage - 2) %}
+                        {% set endPage = min(totalPages, currentPage + 2) %}
+
+                        {% if startPage > 1 %}
+                            <li>
+                                <a href="{{ path('app_catalog', {page: 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                                   class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl border border-black/10 hover:bg-cream hover:border-gold text-ink transition-all duration-200">
+                                    1
+                                </a>
+                            </li>
+                            {% if startPage > 2 %}
+                                <li class="px-1 text-ink/30">...</li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% for p in startPage..endPage %}
+                            <li>
+                                <a href="{{ path('app_catalog', {page: p, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                                   class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl border transition-all duration-200
+                                   {% if p == currentPage %}bg-ink text-white border-ink{% else %}border-black/10 hover:bg-cream hover:border-gold text-ink{% endif %}">
+                                    {{ p }}
+                                </a>
+                            </li>
+                        {% endfor %}
+
+                        {% if endPage < totalPages %}
+                            {% if endPage < totalPages - 1 %}
+                                <li class="px-1 text-ink/30">...</li>
+                            {% endif %}
+                            <li>
+                                <a href="{{ path('app_catalog', {page: totalPages, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                                   class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl border border-black/10 hover:bg-cream hover:border-gold text-ink transition-all duration-200">
+                                    {{ totalPages }}
+                                </a>
+                            </li>
+                        {% endif %}
+
+                        {# Next #}
+                        <li>
+                            <a href="{{ path('app_catalog', {page: currentPage + 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                               class="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-xl border border-black/10 transition-all duration-200 {% if currentPage == totalPages %}opacity-40 pointer-events-none{% else %}hover:bg-cream hover:border-gold text-ink{% endif %}">
+                                <span class="hidden sm:inline">Suivant</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            {% endif %}
+
+        {% else %}
+            {# Empty State #}
+            <div class="text-center py-20">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-cream flex items-center justify-center text-ink/20">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                </div>
+                <h3 class="font-display text-2xl font-semibold text-ink mb-2">Aucun ouvrage trouvé</h3>
+                <p class="text-ink/60 mb-6 max-w-md mx-auto">
+                    Essayez de modifier vos critères de recherche.
+                </p>
+                <a href="{{ path('app_catalog') }}" class="btn btn-secondary px-6 py-3">
+                    Voir tout le catalogue
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}

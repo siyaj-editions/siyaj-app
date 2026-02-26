@@ -3,37 +3,83 @@
 {% block title %}{{ book.title }} - SIYAG{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-md-4">
-        {% if book.coverImage %}
-            <img src="{{ book.coverImage }}" class="img-fluid rounded" alt="{{ book.title }}">
-        {% else %}
-            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 400px;">
-                <i class="bi bi-book" style="font-size: 8rem;"></i>
-            </div>
-        {% endif %}
-    </div>
-    <div class="col-md-8">
-        <h1>{{ book.title }}</h1>
-        <p class="lead">Par {{ book.authorsNames }}</p>
-        <p class="text-muted">ISBN: {{ book.isbn ?? 'N/A' }}</p>
-        <p class="text-muted">Format: {{ book.format.label }}</p>
-        <h3 class="text-primary">{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</h3>
-        
-        {% if book.description %}
-            <h4 class="mt-4">Description</h4>
-            <p>{{ book.description }}</p>
-        {% endif %}
+<section class="relative py-12 md:py-16">
+    <div class="container">
+        <div class="mb-8">
+            <a href="{{ path('app_catalog') }}" class="inline-flex items-center gap-2 text-sm text-sage hover:text-gold transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Retour au catalogue
+            </a>
+        </div>
 
-        {% if book.isInStock %}
-            <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post" class="mt-4">
-                <button type="submit" class="btn btn-success btn-lg">
-                    <i class="bi bi-cart-plus"></i> Ajouter au panier
-                </button>
-            </form>
-        {% else %}
-            <button class="btn btn-secondary btn-lg" disabled>Rupture de stock</button>
-        {% endif %}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12">
+            <div class="lg:col-span-5">
+                <div class="sticky top-28">
+                    {% if book.coverImage %}
+                        <div class="card overflow-hidden">
+                            <img src="{{ book.coverImage }}" alt="{{ book.title }}" class="w-full aspect-book object-cover">
+                        </div>
+                    {% else %}
+                        <div class="card aspect-book bg-cream flex items-center justify-center text-sage">
+                            <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.483 9.246 5 7.5 5S4.168 5.483 3 6.253v13C4.168 18.483 5.754 18 7.5 18s3.332.483 4.5 1.253m0-13C13.168 5.483 14.754 5 16.5 5s3.332.483 4.5 1.253v13C19.832 18.483 18.246 18 16.5 18s-3.332.483-4.5 1.253"></path>
+                            </svg>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="lg:col-span-7">
+                <article class="card p-6 md:p-8 xl:p-10 space-y-6">
+                    <header class="space-y-3">
+                        <p class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-cream text-sage">{{ book.format.label }}</p>
+                        <h1 class="text-4xl md:text-5xl text-ink">{{ book.title }}</h1>
+                        <p class="text-lg text-sage">Par {{ book.authorsNames }}</p>
+                    </header>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                        <div class="rounded-xl bg-paper px-4 py-3 text-ink/80">
+                            <span class="text-ink/50">ISBN:</span> {{ book.isbn ?? 'N/A' }}
+                        </div>
+                        <div class="rounded-xl bg-paper px-4 py-3 text-ink/80">
+                            <span class="text-ink/50">Disponibilité:</span> {{ book.isInStock ? 'En stock' : 'Rupture' }}
+                        </div>
+                    </div>
+
+                    <div class="pt-1">
+                        <p class="text-4xl text-gold">{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</p>
+                    </div>
+
+                    {% if book.description %}
+                        <section class="space-y-3">
+                            <h2 class="text-2xl text-ink">Description</h2>
+                            <div class="prose prose-sm max-w-none text-ink/80">
+                                <p>{{ book.description|nl2br }}</p>
+                            </div>
+                        </section>
+                    {% endif %}
+
+                    <div class="pt-2">
+                        {% if book.isInStock %}
+                            <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post">
+                                <button type="submit" class="btn btn-primary w-full sm:w-auto px-8 py-4">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2m0 0L7 13h10l3-8H5.4zM7 13l-1.34 2.68A1 1 0 006.55 17h10.9a1 1 0 00.89-1.45L17 13M7 13h10M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"></path>
+                                    </svg>
+                                    Ajouter au panier
+                                </button>
+                            </form>
+                        {% else %}
+                            <button class="btn w-full sm:w-auto px-8 py-4 bg-ink/10 text-ink/45 cursor-not-allowed" disabled>
+                                Rupture de stock
+                            </button>
+                        {% endif %}
+                    </div>
+                </article>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

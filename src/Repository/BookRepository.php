@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Book;
 use App\Enum\BookFormat;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -42,6 +43,13 @@ class BookRepository extends ServiceEntityRepository
 
     public function findActiveBooksWithFilters(?string $search = null, ?int $authorId = null, ?BookFormat $format = null): array
     {
+        return $this->createActiveBooksQueryBuilder($search, $authorId, $format)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function createActiveBooksQueryBuilder(?string $search = null, ?int $authorId = null, ?BookFormat $format = null): QueryBuilder
+    {
         $qb = $this->createQueryBuilder('b')
             ->leftJoin('b.authors', 'a')
             ->addSelect('a')
@@ -49,7 +57,8 @@ class BookRepository extends ServiceEntityRepository
             ->setParameter('active', true);
 
         if ($search) {
-            $qb->andWhere('b.title LIKE :search OR b.isbn LIKE :search')
+            // Recherche insensible à la casse et aux accents (PostgreSQL)
+            $qb->andWhere('LOWER(unaccent(b.title)) LIKE LOWER(unaccent(:search)) OR b.isbn LIKE :search')
                 ->setParameter('search', '%' . $search . '%');
         }
 
@@ -63,9 +72,7 @@ class BookRepository extends ServiceEntityRepository
                 ->setParameter('format', $format);
         }
 
-        return $qb->orderBy('b.publishedAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        return $qb->orderBy('b.publishedAt', 'DESC');
     }
 
     public function save(Book $book, bool $flush = false): void

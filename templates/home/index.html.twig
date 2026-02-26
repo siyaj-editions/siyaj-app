@@ -1,39 +1,246 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - SIYAG{% endblock %}
+{% block title %}Accueil - SIYAG Éditions{% endblock %}
 
 {% block body %}
-<div class="jumbotron bg-light p-5 rounded-3 mb-4">
-    <h1 class="display-4">Bienvenue chez SIYAG</h1>
-    <p class="lead">Découvrez notre sélection de livres</p>
-    <a class="btn btn-primary btn-lg" href="{{ path('app_catalog') }}">Voir le catalogue</a>
-</div>
+{# Hero Section #}
+<section class="relative overflow-hidden bg-gradient-to-br from-paper via-cream/50 to-paper">
+    {# Background Pattern #}
+    <div class="absolute inset-0 opacity-30">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23c9a962&quot; fill-opacity=&quot;0.1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
 
-<h2 class="mb-4">Dernières parutions</h2>
+    <div class="container relative py-20 lg:py-32">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {# Content #}
+            <div class="text-center lg:text-left order-2 lg:order-1">
+                <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-4 animate-fade-in">
+                    Maison d'édition
+                </span>
+                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.1] text-ink mb-6 animate-fade-in stagger-1">
+                    Découvrez des œuvres
+                    <span class="block text-gradient mt-2">qui vous transforment</span>
+                </h1>
+                <p class="text-lg text-ink/70 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8 animate-fade-in stagger-2">
+                    SIYAG Éditions vous invite à explorer une collection soigneusement sélectionnée d'ouvrages littéraires, où chaque page raconte une histoire unique.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in stagger-3">
+                    <a href="{{ path('app_catalog') }}" class="btn btn-primary px-8 py-4 text-base">
+                        Explorer le catalogue
+                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                    </a>
+                    <a href="#dernieres-parutions" class="btn btn-secondary px-8 py-4 text-base">
+                        Nouveautés
+                    </a>
+                </div>
+            </div>
 
-<div class="row">
-    {% for book in latestBooks %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100">
-                {% if book.coverImage %}
-                    <img src="{{ book.coverImage }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
-                {% else %}
-                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
-                        <i class="bi bi-book" style="font-size: 5rem;"></i>
-                    </div>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ book.title }}</h5>
-                    <p class="card-text text-muted">{{ book.authorsNames }}</p>
-                    <p class="card-text">
-                        <strong>{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</strong>
-                    </p>
-                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-primary">Voir détails</a>
+            {# Visual - Books Stack #}
+            <div class="hidden lg:block order-1 lg:order-2">
+                <div class="relative h-[500px] animate-fade-in">
+                    {# Decorative Circle #}
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gold/10 rounded-full blur-3xl"></div>
+
+                    {# Books #}
+                    <div class="absolute top-[15%] left-[10%] w-44 h-64 rounded-lg shadow-2xl transform -rotate-12 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #722f37 0%, #8b3a42 100%);"></div>
+                    <div class="absolute top-[10%] left-[30%] w-44 h-64 rounded-lg shadow-2xl transform rotate-6 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #7d8471 0%, #6a7360 100%);"></div>
+                    <div class="absolute top-[20%] left-[55%] w-44 h-64 rounded-lg shadow-2xl transform -rotate-3 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #c9a962 0%, #b8944d 100%);"></div>
                 </div>
             </div>
         </div>
-    {% else %}
-        <p>Aucun livre disponible pour le moment.</p>
-    {% endfor %}
-</div>
+    </div>
+</section>
+
+{# Featured Books Section #}
+<section id="dernieres-parutions" class="py-20 lg:py-28 bg-white">
+    <div class="container">
+        {# Section Header #}
+        <div class="text-center mb-16">
+            <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
+                Nouveautés
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-ink mb-4">
+                Dernières parutions
+            </h2>
+            <p class="text-lg text-ink/60 max-w-2xl mx-auto">
+                Les ouvrages récemment ajoutés à notre collection
+            </p>
+        </div>
+
+        {% if latestBooks|length > 0 %}
+            {# Books Grid #}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                {% for book in latestBooks %}
+                    <article class="group">
+                        <div class="card h-full flex flex-col">
+                            {# Cover #}
+                            <div class="relative aspect-book overflow-hidden bg-cream">
+                                {% if book.coverImage %}
+                                    <img
+                                        src="{{ book.coverImage }}"
+                                        alt="{{ book.title }}"
+                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    >
+                                {% else %}
+                                    <div class="w-full h-full flex items-center justify-center text-ink/20">
+                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+
+                                {# Overlay #}
+                                <div class="absolute inset-0 bg-ink/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-gold px-6 py-3 text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                        Découvrir
+                                    </a>
+                                </div>
+                            </div>
+
+                            {# Content #}
+                            <div class="p-5 flex flex-col flex-1">
+                                <h3 class="font-display text-lg font-semibold text-ink mb-1.5 line-clamp-2 group-hover:text-gold transition-colors duration-200">
+                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}">
+                                        {{ book.title }}
+                                    </a>
+                                </h3>
+                                <p class="text-sm text-ink/50 mb-4">{{ book.authorsNames }}</p>
+
+                                <div class="mt-auto pt-4 border-t border-black/5 flex items-center justify-between">
+                                    <span class="font-display text-xl font-semibold text-ink">
+                                        {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
+                                    </span>
+
+                                    {% if book.isInStock %}
+                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post">
+                                            <button type="submit" class="w-11 h-11 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span class="text-xs font-medium text-ink/40 uppercase tracking-wider">
+                                            Indisponible
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            {# CTA #}
+            <div class="text-center mt-12">
+                <a href="{{ path('app_catalog') }}" class="btn btn-secondary px-8 py-4 text-base">
+                    Voir tout le catalogue
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
+        {% else %}
+            {# Empty State #}
+            <div class="text-center py-16">
+                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-cream flex items-center justify-center text-ink/20">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                </div>
+                <h3 class="font-display text-2xl font-semibold text-ink mb-2">Notre collection arrive bientôt</h3>
+                <p class="text-ink/60 max-w-md mx-auto">
+                    Nous préparons une sélection d'ouvrages exceptionnels pour vous.
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{# Values Section #}
+<section class="py-20 lg:py-28 bg-cream">
+    <div class="container">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
+            {# Value 1 #}
+            <div class="text-center p-6 lg:p-8">
+                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3 class="font-display text-xl font-semibold text-ink mb-3">Sélection exigeante</h3>
+                <p class="text-ink/60 leading-relaxed">
+                    Chaque ouvrage est choisi pour sa qualité littéraire et son apport au lecteur.
+                </p>
+            </div>
+
+            {# Value 2 #}
+            <div class="text-center p-6 lg:p-8">
+                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                <h3 class="font-display text-xl font-semibold text-ink mb-3">Passion du livre</h3>
+                <p class="text-ink/60 leading-relaxed">
+                    Une équipe de passionnés au service de la littérature et des auteurs.
+                </p>
+            </div>
+
+            {# Value 3 #}
+            <div class="text-center p-6 lg:p-8">
+                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <rect x="1" y="3" width="15" height="13"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                </div>
+                <h3 class="font-display text-xl font-semibold text-ink mb-3">Livraison soignée</h3>
+                <p class="text-ink/60 leading-relaxed">
+                    Vos commandes préparées avec soin et expédiées rapidement.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Newsletter Section #}
+<section class="py-20 lg:py-28 bg-ink text-white relative overflow-hidden">
+    {# Background Pattern #}
+    <div class="absolute inset-0 opacity-5">
+        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+
+    <div class="container relative">
+        <div class="max-w-2xl mx-auto text-center">
+            <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-4">
+                Newsletter
+            </span>
+            <h2 class="font-display text-3xl sm:text-4xl font-semibold mb-4">
+                Restez informé
+            </h2>
+            <p class="text-white/60 mb-8 leading-relaxed">
+                Inscrivez-vous pour recevoir nos nouveautés, recommandations et offres exclusives.
+            </p>
+            <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input
+                    type="email"
+                    placeholder="Votre adresse email"
+                    class="flex-1 px-5 py-3.5 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:border-gold focus:bg-white/15 transition-all duration-200"
+                >
+                <button type="submit" class="btn btn-gold px-6 py-3.5 whitespace-nowrap">
+                    S'inscrire
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
 {% endblock %}

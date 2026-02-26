@@ -1,4 +1,4 @@
-.PHONY: help install start stop db-create db-migrate db-reset fixtures cache-clear test
+.PHONY: help install start stop db-create db-migrate db-reset fixtures cache-clear test stripe-listen
 
 ##
 ## SIYAG - Commandes Make
@@ -74,6 +74,10 @@ test: ## Lance les tests
 	@echo "🧪 Exécution des tests..."
 	php bin/phpunit
 	@echo "✅ Tests terminés"
+
+stripe-listen: ## Lance Stripe CLI et forwarde les webhooks vers l'app
+	@echo "🔔 Stripe CLI -> http://localhost:8000/stripe/webhook"
+	stripe listen --forward-to http://localhost:8000/stripe/webhook
 
 ##
 ## Setup complet (First install)

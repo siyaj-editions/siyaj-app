@@ -171,7 +171,8 @@ class Order
 
     public function getReference(): string
     {
-        return 'CMD-' . str_pad((string)$this->id, 6, '0', STR_PAD_LEFT);
+        $year = $this->createdAt?->format('Y') ?? date('Y');
+        return 'ORD-' . $year . '-' . str_pad((string)$this->id, 5, '0', STR_PAD_LEFT);
     }
 
     public function isPaid(): bool

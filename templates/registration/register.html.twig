@@ -1,35 +1,130 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Inscription - SIYAG{% endblock %}
+{% block title %}Inscription - SIYAG Éditions{% endblock %}
 
 {% block body %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <h1 class="mb-4">Inscription</h1>
+<section class="min-h-[calc(100vh-200px)] flex items-center py-12 lg:py-16 bg-paper">
+    <div class="container">
+        <div class="grid lg:grid-cols-2 max-w-5xl mx-auto bg-white rounded-2xl overflow-hidden shadow-2xl">
+            {# Form Side #}
+            <div class="p-8 lg:p-10">
+                <div class="mb-6">
+                    <h1 class="font-display text-3xl lg:text-4xl font-semibold text-ink mb-2">Créer un compte</h1>
+                    <p class="text-ink/60">Rejoignez notre communauté de lecteurs</p>
+                </div>
 
-        {{ form_start(registrationForm) }}
-            <div class="mb-3">
-                {{ form_row(registrationForm.email) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.firstname) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.lastname) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.plainPassword.first) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.plainPassword.second) }}
-            </div>
-            <div class="mb-3">
-                {{ form_row(registrationForm.agreeTerms) }}
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-4'}}) }}
+
+                {# Name Fields #}
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        {{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                        {{ form_widget(registrationForm.firstname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none', 'placeholder': 'Votre prénom'}}) }}
+                        {{ form_errors(registrationForm.firstname) }}
+                    </div>
+                    <div>
+                        {{ form_label(registrationForm.lastname, 'Nom', {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                        {{ form_widget(registrationForm.lastname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none', 'placeholder': 'Votre nom'}}) }}
+                        {{ form_errors(registrationForm.lastname) }}
+                    </div>
+                </div>
+
+                {# Email Field #}
+                <div>
+                    {{ form_label(registrationForm.email, 'Adresse email', {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none', 'placeholder': 'votre@email.com'}}) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+
+                {# Password Fields #}
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div>
+                        {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none', 'placeholder': 'Minimum 8 caractères'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.first) }}
+                    </div>
+                    <div>
+                        {{ form_label(registrationForm.plainPassword.second, 'Confirmation', {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                        {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none', 'placeholder': 'Confirmez le mot de passe'}}) }}
+                        {{ form_errors(registrationForm.plainPassword.second) }}
+                    </div>
+                </div>
+
+                {# Terms Checkbox #}
+                <div class="flex items-start gap-3 py-2">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-5 h-5 mt-0.5 rounded border-black/20 text-gold focus:ring-gold/30 cursor-pointer'}}) }}
+                    <div>
+                        {{ form_label(registrationForm.agreeTerms, "J'accepte les conditions générales d'utilisation", {'label_attr': {'class': 'text-sm text-ink/70 cursor-pointer'}}) }}
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-full py-4 justify-center text-base">
+                    Créer mon compte
+                </button>
+
+                {{ form_end(registrationForm) }}
+
+                <div class="mt-6 pt-6 border-t border-black/5 text-center">
+                    <p class="text-sm text-ink/50 mb-2">Vous avez déjà un compte ?</p>
+                    <a href="{{ path('app_login') }}" class="text-gold font-semibold hover:text-ink transition-colors duration-200">
+                        Se connecter
+                    </a>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">S'inscrire</button>
-            <a href="{{ path('app_login') }}" class="btn btn-link">Déjà un compte ?</a>
-        {{ form_end(registrationForm) }}
+            {# Visual Side #}
+            <div class="hidden lg:flex items-center justify-center p-12 bg-gradient-to-br from-ink to-ink/90 relative overflow-hidden">
+                {# Pattern Background #}
+                <div class="absolute inset-0 opacity-5">
+                    <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+                        </pattern>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </svg>
+                </div>
+
+                <div class="relative z-10 text-white text-center max-w-sm">
+                    <span class="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-gold mb-4">
+                        SIYAG Éditions
+                    </span>
+                    <h2 class="font-display text-2xl lg:text-3xl font-semibold mb-4">
+                        Rejoignez-nous
+                    </h2>
+                    <p class="text-white/70 leading-relaxed mb-8">
+                        Créez votre compte pour accéder à une collection d'ouvrages soigneusement sélectionnés et profiter d'avantages exclusifs.
+                    </p>
+
+                    <ul class="space-y-3 text-left">
+                        <li class="flex items-center gap-3 text-sm text-white/80">
+                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Suivi de vos commandes
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-white/80">
+                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Paiement 100% sécurisé
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-white/80">
+                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Accès à vos livres numériques
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-white/80">
+                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            Offres exclusives
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

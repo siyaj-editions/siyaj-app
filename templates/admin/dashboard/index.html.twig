@@ -3,76 +3,91 @@
 {% block title %}Dashboard Admin - SIYAG{% endblock %}
 
 {% block body %}
-<h1 class="mb-4">Dashboard Admin</h1>
-
-<div class="row mb-4">
-    <div class="col-md-4">
-        <div class="card text-white bg-primary">
-            <div class="card-body">
-                <h5 class="card-title">Commandes</h5>
-                <p class="card-text display-4">{{ totalOrders }}</p>
+<section class="py-12 md:py-16">
+    <div class="container space-y-8">
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+                <p class="text-sm text-sage">Administration</p>
+                <h1 class="text-4xl md:text-5xl text-ink">Dashboard</h1>
             </div>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-success">
-            <div class="card-body">
-                <h5 class="card-title">Livres</h5>
-                <p class="card-text display-4">{{ totalBooks }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-white bg-info">
-            <div class="card-body">
-                <h5 class="card-title">Utilisateurs</h5>
-                <p class="card-text display-4">{{ totalUsers }}</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row mb-4">
-    <div class="col-md-12">
-        <div class="list-group">
-            <a href="{{ path('app_admin_book_index') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-book"></i> Gérer les livres
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <article class="card p-6 bg-ink text-white">
+                <p class="text-sm text-white/70">Commandes</p>
+                <p class="text-4xl mt-2">{{ totalOrders }}</p>
+            </article>
+            <article class="card p-6 bg-sage text-white">
+                <p class="text-sm text-white/70">Livres</p>
+                <p class="text-4xl mt-2">{{ totalBooks }}</p>
+            </article>
+            <article class="card p-6 gradient-gold text-white">
+                <p class="text-sm text-white/80">Utilisateurs</p>
+                <p class="text-4xl mt-2">{{ totalUsers }}</p>
+            </article>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <a href="{{ path('app_admin_book_index') }}" class="card p-5 hover:shadow-xl transition-all duration-300">
+                <h2 class="text-xl text-ink">Gérer les livres</h2>
+                <p class="text-sm text-sage mt-1">Catalogue, stock et disponibilité.</p>
             </a>
-            <a href="{{ path('app_admin_author_index') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-person"></i> Gérer les auteurs
+            <a href="{{ path('app_admin_author_index') }}" class="card p-5 hover:shadow-xl transition-all duration-300">
+                <h2 class="text-xl text-ink">Gérer les auteurs</h2>
+                <p class="text-sm text-sage mt-1">Profils auteur et bibliographie.</p>
             </a>
-            <a href="{{ path('app_admin_order_index') }}" class="list-group-item list-group-item-action">
-                <i class="bi bi-cart"></i> Gérer les commandes
+            <a href="{{ path('app_admin_order_index') }}" class="card p-5 hover:shadow-xl transition-all duration-300">
+                <h2 class="text-xl text-ink">Gérer les commandes</h2>
+                <p class="text-sm text-sage mt-1">Suivi, statut et remboursements.</p>
             </a>
         </div>
-    </div>
-</div>
 
-<h3 class="mb-3">Dernières commandes</h3>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Référence</th>
-                <th>Client</th>
-                <th>Date</th>
-                <th>Statut</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in recentOrders %}
-                <tr>
-                    <td>{{ order.reference }}</td>
-                    <td>{{ order.user.fullName }}</td>
-                    <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
-                    <td><span class="badge bg-{{ order.status.badgeClass }}">{{ order.status.label }}</span></td>
-                    <td>{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
-                    <td><a href="{{ path('app_admin_order_show', {id: order.id}) }}" class="btn btn-sm btn-primary">Voir</a></td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <section class="card p-0 overflow-hidden">
+            <div class="px-6 py-5 border-b border-black/5 flex items-center justify-between">
+                <h3 class="text-2xl text-ink">Dernières commandes</h3>
+                <a href="{{ path('app_admin_order_index') }}" class="text-sm text-sage hover:text-gold transition-colors">Tout voir</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead class="bg-paper text-ink/70 uppercase text-xs tracking-wide">
+                        <tr>
+                            <th class="text-left px-6 py-4">Référence</th>
+                            <th class="text-left px-6 py-4">Client</th>
+                            <th class="text-left px-6 py-4">Date</th>
+                            <th class="text-left px-6 py-4">Statut</th>
+                            <th class="text-left px-6 py-4">Total</th>
+                            <th class="text-right px-6 py-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in recentOrders %}
+                            {% set statusClass = {
+                                'pending': 'bg-amber-100 text-amber-800',
+                                'paid': 'bg-emerald-100 text-emerald-800',
+                                'canceled': 'bg-rose-100 text-rose-800',
+                                'refunded': 'bg-slate-200 text-slate-700'
+                            }[order.status.value]|default('bg-slate-100 text-slate-700') %}
+                            <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors">
+                                <td class="px-6 py-4 font-medium text-ink">{{ order.reference }}</td>
+                                <td class="px-6 py-4 text-ink/80">{{ order.user.fullName }}</td>
+                                <td class="px-6 py-4 text-ink/70">{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ statusClass }}">{{ order.status.label }}</span>
+                                </td>
+                                <td class="px-6 py-4 text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="{{ path('app_admin_order_show', {id: order.id}) }}" class="inline-flex items-center px-4 py-2 rounded-lg bg-ink text-white text-xs font-medium hover:bg-gold transition-colors">Voir</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr class="border-t border-black/5">
+                                <td colspan="6" class="px-6 py-8 text-center text-sage">Aucune commande récente.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</section>
 {% endblock %}
