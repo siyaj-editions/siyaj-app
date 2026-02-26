@@ -89,4 +89,18 @@ class AccountController extends AbstractController
             'order' => $order,
         ]);
     }
+
+    #[Route('/commandes/{id}/facture', name: 'app_account_order_invoice')]
+    public function invoice(int $id, OrderRepository $orderRepository): Response
+    {
+        $order = $orderRepository->find($id);
+
+        if (!$order || $order->getUser() !== $this->getUser()) {
+            throw $this->createNotFoundException('Commande non trouvée.');
+        }
+
+        return $this->render('account/invoice.html.twig', [
+            'order' => $order,
+        ]);
+    }
 }

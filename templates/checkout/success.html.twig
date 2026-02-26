@@ -47,6 +47,9 @@
                     </svg>
                     Voir ma commande
                 </a>
+                <a href="{{ path('app_account_order_invoice', {id: order.id}) }}" class="btn btn-secondary w-full py-4">
+                    Editer ma facture
+                </a>
                 <a href="{{ path('app_catalog') }}" class="btn btn-secondary w-full py-4">
                     Continuer les achats
                 </a>

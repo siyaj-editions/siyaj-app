@@ -32,6 +32,11 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Nom',
                 'attr' => ['class' => 'form-control'],
             ])
+            ->add('numero', TextType::class, [
+                'label' => 'Numéro (téléphone)',
+                'required' => false,
+                'attr' => ['class' => 'form-control'],
+            ])
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'mapped' => false,

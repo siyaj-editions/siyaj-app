@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Author;
+use App\Entity\Address;
 use App\Entity\Book;
 use App\Entity\Order;
 use App\Entity\OrderItem;
@@ -44,6 +45,7 @@ class AppFixtures extends Fixture
         $user->setEmail($email);
         $user->setFirstname($firstname);
         $user->setLastname($lastname);
+        $user->setNumero('0600000000');
         $user->setRoles($roles);
         $user->setPassword($this->passwordHasher->hashPassword($user, $password));
 
@@ -129,6 +131,9 @@ class AppFixtures extends Fixture
         $order1->setUser($client);
         $order1->setStatus(OrderStatus::PAID);
         $order1->setCreatedAt(new \DateTimeImmutable('-2 weeks'));
+        $order1->setShippingAddress($this->createAddressForUser($manager, $client, '12 rue de la Paix', '75002', 'Paris'));
+        $order1->setBillingAddress($order1->getShippingAddress());
+        $order1->setBillingSameAsShipping(true);
 
         $item1 = new OrderItem();
         $item1->setBook($books['Les Misérables']);
@@ -152,6 +157,9 @@ class AppFixtures extends Fixture
         $order2->setUser($client);
         $order2->setStatus(OrderStatus::PAID);
         $order2->setCreatedAt(new \DateTimeImmutable('-5 days'));
+        $order2->setShippingAddress($this->createAddressForUser($manager, $client, '18 avenue de France', '75013', 'Paris'));
+        $order2->setBillingAddress($order2->getShippingAddress());
+        $order2->setBillingSameAsShipping(true);
 
         $item3 = new OrderItem();
         $item3->setBook($books['Le Comte de Monte-Cristo']);
@@ -175,6 +183,9 @@ class AppFixtures extends Fixture
         $order3->setUser($client);
         $order3->setStatus(OrderStatus::PENDING);
         $order3->setCreatedAt(new \DateTimeImmutable());
+        $order3->setShippingAddress($this->createAddressForUser($manager, $client, '8 boulevard Voltaire', '75011', 'Paris'));
+        $order3->setBillingAddress($order3->getShippingAddress());
+        $order3->setBillingSameAsShipping(true);
 
         $item5 = new OrderItem();
         $item5->setBook($books['L\'Étranger']);
@@ -191,6 +202,9 @@ class AppFixtures extends Fixture
         $order4->setUser($client);
         $order4->setStatus(OrderStatus::CANCELED);
         $order4->setCreatedAt(new \DateTimeImmutable('-1 month'));
+        $order4->setShippingAddress($this->createAddressForUser($manager, $client, '3 rue des Lilas', '93100', 'Montreuil'));
+        $order4->setBillingAddress($order4->getShippingAddress());
+        $order4->setBillingSameAsShipping(true);
 
         $item6 = new OrderItem();
         $item6->setBook($books['Madame Bovary']);
@@ -207,6 +221,9 @@ class AppFixtures extends Fixture
         $order5->setUser($client);
         $order5->setStatus(OrderStatus::REFUNDED);
         $order5->setCreatedAt(new \DateTimeImmutable('-3 weeks'));
+        $order5->setShippingAddress($this->createAddressForUser($manager, $client, '45 rue de Lyon', '69002', 'Lyon'));
+        $order5->setBillingAddress($order5->getShippingAddress());
+        $order5->setBillingSameAsShipping(true);
 
         $item7 = new OrderItem();
         $item7->setBook($books['La Peste']);
@@ -217,5 +234,21 @@ class AppFixtures extends Fixture
 
         $order5->calculateTotal();
         $manager->persist($order5);
+    }
+
+    private function createAddressForUser(ObjectManager $manager, User $user, string $street, string $postalCode, string $city): Address
+    {
+        $address = new Address();
+        $address->setUser($user);
+        $address->setFirstname($user->getFirstname());
+        $address->setLastname($user->getLastname());
+        $address->setNumero($user->getNumero());
+        $address->setStreet($street);
+        $address->setPostalCode($postalCode);
+        $address->setCity($city);
+        $address->setCountry('France');
+        $manager->persist($address);
+
+        return $address;
     }
 }
