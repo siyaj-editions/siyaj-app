@@ -1,0 +1,15 @@
+.git
+.github
+.vscode
+var
+vendor
+node_modules
+tests
+docker-compose*
+compose.override.yaml
+.env
+.env.*
+!.env.dist
+!.env.test
+.DS_Store
+public/.DS_Store
