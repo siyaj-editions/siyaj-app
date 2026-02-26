@@ -18,40 +18,11 @@
                     {{ form_start(checkoutForm, {'attr': {'class': 'space-y-8', 'id': 'checkout-form'}}) }}
 
                     <div class="space-y-4">
-                        <h2 class="font-display text-2xl text-ink">Adresse de livraison</h2>
-                        <div class="grid sm:grid-cols-2 gap-4">
-                            <div>
-                                {{ form_label(checkoutForm.shippingAddress.firstname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.firstname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            </div>
-                            <div>
-                                {{ form_label(checkoutForm.shippingAddress.lastname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.lastname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            </div>
-                            <div class="sm:col-span-2">
-                                {{ form_label(checkoutForm.shippingAddress.numero, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.numero, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': '06 12 34 56 78'}}) }}
-                            </div>
-                            <div class="sm:col-span-2">
-                                {{ form_label(checkoutForm.shippingAddress.street, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.street, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': '12 rue de la Paix'}}) }}
-                            </div>
-                            <div class="sm:col-span-2">
-                                {{ form_label(checkoutForm.shippingAddress.street2, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.street2, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': 'Appartement, étage...'}}) }}
-                            </div>
-                            <div>
-                                {{ form_label(checkoutForm.shippingAddress.postalCode, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.postalCode, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            </div>
-                            <div>
-                                {{ form_label(checkoutForm.shippingAddress.city, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.city, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            </div>
-                            <div class="sm:col-span-2">
-                                {{ form_label(checkoutForm.shippingAddress.country, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                {{ form_widget(checkoutForm.shippingAddress.country, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            </div>
+                        <h2 class="font-display text-2xl text-ink">Sélectionnez votre adresse de livraison</h2>
+                        <div>
+                            {{ form_label(checkoutForm.shippingAddressId, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(checkoutForm.shippingAddressId, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            {{ form_errors(checkoutForm.shippingAddressId) }}
                         </div>
                     </div>
 
@@ -62,42 +33,20 @@
                         </div>
 
                         <div id="billing-fields" class="space-y-4 hidden">
-                            <h2 class="font-display text-2xl text-ink">Adresse de facturation</h2>
-                            <div class="grid sm:grid-cols-2 gap-4">
-                                <div>
-                                    {{ form_label(checkoutForm.billingAddress.firstname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.firstname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div>
-                                    {{ form_label(checkoutForm.billingAddress.lastname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.lastname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div class="sm:col-span-2">
-                                    {{ form_label(checkoutForm.billingAddress.numero, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.numero, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div class="sm:col-span-2">
-                                    {{ form_label(checkoutForm.billingAddress.street, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.street, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div class="sm:col-span-2">
-                                    {{ form_label(checkoutForm.billingAddress.street2, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.street2, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div>
-                                    {{ form_label(checkoutForm.billingAddress.postalCode, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.postalCode, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div>
-                                    {{ form_label(checkoutForm.billingAddress.city, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.city, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
-                                <div class="sm:col-span-2">
-                                    {{ form_label(checkoutForm.billingAddress.country, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                                    {{ form_widget(checkoutForm.billingAddress.country, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                                </div>
+                            <h2 class="font-display text-2xl text-ink">Sélectionnez votre adresse de facturation</h2>
+                            <div>
+                                {{ form_label(checkoutForm.billingAddressId, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                                {{ form_widget(checkoutForm.billingAddressId, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                                {{ form_errors(checkoutForm.billingAddressId) }}
                             </div>
                         </div>
+                    </div>
+
+                    <div class="pt-6 border-t border-black/5">
+                        <p class="text-sm text-ink/60">
+                            Besoin d'ajouter une nouvelle adresse ?
+                            <a href="{{ path('app_account_address') }}" class="text-gold hover:underline">Gérer mes adresses</a>
+                        </p>
                     </div>
 
                     <div class="pt-6 border-t border-black/5">
@@ -110,6 +59,14 @@
             <aside class="lg:sticky lg:top-24">
                 <div class="card p-6">
                     <h3 class="font-display text-xl text-ink mb-4">Récapitulatif</h3>
+                    <div class="mb-4 p-4 rounded-xl bg-paper border border-black/5">
+                        <p class="text-xs font-semibold uppercase tracking-wider text-ink/40 mb-2">Adresses disponibles</p>
+                        <div class="space-y-2 text-xs text-ink/70">
+                            {% for address in addresses %}
+                                <p>{{ address.fullName }} - {{ address.inline }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <div class="space-y-2 text-sm text-ink/70">
                         {% for item in cart %}
                             <div class="flex justify-between gap-3">

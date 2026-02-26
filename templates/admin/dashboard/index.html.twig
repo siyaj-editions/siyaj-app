@@ -3,91 +3,136 @@
 {% block title %}Dashboard Admin - SIYAG{% endblock %}
 
 {% block body %}
+{% set unreadManuscriptsCount = admin_unread_manuscripts_count() %}
 <section class="py-12 md:py-16">
-    <div class="container space-y-8">
-        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
-            <div>
-                <p class="text-sm text-sage">Administration</p>
-                <h1 class="text-4xl md:text-5xl text-ink">Dashboard</h1>
-            </div>
-        </div>
+    <div class="container">
+        <div class="grid lg:grid-cols-4 gap-8 lg:gap-12 items-start">
+            <aside class="lg:sticky lg:top-24">
+                <nav class="bg-white rounded-2xl border border-black/5 overflow-hidden">
+                    <a href="{{ path('app_admin_dashboard') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium bg-ink text-white border-b border-black/5 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="{{ path('app_admin_book_index') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                        Livres
+                    </a>
+                    <a href="{{ path('app_admin_author_index') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        Auteurs
+                    </a>
+                    <a href="{{ path('app_admin_order_index') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+                        </svg>
+                        Commandes
+                    </a>
+                    <a href="{{ path('app_admin_manuscript_index') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-8.25a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 6v12A2.25 2.25 0 006.75 20.25h5.25" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 7.5h7.5M8.25 11.25h7.5M8.25 15h3.75M16.5 18.75a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z" />
+                        </svg>
+                        Manuscrits
+                        {% if unreadManuscriptsCount > 0 %}
+                            <span class="ml-auto inline-flex w-4 h-4 rounded-full bg-gold text-white text-[9px] font-semibold items-center justify-center leading-none shrink-0">
+                                {{ unreadManuscriptsCount > 99 ? '99' : unreadManuscriptsCount }}
+                            </span>
+                        {% endif %}
+                    </a>
+                    <a href="{{ path('app_admin_newsletter_index') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream transition-all duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                        </svg>
+                        Newsletter
+                    </a>
+                </nav>
+            </aside>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <article class="card p-6 bg-ink text-white">
-                <p class="text-sm text-white/70">Commandes</p>
-                <p class="text-4xl mt-2">{{ totalOrders }}</p>
-            </article>
-            <article class="card p-6 bg-sage text-white">
-                <p class="text-sm text-white/70">Livres</p>
-                <p class="text-4xl mt-2">{{ totalBooks }}</p>
-            </article>
-            <article class="card p-6 gradient-gold text-white">
-                <p class="text-sm text-white/80">Utilisateurs</p>
-                <p class="text-4xl mt-2">{{ totalUsers }}</p>
-            </article>
-        </div>
+            <main class="lg:col-span-3 space-y-8">
+                <div>
+                    <p class="text-sm text-sage">Administration</p>
+                    <h1 class="text-4xl md:text-5xl text-ink">Dashboard</h1>
+                </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a href="{{ path('app_admin_book_index') }}" class="card p-5 hover:shadow-xl transition-all duration-300">
-                <h2 class="text-xl text-ink">Gérer les livres</h2>
-                <p class="text-sm text-sage mt-1">Catalogue, stock et disponibilité.</p>
-            </a>
-            <a href="{{ path('app_admin_author_index') }}" class="card p-5 hover:shadow-xl transition-all duration-300">
-                <h2 class="text-xl text-ink">Gérer les auteurs</h2>
-                <p class="text-sm text-sage mt-1">Profils auteur et bibliographie.</p>
-            </a>
-            <a href="{{ path('app_admin_order_index') }}" class="card p-5 hover:shadow-xl transition-all duration-300">
-                <h2 class="text-xl text-ink">Gérer les commandes</h2>
-                <p class="text-sm text-sage mt-1">Suivi, statut et remboursements.</p>
-            </a>
-        </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
+                    <article class="card p-6 bg-ink text-white">
+                        <p class="text-sm text-white/70">Commandes</p>
+                        <p class="text-4xl mt-2">{{ totalOrders }}</p>
+                    </article>
+                    <article class="card p-6 bg-sage text-white">
+                        <p class="text-sm text-white/70">Livres</p>
+                        <p class="text-4xl mt-2">{{ totalBooks }}</p>
+                    </article>
+                    <article class="card p-6 gradient-gold text-white">
+                        <p class="text-sm text-white/80">Utilisateurs</p>
+                        <p class="text-4xl mt-2">{{ totalUsers }}</p>
+                    </article>
+                    <article class="card p-6 bg-white border border-black/10">
+                        <p class="text-sm text-ink/60">Newsletter</p>
+                        <p class="text-4xl mt-2 text-ink">{{ totalNewsletter }}</p>
+                    </article>
+                    <article class="card p-6 bg-white border border-black/10">
+                        <p class="text-sm text-ink/60">Manuscrits</p>
+                        <p class="text-4xl mt-2 text-ink">{{ totalManuscripts }}</p>
+                    </article>
+                </div>
 
-        <section class="card p-0 overflow-hidden">
-            <div class="px-6 py-5 border-b border-black/5 flex items-center justify-between">
-                <h3 class="text-2xl text-ink">Dernières commandes</h3>
-                <a href="{{ path('app_admin_order_index') }}" class="text-sm text-sage hover:text-gold transition-colors">Tout voir</a>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="min-w-full text-sm">
-                    <thead class="bg-paper text-ink/70 uppercase text-xs tracking-wide">
-                        <tr>
-                            <th class="text-left px-6 py-4">Référence</th>
-                            <th class="text-left px-6 py-4">Client</th>
-                            <th class="text-left px-6 py-4">Date</th>
-                            <th class="text-left px-6 py-4">Statut</th>
-                            <th class="text-left px-6 py-4">Total</th>
-                            <th class="text-right px-6 py-4">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for order in recentOrders %}
-                            {% set statusClass = {
-                                'pending': 'bg-amber-100 text-amber-800',
-                                'paid': 'bg-emerald-100 text-emerald-800',
-                                'canceled': 'bg-rose-100 text-rose-800',
-                                'refunded': 'bg-slate-200 text-slate-700'
-                            }[order.status.value]|default('bg-slate-100 text-slate-700') %}
-                            <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors">
-                                <td class="px-6 py-4 font-medium text-ink">{{ order.reference }}</td>
-                                <td class="px-6 py-4 text-ink/80">{{ order.user.fullName }}</td>
-                                <td class="px-6 py-4 text-ink/70">{{ order.createdAt|date('d/m/Y H:i') }}</td>
-                                <td class="px-6 py-4">
-                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ statusClass }}">{{ order.status.label }}</span>
-                                </td>
-                                <td class="px-6 py-4 text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
-                                <td class="px-6 py-4 text-right">
-                                    <a href="{{ path('app_admin_order_show', {id: order.id}) }}" class="inline-flex items-center px-4 py-2 rounded-lg bg-ink text-white text-xs font-medium hover:bg-gold transition-colors">Voir</a>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr class="border-t border-black/5">
-                                <td colspan="6" class="px-6 py-8 text-center text-sage">Aucune commande récente.</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </section>
+                <section class="card p-0 overflow-hidden">
+                    <div class="px-6 py-5 border-b border-black/5 flex items-center justify-between">
+                        <h3 class="text-2xl text-ink">Dernières commandes</h3>
+                        <a href="{{ path('app_admin_order_index') }}" class="text-sm text-sage hover:text-gold transition-colors">Tout voir</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full text-sm">
+                            <thead class="bg-paper text-ink/70 uppercase text-xs tracking-wide">
+                                <tr>
+                                    <th class="text-left px-6 py-4">Référence</th>
+                                    <th class="text-left px-6 py-4">Client</th>
+                                    <th class="text-left px-6 py-4">Date</th>
+                                    <th class="text-left px-6 py-4">Statut</th>
+                                    <th class="text-left px-6 py-4">Total</th>
+                                    <th class="text-right px-6 py-4">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for order in recentOrders %}
+                                    {% set statusClass = {
+                                        'pending': 'bg-amber-100 text-amber-800',
+                                        'paid': 'bg-emerald-100 text-emerald-800',
+                                        'canceled': 'bg-rose-100 text-rose-800',
+                                        'refunded': 'bg-slate-200 text-slate-700'
+                                    }[order.status.value]|default('bg-slate-100 text-slate-700') %}
+                                    <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors">
+                                        <td class="px-6 py-4 font-medium text-ink">{{ order.reference }}</td>
+                                        <td class="px-6 py-4 text-ink/80">{{ order.user.fullName }}</td>
+                                        <td class="px-6 py-4 text-ink/70">{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ statusClass }}">{{ order.status.label }}</span>
+                                        </td>
+                                        <td class="px-6 py-4 text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
+                                        <td class="px-6 py-4 text-right">
+                                            <a href="{{ path('app_admin_order_show', {id: order.id}) }}" class="inline-flex items-center px-4 py-2 rounded-lg bg-ink text-white text-xs font-medium hover:bg-gold transition-colors">Voir</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr class="border-t border-black/5">
+                                        <td colspan="6" class="px-6 py-8 text-center text-sage">Aucune commande récente.</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
     </div>
 </section>
 {% endblock %}

@@ -45,7 +45,7 @@
                                 {# Cover #}
                                 <div class="flex-shrink-0 w-20 h-28 sm:w-24 sm:h-32 rounded-lg overflow-hidden bg-cream">
                                     {% if item.book.coverImage %}
-                                        <img src="{{ item.book.coverImage }}" alt="{{ item.book.title }}" class="w-full h-full object-cover">
+                                        <img src="{{ item.book.coverImage }}" alt="{{ item.book.title }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full h-full object-cover">
                                     {% else %}
                                         <div class="w-full h-full flex items-center justify-center text-ink/20">
                                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">

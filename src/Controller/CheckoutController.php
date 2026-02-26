@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
 use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
 use App\Form\CheckoutType;
+use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\CartService;
 use App\Service\StripeService;
@@ -26,7 +26,8 @@ class CheckoutController extends AbstractController
         private CartService $cartService,
         private StripeService $stripeService,
         private EntityManagerInterface $entityManager,
-        private OrderRepository $orderRepository
+        private OrderRepository $orderRepository,
+        private AddressRepository $addressRepository
     ) {
     }
 
@@ -50,35 +51,57 @@ class CheckoutController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
+        $addresses = $this->addressRepository->findByUser($user);
+        if (count($addresses) === 0) {
+            $this->addFlash('warning', 'Ajoutez au moins une adresse avant de continuer le paiement.');
 
-        $initialAddress = [
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'numero' => $user->getNumero(),
-            'street' => '',
-            'street2' => '',
-            'postalCode' => '',
-            'city' => '',
-            'country' => 'France',
-        ];
+            return $this->redirectToRoute('app_account_address');
+        }
 
+        $choices = [];
+        foreach ($addresses as $address) {
+            $label = sprintf(
+                '%s - %s',
+                $address->getFullName(),
+                $address->getInline()
+            );
+            $choices[$label] = (string) $address->getId();
+        }
+
+        $defaultAddressId = (string) $addresses[0]->getId();
         $formData = [
-            'shippingAddress' => $initialAddress,
+            'shippingAddressId' => $defaultAddressId,
             'billingSameAsShipping' => true,
-            'billingAddress' => $initialAddress,
+            'billingAddressId' => $defaultAddressId,
         ];
 
-        $form = $this->createForm(CheckoutType::class, $formData);
+        $form = $this->createForm(CheckoutType::class, $formData, [
+            'address_choices' => $choices,
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $billingSameAsShipping = (bool) ($data['billingSameAsShipping'] ?? true);
+            $shippingAddressId = (int) ($data['shippingAddressId'] ?? 0);
+            $billingAddressId = (int) ($data['billingAddressId'] ?? 0);
 
-            $shippingAddress = $this->buildAddressFromArray($data['shippingAddress'], $user);
+            $shippingAddress = $this->addressRepository->findOneByIdAndUser($shippingAddressId, $user);
+            if (!$shippingAddress) {
+                $this->addFlash('error', 'Adresse de livraison invalide.');
+
+                return $this->redirectToRoute('app_checkout_information');
+            }
+
             $billingAddress = $billingSameAsShipping
                 ? $shippingAddress
-                : $this->buildAddressFromArray($data['billingAddress'], $user);
+                : $this->addressRepository->findOneByIdAndUser($billingAddressId, $user);
+
+            if (!$billingAddress) {
+                $this->addFlash('error', 'Adresse de facturation invalide.');
+
+                return $this->redirectToRoute('app_checkout_information');
+            }
 
             $order = new Order();
             $order->setUser($user);
@@ -118,7 +141,8 @@ class CheckoutController extends AbstractController
         return $this->render('checkout/information.html.twig', [
             'checkoutForm' => $form,
             'cart' => $this->cartService->getFullCart(),
-            'total' => $this->cartService->getTotal(),
+            'total' => $this->cartService->getTotalEuros(),
+            'addresses' => $addresses,
         ]);
     }
 
@@ -202,22 +226,4 @@ class CheckoutController extends AbstractController
         ]);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    private function buildAddressFromArray(array $data, User $user): Address
-    {
-        $address = new Address();
-        $address->setUser($user);
-        $address->setFirstname((string) ($data['firstname'] ?? ''));
-        $address->setLastname((string) ($data['lastname'] ?? ''));
-        $address->setNumero($data['numero'] ? (string) $data['numero'] : null);
-        $address->setStreet((string) ($data['street'] ?? ''));
-        $address->setStreet2($data['street2'] ? (string) $data['street2'] : null);
-        $address->setPostalCode((string) ($data['postalCode'] ?? ''));
-        $address->setCity((string) ($data['city'] ?? ''));
-        $address->setCountry((string) ($data['country'] ?? 'France'));
-
-        return $address;
-    }
 }

@@ -36,6 +36,25 @@ class OrderRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return Order[]
+     */
+    public function findLatestForToday(int $limit = 10): array
+    {
+        $startOfDay = new \DateTimeImmutable('today');
+        $endOfDay = $startOfDay->modify('+1 day');
+
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.createdAt >= :startOfDay')
+            ->andWhere('o.createdAt < :endOfDay')
+            ->setParameter('startOfDay', $startOfDay)
+            ->setParameter('endOfDay', $endOfDay)
+            ->orderBy('o.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function save(Order $order, bool $flush = false): void
     {
         $this->getEntityManager()->persist($order);

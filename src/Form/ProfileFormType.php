@@ -11,7 +11,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ProfileFormType extends AbstractType
 {
@@ -43,7 +42,6 @@ class ProfileFormType extends AbstractType
                     'label' => 'Nouveau mot de passe (laisser vide pour ne pas changer)',
                     'attr' => ['class' => 'form-control', 'autocomplete' => 'new-password'],
                     'constraints' => [
-                        new NotBlank(message: 'Veuillez entrer un mot de passe'),
                         new Length(
                             min: 6,
                             minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
