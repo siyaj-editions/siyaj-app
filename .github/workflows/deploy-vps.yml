@@ -70,6 +70,10 @@ jobs:
             docker compose --env-file .env.prod -f compose.vps.yml run --rm app php bin/console doctrine:migrations:migrate --no-interaction
             docker compose --env-file .env.prod -f compose.vps.yml run --rm app php bin/console cache:clear --env=prod
 
-            docker compose --env-file .env.prod -f compose.vps.yml up -d app nginx
+            docker compose --env-file .env.prod -f compose.vps.yml up -d app
+            docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console importmap:install --env=prod
+            docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console tailwind:build --env=prod --minify
+            docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console asset-map:compile --env=prod
+            docker compose --env-file .env.prod -f compose.vps.yml up -d nginx
             docker logout ghcr.io
             docker image prune -f
