@@ -3,9 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
-use App\Enum\OrderStatus;
-use App\Repository\OrderRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\AdminOrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,12 +15,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class OrderController extends AbstractController
 {
     #[Route('', name: 'app_admin_order_index')]
-    public function index(OrderRepository $orderRepository): Response
+    public function index(AdminOrderService $adminOrderService): Response
     {
-        $orders = $orderRepository->findBy([], ['createdAt' => 'DESC']);
-
         return $this->render('admin/order/index.html.twig', [
-            'orders' => $orders,
+            'orders' => $adminOrderService->listOrders(),
         ]);
     }
 
@@ -38,14 +34,10 @@ class OrderController extends AbstractController
     public function updateStatus(
         Request $request,
         Order $order,
-        EntityManagerInterface $entityManager
+        AdminOrderService $adminOrderService
     ): Response {
         $status = $request->request->get('status');
-
-        if ($status && in_array($status, ['pending', 'paid', 'canceled', 'refunded'])) {
-            $order->setStatus(OrderStatus::from($status));
-            $entityManager->flush();
-
+        if ($adminOrderService->updateOrderStatus($order, is_string($status) ? $status : null)) {
             $this->addFlash('success', 'Le statut de la commande a été mis à jour.');
         }
 
