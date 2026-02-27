@@ -163,6 +163,8 @@ Dans le repository GitHub, ajouter:
 - `VPS_USER` (ex: `ubuntu`)
 - `VPS_SSH_KEY` (cle privee SSH)
 - `VPS_APP_PATH` (ex: `/home/ubuntu/siyag`)
+- `GHCR_USERNAME` (ton username GitHub, ex: `LudwigELATRE`)
+- `GHCR_TOKEN` (token GitHub avec droit `read:packages` pour pull l'image)
 
 ### 3) Lancer le deploiement
 
