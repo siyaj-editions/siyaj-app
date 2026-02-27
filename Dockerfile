@@ -29,7 +29,8 @@ COPY . .
 
 RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction
 
-RUN chown -R www-data:www-data var public
+RUN mkdir -p var public \
+    && chown -R www-data:www-data var public
 
 USER www-data
 
