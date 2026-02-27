@@ -79,9 +79,6 @@
         }
 
         if (typeof Stripe !== 'function') {
-            var el = document.getElementById('stripe-error');
-            el.textContent = 'Stripe.js indisponible. Utilisez le bouton ci-dessus pour accéder au paiement.';
-            el.classList.remove('hidden');
             return;
         }
 

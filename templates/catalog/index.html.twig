@@ -30,7 +30,7 @@
                         Recherche
                     </label>
                     <div class="relative">
-                        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ink/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                        <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-ink/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                             <circle cx="11" cy="11" r="8"/>
                             <path d="m21 21-4.35-4.35"/>
                         </svg>
@@ -38,7 +38,7 @@
                             type="text"
                             name="search"
                             id="search"
-                            class="w-full pl-12 pr-4 py-3 rounded-xl"
+                            class="w-full pl-14 pr-4 py-3 rounded-xl"
                             placeholder="Titre, ISBN..."
                             value="{{ currentSearch }}"
                         >
@@ -73,7 +73,7 @@
                 </div>
 
                 {# Actions #}
-                <div class="flex items-center gap-3">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                     <button type="submit" class="btn btn-primary flex-1 py-3">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                             <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
@@ -97,11 +97,11 @@
             <p class="text-sm text-ink/70">
                 <span class="font-semibold text-ink">{{ totalBooks }}</span> ouvrage{% if totalBooks > 1 %}s{% endif %} trouvé{% if totalBooks > 1 %}s{% endif %}
             </p>
-            <div class="flex items-center gap-4">
+            <div class="flex flex-wrap sm:flex-nowrap items-center gap-3 sm:gap-4 w-full sm:w-auto">
                 {% if totalPages > 1 %}
                     <span class="text-sm text-ink/50">Page {{ currentPage }} sur {{ totalPages }}</span>
                 {% endif %}
-                <div class="flex items-center gap-2">
+                <div class="flex items-center gap-2 ml-auto sm:ml-0">
                     <label for="perPageSelect" class="text-xs text-ink/50">Afficher</label>
                     <select id="perPageSelect" onchange="window.location.href=this.value" class="py-1.5 px-3 text-sm rounded-lg border border-black/10">
                         {% for option in allowedPerPage %}
@@ -116,7 +116,7 @@
 
         {% if books|length > 0 %}
             {# Books Grid #}
-            <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mb-12">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mb-12">
                 {% for book in books %}
                     <article class="group">
                         <div class="card h-full flex flex-col">
