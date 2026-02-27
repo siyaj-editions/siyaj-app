@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Order;
-use App\Entity\OrderItem;
 use App\Entity\User;
+use App\Exception\CheckoutException;
 use App\Form\CheckoutType;
-use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use App\Service\CartService;
+use App\Service\CheckoutService;
 use App\Service\StripeService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,25 +22,18 @@ class CheckoutController extends AbstractController
 {
     public function __construct(
         private CartService $cartService,
+        private CheckoutService $checkoutService,
         private StripeService $stripeService,
-        private EntityManagerInterface $entityManager,
-        private OrderRepository $orderRepository,
-        private AddressRepository $addressRepository
+        private OrderRepository $orderRepository
     ) {
     }
 
     #[Route('/informations', name: 'app_checkout_information', methods: ['GET', 'POST'])]
     public function information(Request $request): Response
     {
-        if ($this->cartService->isEmpty()) {
-            $this->addFlash('error', 'Votre panier est vide.');
-
-            return $this->redirectToRoute('app_cart');
-        }
-
-        $stockErrors = $this->cartService->validateStock();
-        if (!empty($stockErrors)) {
-            foreach ($stockErrors as $error) {
+        $cartValidationErrors = $this->checkoutService->getCartValidationErrors();
+        if ($cartValidationErrors !== []) {
+            foreach ($cartValidationErrors as $error) {
                 $this->addFlash('error', $error);
             }
 
@@ -51,24 +42,15 @@ class CheckoutController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $addresses = $this->addressRepository->findByUser($user);
-        if (count($addresses) === 0) {
+        $addresses = $this->checkoutService->getUserAddresses($user);
+        if ($addresses === []) {
             $this->addFlash('warning', 'Ajoutez au moins une adresse avant de continuer le paiement.');
 
             return $this->redirectToRoute('app_account_address');
         }
 
-        $choices = [];
-        foreach ($addresses as $address) {
-            $label = sprintf(
-                '%s - %s',
-                $address->getFullName(),
-                $address->getInline()
-            );
-            $choices[$label] = (string) $address->getId();
-        }
-
-        $defaultAddressId = (string) $addresses[0]->getId();
+        $choices = $this->checkoutService->buildAddressChoices($addresses);
+        $defaultAddressId = $this->checkoutService->getDefaultAddressId($addresses);
         $formData = [
             'shippingAddressId' => $defaultAddressId,
             'billingSameAsShipping' => true,
@@ -81,56 +63,17 @@ class CheckoutController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $billingSameAsShipping = (bool) ($data['billingSameAsShipping'] ?? true);
-            $shippingAddressId = (int) ($data['shippingAddressId'] ?? 0);
-            $billingAddressId = (int) ($data['billingAddressId'] ?? 0);
-
-            $shippingAddress = $this->addressRepository->findOneByIdAndUser($shippingAddressId, $user);
-            if (!$shippingAddress) {
-                $this->addFlash('error', 'Adresse de livraison invalide.');
-
-                return $this->redirectToRoute('app_checkout_information');
-            }
-
-            $billingAddress = $billingSameAsShipping
-                ? $shippingAddress
-                : $this->addressRepository->findOneByIdAndUser($billingAddressId, $user);
-
-            if (!$billingAddress) {
-                $this->addFlash('error', 'Adresse de facturation invalide.');
-
-                return $this->redirectToRoute('app_checkout_information');
-            }
-
-            $order = new Order();
-            $order->setUser($user);
-            $order->setCurrency('EUR');
-            $order->setShippingAddress($shippingAddress);
-            $order->setBillingAddress($billingAddress);
-            $order->setBillingSameAsShipping($billingSameAsShipping);
-
-            $cart = $this->cartService->getFullCart();
-            foreach ($cart as $item) {
-                $orderItem = new OrderItem();
-                $orderItem->setBook($item['book']);
-                $orderItem->setTitleSnapshot($item['book']->getTitle());
-                $orderItem->setPriceSnapshot($item['book']->getPriceCents());
-                $orderItem->setQuantity($item['quantity']);
-                $order->addOrderItem($orderItem);
-            }
-
-            $order->calculateTotal();
-
-            $this->entityManager->persist($order);
-            $this->entityManager->flush();
-
             try {
+                $order = $this->checkoutService->createOrderFromFormData($user, $form->getData());
                 $session = $this->stripeService->createCheckoutSession($order);
 
                 return $this->redirectToRoute('app_checkout_start', [
                     'session_id' => $session->id,
                 ]);
+            } catch (CheckoutException $e) {
+                $this->addFlash('error', $e->getMessage());
+
+                return $this->redirectToRoute('app_checkout_information');
             } catch (\Exception $e) {
                 $this->addFlash('error', 'Erreur lors de la création du paiement: ' . $e->getMessage());
 
