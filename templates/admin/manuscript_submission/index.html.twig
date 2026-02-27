@@ -8,9 +8,9 @@
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
                 <p class="text-sm text-sage">Administration</p>
-                <h1 class="text-4xl md:text-5xl text-ink">Soumissions auteurs</h1>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl text-ink">Soumissions auteurs</h1>
             </div>
-            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary px-6 py-3">Retour dashboard</a>
+            <a href="{{ path('app_admin_dashboard') }}" class="btn btn-secondary px-6 py-3 w-full sm:w-auto text-center justify-center">Retour dashboard</a>
         </div>
 
         <section class="card p-0 overflow-hidden">
@@ -18,7 +18,7 @@
                 <h2 class="text-2xl text-ink">Demandes reçues</h2>
             </div>
             <div class="overflow-x-auto">
-                <table class="min-w-full text-sm">
+                <table class="min-w-[1100px] w-full text-sm">
                     <thead class="bg-paper text-ink/70 uppercase text-xs tracking-wide">
                         <tr>
                             <th class="text-left px-6 py-4">Auteur</th>
