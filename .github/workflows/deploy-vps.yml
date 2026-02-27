@@ -59,16 +59,17 @@ jobs:
           script: |
             set -e
             cd ${{ secrets.VPS_APP_PATH }}
+            test -f .env.prod || { echo ".env.prod introuvable dans $PWD"; exit 1; }
 
             export APP_IMAGE=${{ env.IMAGE_NAME }}:${{ github.sha }}
 
             echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
             docker pull $APP_IMAGE
-            docker compose -f compose.vps.yml up -d database
+            docker compose --env-file .env.prod -f compose.vps.yml up -d database
 
-            docker compose -f compose.vps.yml run --rm app php bin/console doctrine:migrations:migrate --no-interaction
-            docker compose -f compose.vps.yml run --rm app php bin/console cache:clear --env=prod
+            docker compose --env-file .env.prod -f compose.vps.yml run --rm app php bin/console doctrine:migrations:migrate --no-interaction
+            docker compose --env-file .env.prod -f compose.vps.yml run --rm app php bin/console cache:clear --env=prod
 
-            docker compose -f compose.vps.yml up -d app nginx
+            docker compose --env-file .env.prod -f compose.vps.yml up -d app nginx
             docker logout ghcr.io
             docker image prune -f
