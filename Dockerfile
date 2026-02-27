@@ -43,6 +43,12 @@ RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction \
     && if [ ! -f var/tailwind/app.built.css ]; then \
         php bin/console tailwind:build --env=prod --minify; \
     fi \
+    && if [ ! -f var/tailwind/app.built.css ]; then \
+        TAILWIND_BIN="$(find var/tailwind -type f -name 'tailwindcss-*' | head -n 1)"; \
+        if [ -n "$TAILWIND_BIN" ]; then \
+            "$TAILWIND_BIN" -i assets/styles/app.css -o var/tailwind/app.built.css --minify; \
+        fi; \
+    fi \
     && test -f var/tailwind/app.built.css \
     && APP_SECRET=build-secret \
     DATABASE_URL=postgresql://app:app@database:5432/app?serverVersion=16&charset=utf8 \
