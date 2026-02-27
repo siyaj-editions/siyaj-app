@@ -89,7 +89,7 @@
 
                     <div class="space-y-4">
                         {% for item in order.orderItems %}
-                            <div class="flex items-center gap-4 p-4 bg-paper rounded-xl">
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-4 p-4 bg-paper rounded-xl">
                                 {# Cover #}
                                 <div class="w-16 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-cream">
                                     {% if item.book and item.book.coverImage %}
@@ -111,13 +111,13 @@
                                 </div>
 
                                 {# Quantity #}
-                                <div class="text-center px-4">
+                                <div class="text-left sm:text-center sm:px-4">
                                     <span class="text-[10px] font-semibold uppercase tracking-wider text-ink/40 block">Qté</span>
                                     <span class="font-semibold text-ink">{{ item.quantity }}</span>
                                 </div>
 
                                 {# Total #}
-                                <div class="font-display text-lg font-semibold text-ink min-w-[80px] text-right">
+                                <div class="font-display text-lg font-semibold text-ink min-w-[80px] text-left sm:text-right">
                                     {{ (item.total / 100)|number_format(2, ',', ' ') }} €
                                 </div>
                             </div>
