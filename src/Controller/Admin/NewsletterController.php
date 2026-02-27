@@ -2,7 +2,7 @@
 
 namespace App\Controller\Admin;
 
-use App\Repository\NewsletterRepository;
+use App\Service\AdminNewsletterService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,10 +13,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class NewsletterController extends AbstractController
 {
     #[Route('', name: 'app_admin_newsletter_index')]
-    public function index(NewsletterRepository $newsletterRepository): Response
+    public function index(AdminNewsletterService $adminNewsletterService): Response
     {
         return $this->render('admin/newsletter/index.html.twig', [
-            'subscriptions' => $newsletterRepository->findLatest(200),
+            'subscriptions' => $adminNewsletterService->listLatestSubscriptions(),
         ]);
     }
 }

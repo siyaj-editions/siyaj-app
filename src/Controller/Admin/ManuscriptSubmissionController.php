@@ -3,23 +3,22 @@
 namespace App\Controller\Admin;
 
 use App\Entity\ManuscriptSubmission;
-use App\Repository\ManuscriptSubmissionRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\AdminManuscriptService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\HttpFoundation\Request;
 
 #[Route('/admin/manuscrits')]
 #[IsGranted('ROLE_ADMIN')]
 class ManuscriptSubmissionController extends AbstractController
 {
     #[Route('', name: 'app_admin_manuscript_index')]
-    public function index(ManuscriptSubmissionRepository $manuscriptSubmissionRepository): Response
+    public function index(AdminManuscriptService $adminManuscriptService): Response
     {
         return $this->render('admin/manuscript_submission/index.html.twig', [
-            'submissions' => $manuscriptSubmissionRepository->findLatest(300),
+            'submissions' => $adminManuscriptService->listLatestSubmissions(),
         ]);
     }
 
@@ -27,7 +26,7 @@ class ManuscriptSubmissionController extends AbstractController
     public function markRead(
         ManuscriptSubmission $manuscriptSubmission,
         Request $request,
-        EntityManagerInterface $entityManager
+        AdminManuscriptService $adminManuscriptService
     ): Response {
         if (!$this->isCsrfTokenValid('mark_manuscript_read_' . $manuscriptSubmission->getId(), (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Token invalide.');
@@ -35,8 +34,7 @@ class ManuscriptSubmissionController extends AbstractController
             return $this->redirectToRoute('app_admin_manuscript_index');
         }
 
-        $manuscriptSubmission->setIsReadByAdmin(true);
-        $entityManager->flush();
+        $adminManuscriptService->markAsRead($manuscriptSubmission);
         $this->addFlash('success', 'Demande marquée comme lue.');
 
         return $this->redirectToRoute('app_admin_manuscript_index');
@@ -46,7 +44,7 @@ class ManuscriptSubmissionController extends AbstractController
     public function markUnread(
         ManuscriptSubmission $manuscriptSubmission,
         Request $request,
-        EntityManagerInterface $entityManager
+        AdminManuscriptService $adminManuscriptService
     ): Response {
         if (!$this->isCsrfTokenValid('mark_manuscript_unread_' . $manuscriptSubmission->getId(), (string) $request->request->get('_token'))) {
             $this->addFlash('error', 'Token invalide.');
@@ -54,8 +52,7 @@ class ManuscriptSubmissionController extends AbstractController
             return $this->redirectToRoute('app_admin_manuscript_index');
         }
 
-        $manuscriptSubmission->setIsReadByAdmin(false);
-        $entityManager->flush();
+        $adminManuscriptService->markAsUnread($manuscriptSubmission);
         $this->addFlash('success', 'Demande marquée comme non lue.');
 
         return $this->redirectToRoute('app_admin_manuscript_index');

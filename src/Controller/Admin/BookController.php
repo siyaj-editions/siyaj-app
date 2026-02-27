@@ -4,8 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Book;
 use App\Form\BookFormType;
-use App\Repository\BookRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\AdminBookService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,25 +16,22 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class BookController extends AbstractController
 {
     #[Route('', name: 'app_admin_book_index')]
-    public function index(BookRepository $bookRepository): Response
+    public function index(AdminBookService $adminBookService): Response
     {
-        $books = $bookRepository->findBy([], ['createdAt' => 'DESC']);
-
         return $this->render('admin/book/index.html.twig', [
-            'books' => $books,
+            'books' => $adminBookService->listBooks(),
         ]);
     }
 
     #[Route('/nouveau', name: 'app_admin_book_new')]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, AdminBookService $adminBookService): Response
     {
         $book = new Book();
         $form = $this->createForm(BookFormType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($book);
-            $entityManager->flush();
+            $adminBookService->createBook($book);
 
             $this->addFlash('success', 'Le livre a été créé avec succès.');
 
@@ -48,13 +44,13 @@ class BookController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_admin_book_edit')]
-    public function edit(Request $request, Book $book, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Book $book, AdminBookService $adminBookService): Response
     {
         $form = $this->createForm(BookFormType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
+            $adminBookService->updateBook();
 
             $this->addFlash('success', 'Le livre a été modifié avec succès.');
 
@@ -68,11 +64,10 @@ class BookController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_admin_book_delete', methods: ['POST'])]
-    public function delete(Request $request, Book $book, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Book $book, AdminBookService $adminBookService): Response
     {
         if ($this->isCsrfTokenValid('delete'.$book->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($book);
-            $entityManager->flush();
+            $adminBookService->deleteBook($book);
 
             $this->addFlash('success', 'Le livre a été supprimé avec succès.');
         }
