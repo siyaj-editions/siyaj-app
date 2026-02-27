@@ -26,7 +26,14 @@ RUN composer install \
 COPY . .
 
 RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction \
-    && APP_ENV=prod APP_DEBUG=0 APP_SECRET=build-secret php bin/console tailwind:build
+    && APP_ENV=prod \
+    APP_DEBUG=0 \
+    APP_SECRET=build-secret \
+    DATABASE_URL=postgresql://app:app@database:5432/app?serverVersion=16&charset=utf8 \
+    STRIPE_PUBLIC_KEY=pk_test_build \
+    STRIPE_SECRET_KEY=sk_test_build \
+    STRIPE_WEBHOOK_SECRET=whsec_build \
+    php bin/console tailwind:build
 
 RUN chown -R www-data:www-data var public
 
