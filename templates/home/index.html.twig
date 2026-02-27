@@ -2,6 +2,44 @@
 
 {% block title %}Accueil - SIYAG Éditions{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .home-latest-card {
+            border: 1px solid rgba(17, 24, 39, 0.08);
+            box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
+            background: #fff;
+        }
+
+        @media (max-width: 639px) {
+            .mobile-book-meta {
+                padding-left: 10px;
+                padding-bottom: 5px;
+            }
+
+            .mobile-book-price {
+                flex-shrink: 0;
+                font-size: 0.95rem;
+                line-height: 1;
+            }
+
+            .shrink-0{
+                padding-right: 5px;
+            }
+
+            .mobile-book-add {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+
+            .mobile-book-add svg {
+                width: 0.75rem;
+                height: 0.75rem;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
 {# Hero Section #}
 <section class="relative overflow-hidden bg-gradient-to-br from-paper via-cream/50 to-paper">
@@ -71,10 +109,10 @@
 
         {% if latestBooks|length > 0 %}
             {# Books Grid #}
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-8">
                 {% for book in latestBooks %}
                     <article class="group">
-                        <div class="card h-full flex flex-col">
+                        <div class="card home-latest-card h-full flex flex-col">
                             {# Cover #}
                             <div class="relative aspect-book overflow-hidden bg-cream">
                                 {% if book.coverImage %}
@@ -104,29 +142,29 @@
                             </div>
 
                             {# Content #}
-                            <div class="p-5 flex flex-col flex-1">
-                                <h3 class="font-display text-lg font-semibold text-ink mb-1.5 line-clamp-2 group-hover:text-gold transition-colors duration-200">
+                            <div class="p-3 sm:p-4 lg:p-5 flex flex-col flex-1">
+                                <h3 class="font-display text-base sm:text-lg font-semibold text-ink mb-1.5 line-clamp-2 group-hover:text-gold transition-colors duration-200">
                                     <a href="{{ path('app_book_show', {slug: book.slug}) }}">
                                         {{ book.title }}
                                     </a>
                                 </h3>
-                                <p class="text-sm text-ink/50 mb-4">{{ book.authorsNames }}</p>
+                                <p class="text-xs sm:text-sm text-ink/50 mb-3 sm:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
 
-                                <div class="mt-auto pt-4 border-t border-black/5 flex items-center justify-between">
-                                    <span class="font-display text-xl font-semibold text-ink">
+                                <div class="mobile-book-meta mt-auto pt-3 sm:pt-4 border-t border-black/5 flex items-center justify-between gap-2 sm:px-0 sm:pb-0">
+                                    <span class="mobile-book-price font-display text-sm sm:text-lg lg:text-xl font-semibold text-ink">
                                         {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
                                     </span>
 
                                     {% if book.isInStock %}
-                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post">
-                                            <button type="submit" class="w-11 h-11 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post" class="shrink-0">
+                                            <button type="submit" class="mobile-book-add sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
+                                                <svg class="sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                                 </svg>
                                             </button>
                                         </form>
                                     {% else %}
-                                        <span class="text-xs font-medium text-ink/40 uppercase tracking-wider">
+                                        <span class="text-[10px] sm:text-xs font-medium text-ink/40 uppercase tracking-wider">
                                             Indisponible
                                         </span>
                                     {% endif %}
