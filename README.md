@@ -123,3 +123,57 @@ php bin/console doctrine:migrations:migrate
 - HTTPS
 - `composer install --no-dev --optimize-autoloader`
 - `php bin/console cache:clear --env=prod`
+
+## Deploiement VPS (GitHub Actions)
+
+Le projet inclut:
+- `Dockerfile` (image Symfony prod)
+- `compose.vps.yml` (app + nginx + postgres)
+- `.github/workflows/deploy-vps.yml` (build + push GHCR + deploy VPS)
+
+### 1) Preparer le VPS (une fois)
+
+Installer Docker + plugin Compose, puis creer un dossier de deploiement, par exemple:
+
+```bash
+mkdir -p /home/ubuntu/siyag
+```
+
+Copier `.env.prod.example` vers `/home/ubuntu/siyag/.env.prod`, puis adapter les valeurs:
+
+```env
+APP_ENV=prod
+APP_DEBUG=0
+APP_SECRET=change-me
+DATABASE_URL=postgresql://app:change-me@database:5432/app?serverVersion=16&charset=utf8
+
+POSTGRES_DB=app
+POSTGRES_USER=app
+POSTGRES_PASSWORD=change-me
+
+STRIPE_PUBLIC_KEY=pk_live_xxx
+STRIPE_SECRET_KEY=sk_live_xxx
+STRIPE_WEBHOOK_SECRET=whsec_xxx
+```
+
+### 2) Secrets GitHub a configurer
+
+Dans le repository GitHub, ajouter:
+- `VPS_HOST` (IP ou domaine du VPS)
+- `VPS_USER` (ex: `ubuntu`)
+- `VPS_SSH_KEY` (cle privee SSH)
+- `VPS_APP_PATH` (ex: `/home/ubuntu/siyag`)
+
+### 3) Lancer le deploiement
+
+Le workflow se lance:
+- automatiquement a chaque push sur `main`
+- ou manuellement via `workflow_dispatch`
+
+Pipeline:
+1. build image Docker
+2. push image sur GHCR
+3. copie `compose.vps.yml` + conf nginx sur le VPS
+4. migration Doctrine
+5. clear cache prod
+6. restart `app` + `nginx`
