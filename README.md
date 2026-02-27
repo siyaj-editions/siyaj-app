@@ -150,6 +150,7 @@ DATABASE_URL=postgresql://app:change-me@database:5432/app?serverVersion=16&chars
 POSTGRES_DB=app
 POSTGRES_USER=app
 POSTGRES_PASSWORD=change-me
+HOST_HTTP_PORT=8002
 
 STRIPE_PUBLIC_KEY=pk_live_xxx
 STRIPE_SECRET_KEY=sk_live_xxx
@@ -164,7 +165,7 @@ Dans le repository GitHub, ajouter:
 - `VPS_SSH_KEY` (cle privee SSH)
 - `VPS_APP_PATH` (ex: `/home/ubuntu/siyag`)
 - `GHCR_USERNAME` (ton username GitHub, ex: `LudwigELATRE`)
-- `GHCR_TOKEN` (token GitHub avec droit `read:packages` pour pull l'image)
+- `GHCR_TOKEN` (token GitHub avec droits `read:packages` et `write:packages`)
 
 ### 3) Lancer le deploiement
 
