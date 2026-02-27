@@ -27,35 +27,7 @@ RUN composer install \
 
 COPY . .
 
-RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction \
-    && APP_SECRET=build-secret \
-    DATABASE_URL=postgresql://app:app@database:5432/app?serverVersion=16&charset=utf8 \
-    STRIPE_PUBLIC_KEY=pk_test_build \
-    STRIPE_SECRET_KEY=sk_test_build \
-    STRIPE_WEBHOOK_SECRET=whsec_build \
-    php bin/console importmap:install --env=prod \
-    && APP_SECRET=build-secret \
-    DATABASE_URL=postgresql://app:app@database:5432/app?serverVersion=16&charset=utf8 \
-    STRIPE_PUBLIC_KEY=pk_test_build \
-    STRIPE_SECRET_KEY=sk_test_build \
-    STRIPE_WEBHOOK_SECRET=whsec_build \
-    php bin/console tailwind:build --env=prod --minify \
-    && if [ ! -f var/tailwind/app.built.css ]; then \
-        php bin/console tailwind:build --env=prod --minify; \
-    fi \
-    && if [ ! -f var/tailwind/app.built.css ]; then \
-        TAILWIND_BIN="$(find var/tailwind -type f -name 'tailwindcss-*' | head -n 1)"; \
-        if [ -n "$TAILWIND_BIN" ]; then \
-            "$TAILWIND_BIN" -i assets/styles/app.css -o var/tailwind/app.built.css --minify; \
-        fi; \
-    fi \
-    && test -f var/tailwind/app.built.css \
-    && APP_SECRET=build-secret \
-    DATABASE_URL=postgresql://app:app@database:5432/app?serverVersion=16&charset=utf8 \
-    STRIPE_PUBLIC_KEY=pk_test_build \
-    STRIPE_SECRET_KEY=sk_test_build \
-    STRIPE_WEBHOOK_SECRET=whsec_build \
-    php bin/console asset-map:compile --env=prod
+RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction
 
 RUN chown -R www-data:www-data var public
 
