@@ -29,6 +29,9 @@ COPY . .
 
 RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction
 
+RUN mkdir -p /opt/public \
+    && cp -a public/. /opt/public/
+
 RUN mkdir -p var public assets/vendor \
     && chown -R www-data:www-data var public assets
 
