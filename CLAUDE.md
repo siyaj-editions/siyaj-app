@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
-# PROJET : SIYAG
+# PROJET : SIYAJ
 **Type** : Site e-commerce – Maison d'édition
 **Stack** : Symfony 8.0 + Doctrine ORM + PostgreSQL + Twig + Stimulus + Turbo + Stripe
 

@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         // Créer les utilisateurs
-        $admin = $this->createUser($manager, 'admin@siyag.com', 'admin123', 'Admin', 'SIYAG', ['ROLE_ADMIN']);
+        $admin = $this->createUser($manager, 'admin@siyaj.com', 'admin123', 'Admin', 'SIYAJ', ['ROLE_ADMIN']);
         $client = $this->createUser($manager, 'client@test.com', 'client123', 'Jean', 'Dupont', ['ROLE_USER']);
 
         // Créer les auteurs

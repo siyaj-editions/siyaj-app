@@ -1,14 +1,14 @@
 # Project Context
 
 ## Project
-- Name: SIYAG Editions
+- Name: SIYAJ Editions
 - Type: Symfony 8 e-commerce for books
 - Stack: PHP 8.4, Symfony 8, Twig, Tailwind v4, Doctrine ORM, PostgreSQL 16, Docker Compose
 - Payments: Stripe Checkout + webhook
 
 ## Environments
 - Local app URL: `http://127.0.0.1:8000`
-- VPS app URL: `https://siyag-editions.elydris.fr`
+- VPS app URL: `https://siyaj-editions.elydris.fr`
 - Reverse proxy/tunnel: Cloudflare Tunnel -> `localhost:8002` on VPS
 
 ## Deployment model
