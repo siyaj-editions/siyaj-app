@@ -28,18 +28,19 @@
   - [ ] `/checkout/start?session_id=...`
   - [ ] `/checkout/success?session_id=...`
   - [ ] `/checkout/debug?session_id=...`
-- [ ] Commit current refactor changes
+- [ ] Commit current refactor + tests changes
 - [ ] Push branch and open/merge PR
 
 ## Validation checklist before push
 - [ ] `php -l` on changed PHP files
 - [ ] `php bin/console lint:container --no-debug`
+- [ ] `php bin/phpunit`
 - [ ] Quick UI smoke test desktop + mobile for impacted pages
 - [ ] Update docs (`PROJECT_CONTEXT.md` + `TODO.md` mandatory, plus `ARCHITECTURE.md`/`ROADMAP.md` if impacted)
 
 ## After merge
 - [ ] Pull `main`
-- [ ] Start test hardening batch (unit tests services + integration critical flows)
+- [ ] Continue test hardening batch (increase service coverage + critical integration flows)
 - [ ] Keep one coherent PR per bounded context
 
 ## Ops/deploy follow-up
@@ -49,4 +50,6 @@
 
 ## Nice to have
 - [x] Add dedicated `make smoke` target for quick post-deploy checks
-- [ ] Add service unit tests for checkout/catalog/admin flows
+- [x] Add initial service unit tests baseline
+- [ ] Add deeper service unit tests for checkout/catalog/admin edge cases
+- [ ] Decide if `/checkout/webhook` legacy route should stay protected by `ROLE_USER` or be made public

@@ -29,8 +29,8 @@
   - Cart mutation flows
   - Newsletter/manuscript submit flows if needed
 - Continue checkout orchestration cleanup where needed
-- Add focused unit tests for service-level logic
-- Add integration tests for critical user journeys
+- Add focused unit tests for service-level logic (baseline done, continue coverage)
+- Add integration tests for critical user journeys (baseline started, continue)
 
 ## Phase 4
 - Hardening and DX:
