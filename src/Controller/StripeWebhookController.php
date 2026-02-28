@@ -15,9 +15,8 @@ class StripeWebhookController extends AbstractController
     ) {
     }
 
-    // Accept both legacy and current webhook paths to avoid local misconfig
+    // Stripe server-to-server webhook endpoint.
     #[Route('/stripe/webhook', name: 'app_stripe_webhook', methods: ['POST'])]
-    #[Route('/checkout/webhook', name: 'app_checkout_webhook_legacy', methods: ['POST'])]
     public function webhook(Request $request): Response
     {
         $payload = $request->getContent();

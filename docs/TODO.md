@@ -22,7 +22,7 @@
 - [ ] Manual test home + webhook routes:
   - [ ] `/` (newsletter inscription + doublon)
   - [ ] `POST /stripe/webhook` (signature absente -> 400)
-  - [ ] `POST /checkout/webhook` (route legacy toujours active)
+  - [ ] `POST /checkout/webhook` (route supprimée -> 404)
 - [ ] Manual test checkout flow routes:
   - [ ] `/checkout/informations`
   - [ ] `/checkout/start?session_id=...`
@@ -52,4 +52,4 @@
 - [x] Add dedicated `make smoke` target for quick post-deploy checks
 - [x] Add initial service unit tests baseline
 - [ ] Add deeper service unit tests for checkout/catalog/admin edge cases
-- [ ] Decide if `/checkout/webhook` legacy route should stay protected by `ROLE_USER` or be made public
+- [x] Remove legacy `/checkout/webhook` route (keep `/stripe/webhook` only)
