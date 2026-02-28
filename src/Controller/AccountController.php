@@ -2,13 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Address;
 use App\Entity\User;
 use App\Form\AddressFormType;
 use App\Form\ProfileFormType;
-use App\Repository\AddressRepository;
-use App\Repository\OrderRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\AccountService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,46 +18,33 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AccountController extends AbstractController
 {
     #[Route('', name: 'app_account')]
-    public function index(OrderRepository $orderRepository): Response
+    public function index(AccountService $accountService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
-        $recentOrders = $orderRepository->findBy(
-            ['user' => $user],
-            ['createdAt' => 'DESC'],
-            5
-        );
 
         return $this->render('account/index.html.twig', [
             'user' => $user,
-            'recentOrders' => $recentOrders,
+            'recentOrders' => $accountService->getRecentOrders($user),
         ]);
     }
 
     #[Route('/adresse', name: 'app_account_address')]
     public function address(
         Request $request,
-        AddressRepository $addressRepository,
-        EntityManagerInterface $entityManager
+        AccountService $accountService
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-        $addresses = $addressRepository->findByUser($user);
-
-        $address = new Address();
-        $address->setUser($user);
-        $address->setFirstname($user->getFirstname());
-        $address->setLastname($user->getLastname());
-        $address->setNumero($user->getNumero());
-        $address->setCountry('France');
+        $addresses = $accountService->getUserAddresses($user);
+        $address = $accountService->createDefaultAddressForUser($user);
 
         $addressForm = $this->createForm(AddressFormType::class, $address);
         $addressForm->handleRequest($request);
 
         if ($addressForm->isSubmitted() && $addressForm->isValid()) {
             $address->setUser($user);
-            $entityManager->persist($address);
-            $entityManager->flush();
+            $accountService->saveAddress($address);
 
             $this->addFlash('success', 'Adresse enregistrée. Elle sera préremplie au checkout.');
 
@@ -77,12 +61,11 @@ class AccountController extends AbstractController
     public function deleteAddress(
         int $id,
         Request $request,
-        AddressRepository $addressRepository,
-        EntityManagerInterface $entityManager
+        AccountService $accountService
     ): Response {
         /** @var User $user */
         $user = $this->getUser();
-        $address = $addressRepository->findOneByIdAndUser($id, $user);
+        $address = $accountService->findUserAddressById($user, $id);
 
         if (!$address) {
             throw $this->createNotFoundException('Adresse non trouvée.');
@@ -94,8 +77,7 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('app_account_address');
         }
 
-        $entityManager->remove($address);
-        $entityManager->flush();
+        $accountService->deleteAddress($address);
 
         $this->addFlash('success', 'Adresse supprimée.');
 
@@ -105,7 +87,7 @@ class AccountController extends AbstractController
     #[Route('/profil', name: 'app_account_profile')]
     public function profile(
         Request $request,
-        EntityManagerInterface $entityManager,
+        AccountService $accountService,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
         /** @var User $user */
@@ -115,14 +97,7 @@ class AccountController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
-
-            if ($plainPassword) {
-                $user->setPassword(
-                    $passwordHasher->hashPassword($user, $plainPassword)
-                );
-            }
-
-            $entityManager->flush();
+            $accountService->updateProfile($user, is_string($plainPassword) ? $plainPassword : null, $passwordHasher);
 
             $this->addFlash('success', 'Votre profil a été mis à jour avec succès.');
 
@@ -135,22 +110,24 @@ class AccountController extends AbstractController
     }
 
     #[Route('/commandes', name: 'app_account_orders')]
-    public function orders(OrderRepository $orderRepository): Response
+    public function orders(AccountService $accountService): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
-        $orders = $orderRepository->findByUser($user);
 
         return $this->render('account/orders.html.twig', [
-            'orders' => $orders,
+            'orders' => $accountService->getUserOrders($user),
         ]);
     }
 
     #[Route('/commandes/{id}', name: 'app_account_order_show')]
-    public function orderShow(int $id, OrderRepository $orderRepository): Response
+    public function orderShow(int $id, AccountService $accountService): Response
     {
-        $order = $orderRepository->find($id);
+        /** @var User $user */
+        $user = $this->getUser();
+        $order = $accountService->findUserOrderById($user, $id);
 
-        if (!$order || $order->getUser() !== $this->getUser()) {
+        if (!$order) {
             throw $this->createNotFoundException('Commande non trouvée.');
         }
 
@@ -160,11 +137,13 @@ class AccountController extends AbstractController
     }
 
     #[Route('/commandes/{id}/facture', name: 'app_account_order_invoice')]
-    public function invoice(int $id, OrderRepository $orderRepository): Response
+    public function invoice(int $id, AccountService $accountService): Response
     {
-        $order = $orderRepository->find($id);
+        /** @var User $user */
+        $user = $this->getUser();
+        $order = $accountService->findUserOrderById($user, $id);
 
-        if (!$order || $order->getUser() !== $this->getUser()) {
+        if (!$order) {
             throw $this->createNotFoundException('Commande non trouvée.');
         }
 

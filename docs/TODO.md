@@ -1,15 +1,21 @@
 # TODO
 
 ## Immediate (next session)
-- [ ] Review local refactor for all admin controllers/services
-- [ ] Manual test admin routes:
-  - [ ] `/admin`
-  - [ ] `/admin/auteurs`
-  - [ ] `/admin/livres`
-  - [ ] `/admin/commandes`
-  - [ ] `/admin/manuscrits`
-  - [ ] `/admin/newsletter`
-- [ ] Commit admin refactor changes
+- [ ] Review local refactor for account + cart service extraction
+- [ ] Manual test account routes:
+  - [ ] `/mon-compte`
+  - [ ] `/mon-compte/adresse`
+  - [ ] `/mon-compte/profil`
+  - [ ] `/mon-compte/commandes`
+  - [ ] `/mon-compte/commandes/{id}`
+  - [ ] `/mon-compte/commandes/{id}/facture`
+- [ ] Manual test cart mutation routes:
+  - [ ] `POST /panier/add/{id}`
+  - [ ] `POST /panier/increment/{id}`
+  - [ ] `POST /panier/decrement/{id}`
+  - [ ] `POST /panier/remove/{id}`
+  - [ ] `POST /panier/clear`
+- [ ] Commit account/cart refactor changes
 - [ ] Push branch and open/merge PR
 
 ## Validation checklist before push
@@ -20,13 +26,13 @@
 
 ## After merge
 - [ ] Pull `main`
-- [ ] Start next extraction batch outside admin
+- [ ] Continue next extraction batch outside admin (author submission + registration/security)
 - [ ] Keep one coherent PR per bounded context
 
 ## Ops/deploy follow-up
-- [ ] Confirm deploy workflow still green after admin refactor merge
+- [ ] Confirm deploy workflow still green after account refactor merge
 - [ ] Verify assets are still served correctly in prod
-- [ ] Check login + checkout + admin smoke test on production URL
+- [ ] Check login + checkout + account smoke test on production URL
 
 ## Nice to have
 - [ ] Add dedicated `make smoke` target for quick post-deploy checks
