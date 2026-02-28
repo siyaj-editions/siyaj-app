@@ -99,6 +99,7 @@ make stop
 make db-migrate
 make fixtures
 make test
+make smoke
 php bin/console tailwind:build
 php bin/console lint:twig templates
 ```

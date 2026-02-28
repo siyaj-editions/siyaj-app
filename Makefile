@@ -1,4 +1,4 @@
-.PHONY: help install start stop db-create db-migrate db-reset fixtures cache-clear test stripe-listen
+.PHONY: help install start stop db-create db-migrate db-reset fixtures cache-clear test smoke stripe-listen
 
 ##
 ## SIYAJ - Commandes Make
@@ -74,6 +74,12 @@ test: ## Lance les tests
 	@echo "🧪 Exécution des tests..."
 	php bin/phpunit
 	@echo "✅ Tests terminés"
+
+smoke: ## Vérifications rapides (lint container + twig)
+	@echo "🩺 Smoke checks..."
+	php bin/console lint:container --no-debug
+	php bin/console lint:twig templates
+	@echo "✅ Smoke checks OK"
 
 stripe-listen: ## Lance Stripe CLI et forwarde les webhooks vers l'app
 	@echo "🔔 Stripe CLI -> http://localhost:8000/stripe/webhook"

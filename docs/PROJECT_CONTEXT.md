@@ -34,7 +34,7 @@
 - Nginx serving wrong root path in VPS setup
 
 ## Current branch status (work in progress)
-- Branch: `refactor/account-service-step4`
+- Branch: `refactor/stripe-webhook-cleanup-step6`
 - Goal: continue service-oriented refactor (thin controllers) outside admin
 - Not yet pushed in this state
 
@@ -71,6 +71,13 @@ In progress (local, ready for review):
   - `AuthorSubmissionService` created for manuscript submit flow
   - `RegistrationService` created for user registration flow
   - `SecurityController` kept as-is (no meaningful business logic to extract)
+- Home + webhook cleanup started:
+  - `HomeService` + `NewsletterSubscriptionResult` created
+  - `StripeWebhookService` created
+  - `HomeController` and `StripeWebhookController` now delegate business handling
+- Checkout orchestration cleanup started:
+  - `CheckoutFlowService` + `CheckoutSuccessResult` created
+  - `CheckoutController` delegates start/success/debug orchestration
 
 ## Known functional conventions
 - Keep CSRF validation in controllers

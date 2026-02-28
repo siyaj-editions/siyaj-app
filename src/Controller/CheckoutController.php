@@ -5,8 +5,8 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Exception\CheckoutException;
 use App\Form\CheckoutType;
-use App\Repository\OrderRepository;
 use App\Service\CartService;
+use App\Service\CheckoutFlowService;
 use App\Service\CheckoutService;
 use App\Service\StripeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,10 +21,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class CheckoutController extends AbstractController
 {
     public function __construct(
-        private CartService $cartService,
-        private CheckoutService $checkoutService,
-        private StripeService $stripeService,
-        private OrderRepository $orderRepository
+        private readonly CartService $cartService,
+        private readonly CheckoutService $checkoutService,
+        private readonly CheckoutFlowService $checkoutFlowService,
+        private readonly StripeService $stripeService
     ) {
     }
 
@@ -93,17 +93,14 @@ class CheckoutController extends AbstractController
     public function start(Request $request): Response
     {
         $sessionId = $request->query->get('session_id');
-        if (!$sessionId) {
+        if (!is_string($sessionId) || $sessionId === '') {
             return $this->redirectToRoute('app_cart');
         }
 
-        $session = $this->stripeService->retrieveSession($sessionId);
-
-        return $this->render('checkout/start.html.twig', [
-            'stripePublicKey' => $this->getParameter('stripe_public_key'),
-            'sessionId' => $sessionId,
-            'sessionUrl' => $session?->url,
-        ]);
+        return $this->render(
+            'checkout/start.html.twig',
+            $this->checkoutFlowService->buildStartViewData($sessionId, $this->getParameter('stripe_public_key'))
+        );
     }
 
     #[Route('/success', name: 'app_checkout_success')]
@@ -111,29 +108,24 @@ class CheckoutController extends AbstractController
     {
         $sessionId = $request->query->get('session_id');
 
-        if (!$sessionId) {
+        if (!is_string($sessionId) || $sessionId === '') {
             return $this->redirectToRoute('app_home');
         }
 
-        $stripeSession = $this->stripeService->retrieveSession($sessionId);
-        if (!$stripeSession) {
+        /** @var User $user */
+        $user = $this->getUser();
+        $result = $this->checkoutFlowService->handleSuccess($sessionId, $user);
+
+        if (!$result->stripeSessionFound) {
             $this->addFlash('error', 'Session Stripe introuvable (clé incorrecte ou session expirée).');
-        } else {
-            $this->stripeService->syncPaidOrderFromSession($stripeSession);
         }
 
-        $order = $this->orderRepository->findByStripeSessionId($sessionId);
-
-        if (!$order || $order->getUser() !== $this->getUser()) {
+        if (!$result->order) {
             throw $this->createNotFoundException('Commande non trouvée.');
         }
 
-        if ($order->isPaid()) {
-            $this->cartService->clear();
-        }
-
         return $this->render('checkout/success.html.twig', [
-            'order' => $order,
+            'order' => $result->order,
         ]);
     }
 
@@ -150,23 +142,16 @@ class CheckoutController extends AbstractController
     {
         $sessionId = $request->query->get('session_id');
 
-        if (!$sessionId) {
+        if (!is_string($sessionId) || $sessionId === '') {
             return new JsonResponse(['error' => 'session_id manquant'], 400);
         }
 
-        $session = $this->stripeService->retrieveSession($sessionId);
-        if (!$session) {
+        $sessionData = $this->checkoutFlowService->getDebugSessionData($sessionId);
+        if (!$sessionData) {
             return new JsonResponse(['error' => 'Session Stripe introuvable'], 404);
         }
 
-        return new JsonResponse([
-            'id' => $session->id ?? null,
-            'status' => $session->status ?? null,
-            'payment_status' => $session->payment_status ?? null,
-            'livemode' => $session->livemode ?? null,
-            'expires_at' => $session->expires_at ?? null,
-            'url' => $session->url ?? null,
-        ]);
+        return new JsonResponse($sessionData);
     }
 
 }
