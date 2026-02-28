@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Newsletter;
 use App\Form\NewsletterType;
-use App\Repository\BookRepository;
-use App\Repository\NewsletterRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\HomeService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,33 +15,18 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(
         Request $request,
-        BookRepository $bookRepository,
-        NewsletterRepository $newsletterRepository,
-        EntityManagerInterface $entityManager
+        HomeService $homeService
     ): Response
     {
-        $latestBooks = $bookRepository->findBy(
-            ['isActive' => true],
-            ['publishedAt' => 'DESC'],
-            6
-        );
+        $latestBooks = $homeService->getLatestActiveBooks();
 
         $newsletter = new Newsletter();
         $newsletterForm = $this->createForm(NewsletterType::class, $newsletter);
         $newsletterForm->handleRequest($request);
 
         if ($newsletterForm->isSubmitted() && $newsletterForm->isValid()) {
-            $email = mb_strtolower(trim((string) $newsletter->getEmail()));
-            $existing = $newsletterRepository->findOneBy(['email' => $email]);
-
-            if ($existing) {
-                $this->addFlash('warning', 'Cette adresse est déjà inscrite à la newsletter.');
-            } else {
-                $newsletter->setEmail($email);
-                $entityManager->persist($newsletter);
-                $entityManager->flush();
-                $this->addFlash('success', 'Inscription à la newsletter confirmée.');
-            }
+            $result = $homeService->subscribeToNewsletter($newsletter);
+            $this->addFlash($result->flashType, $result->flashMessage);
 
             return $this->redirectToRoute('app_home');
         }

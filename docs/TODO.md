@@ -1,7 +1,7 @@
 # TODO
 
 ## Immediate (next session)
-- [ ] Review local refactor for account + cart + submission/registration service extraction
+- [ ] Review local refactor for account + cart + submission/registration + home/webhook + checkout-flow extraction
 - [ ] Manual test account routes:
   - [ ] `/mon-compte`
   - [ ] `/mon-compte/adresse`
@@ -19,7 +19,16 @@
   - [ ] `/register`
   - [ ] `/login`
   - [ ] `/auteurs/soumettre-manuscrit`
-- [ ] Commit account/cart/submission/registration refactor changes
+- [ ] Manual test home + webhook routes:
+  - [ ] `/` (newsletter inscription + doublon)
+  - [ ] `POST /stripe/webhook` (signature absente -> 400)
+  - [ ] `POST /checkout/webhook` (route legacy toujours active)
+- [ ] Manual test checkout flow routes:
+  - [ ] `/checkout/informations`
+  - [ ] `/checkout/start?session_id=...`
+  - [ ] `/checkout/success?session_id=...`
+  - [ ] `/checkout/debug?session_id=...`
+- [ ] Commit current refactor changes
 - [ ] Push branch and open/merge PR
 
 ## Validation checklist before push
@@ -30,7 +39,7 @@
 
 ## After merge
 - [ ] Pull `main`
-- [ ] Continue next extraction batch outside admin (stripe webhook + home/catalog minor cleanup)
+- [ ] Start test hardening batch (unit tests services + integration critical flows)
 - [ ] Keep one coherent PR per bounded context
 
 ## Ops/deploy follow-up
@@ -39,5 +48,5 @@
 - [ ] Check login + checkout + account smoke test on production URL
 
 ## Nice to have
-- [ ] Add dedicated `make smoke` target for quick post-deploy checks
+- [x] Add dedicated `make smoke` target for quick post-deploy checks
 - [ ] Add service unit tests for checkout/catalog/admin flows

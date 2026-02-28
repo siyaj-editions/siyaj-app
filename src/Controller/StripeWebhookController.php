@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\StripeService;
+use App\Service\StripeWebhookService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class StripeWebhookController extends AbstractController
 {
     public function __construct(
-        private StripeService $stripeService
+        private readonly StripeWebhookService $stripeWebhookService
     ) {
     }
 
@@ -23,16 +23,14 @@ class StripeWebhookController extends AbstractController
         $payload = $request->getContent();
         $signature = $request->headers->get('Stripe-Signature');
 
-        if (!$signature) {
-            return new Response('No signature', 400);
-        }
-
         try {
-            $this->stripeService->handleWebhook($payload, $signature);
+            $this->stripeWebhookService->handleWebhookPayload($payload, $signature);
 
             return new Response('Webhook handled', 200);
-        } catch (\Exception $e) {
-            return new Response('Webhook error: ' . $e->getMessage(), 400);
+        } catch (\InvalidArgumentException) {
+            return new Response('No signature', 400);
+        } catch (\Throwable) {
+            return new Response('Webhook error', 400);
         }
     }
 }

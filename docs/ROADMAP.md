@@ -20,15 +20,15 @@
 ### Step B (done)
 - Catalog -> `CatalogService`
 
-### Step C (current local state)
+### Step C (done)
 - Admin -> dedicated services for each controller
-- Pending: review + push + merge
 
 ## Phase 3 (next)
 - Continue same extraction pattern outside admin:
   - Account/profile actions
   - Cart mutation flows
   - Newsletter/manuscript submit flows if needed
+- Continue checkout orchestration cleanup where needed
 - Add focused unit tests for service-level logic
 - Add integration tests for critical user journeys
 
