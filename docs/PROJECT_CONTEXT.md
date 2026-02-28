@@ -67,6 +67,10 @@ In progress (local, ready for review):
 - Cart mutation flow migration started:
   - `CartActionService` + `CartActionResult` created
   - `CartController` delegates add/increment business checks to service
+- Author submission + registration migration started:
+  - `AuthorSubmissionService` created for manuscript submit flow
+  - `RegistrationService` created for user registration flow
+  - `SecurityController` kept as-is (no meaningful business logic to extract)
 
 ## Known functional conventions
 - Keep CSRF validation in controllers

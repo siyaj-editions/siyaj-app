@@ -1,7 +1,7 @@
 # TODO
 
 ## Immediate (next session)
-- [ ] Review local refactor for account + cart service extraction
+- [ ] Review local refactor for account + cart + submission/registration service extraction
 - [ ] Manual test account routes:
   - [ ] `/mon-compte`
   - [ ] `/mon-compte/adresse`
@@ -15,7 +15,11 @@
   - [ ] `POST /panier/decrement/{id}`
   - [ ] `POST /panier/remove/{id}`
   - [ ] `POST /panier/clear`
-- [ ] Commit account/cart refactor changes
+- [ ] Manual test public auth/submission routes:
+  - [ ] `/register`
+  - [ ] `/login`
+  - [ ] `/auteurs/soumettre-manuscrit`
+- [ ] Commit account/cart/submission/registration refactor changes
 - [ ] Push branch and open/merge PR
 
 ## Validation checklist before push
@@ -26,7 +30,7 @@
 
 ## After merge
 - [ ] Pull `main`
-- [ ] Continue next extraction batch outside admin (author submission + registration/security)
+- [ ] Continue next extraction batch outside admin (stripe webhook + home/catalog minor cleanup)
 - [ ] Keep one coherent PR per bounded context
 
 ## Ops/deploy follow-up
