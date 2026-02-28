@@ -1,4 +1,4 @@
-# SIYAG - E-commerce Maison d'Edition
+# SIYAJ - E-commerce Maison d'Edition
 
 Application e-commerce Symfony 8 pour la vente de livres (catalogue, panier, paiement Stripe, espace client et admin).
 
@@ -105,7 +105,7 @@ php bin/console lint:twig templates
 
 ## Comptes fixtures
 
-- Admin: `admin@siyag.com` / `admin123`
+- Admin: `admin@siyaj.com` / `admin123`
 - Client: `client@test.com` / `client123`
 
 ## Migrations
@@ -136,10 +136,10 @@ Le projet inclut:
 Installer Docker + plugin Compose, puis creer un dossier de deploiement, par exemple:
 
 ```bash
-mkdir -p /home/ubuntu/siyag
+mkdir -p /home/ubuntu/siyaj
 ```
 
-Copier `.env.prod.example` vers `/home/ubuntu/siyag/.env.prod`, puis adapter les valeurs:
+Copier `.env.prod.example` vers `/home/ubuntu/siyaj/.env.prod`, puis adapter les valeurs:
 
 ```env
 APP_ENV=prod
@@ -163,7 +163,7 @@ Dans le repository GitHub, ajouter:
 - `VPS_HOST` (IP ou domaine du VPS)
 - `VPS_USER` (ex: `ubuntu`)
 - `VPS_SSH_KEY` (cle privee SSH)
-- `VPS_APP_PATH` (ex: `/home/ubuntu/siyag`)
+- `VPS_APP_PATH` (ex: `/home/ubuntu/siyaj`)
 - `GHCR_USERNAME` (ton username GitHub, ex: `LudwigELATRE`)
 - `GHCR_TOKEN` (token GitHub avec droits `read:packages` et `write:packages`)
 

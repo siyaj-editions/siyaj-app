@@ -1,7 +1,7 @@
 .PHONY: help install start stop db-create db-migrate db-reset fixtures cache-clear test stripe-listen
 
 ##
-## SIYAG - Commandes Make
+## SIYAJ - Commandes Make
 ##
 
 help: ## Affiche cette aide
@@ -58,7 +58,7 @@ fixtures: ## Charge les fixtures (données de test)
 	@echo "📊 Chargement des fixtures..."
 	php bin/console doctrine:fixtures:load --no-interaction
 	@echo "✅ Fixtures chargées"
-	@echo "👤 Admin: admin@siyag.com / admin123"
+	@echo "👤 Admin: admin@siyaj.com / admin123"
 	@echo "👤 Client: client@test.com / client123"
 
 ##
@@ -94,7 +94,7 @@ setup: install start db-create db-migrate fixtures ## Installation complète du 
 	@echo "   php -S localhost:8000 -t public/"
 	@echo ""
 	@echo "👤 Comptes de test:"
-	@echo "   Admin: admin@siyag.com / admin123"
+	@echo "   Admin: admin@siyaj.com / admin123"
 	@echo "   Client: client@test.com / client123"
 	@echo ""
 
