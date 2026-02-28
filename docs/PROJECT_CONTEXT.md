@@ -34,8 +34,8 @@
 - Nginx serving wrong root path in VPS setup
 
 ## Current branch status (work in progress)
-- Branch: `refactor/admin-dashboard-service-step3`
-- Goal: continue service-oriented refactor (thin controllers)
+- Branch: `refactor/account-service-step4`
+- Goal: continue service-oriented refactor (thin controllers) outside admin
 - Not yet pushed in this state
 
 ## Documentation discipline (mandatory)
@@ -51,16 +51,22 @@
 Completed:
 - Checkout logic extracted to `CheckoutService` + `CheckoutException`
 - Catalog filtering/pagination logic extracted to `CatalogService`
-- Admin dashboard logic extracted to `AdminDashboardService`
-
-In progress (local, ready for review):
-- Admin controllers migrated to dedicated services:
+- Admin area migrated to dedicated services:
+  - `AdminDashboardService`
   - `AdminAuthorService`
   - `AdminBookService`
   - `AdminOrderService`
   - `AdminManuscriptService`
   - `AdminNewsletterService`
-- Controllers now focus on HTTP concerns (route, request, CSRF, flash, redirect/render)
+
+In progress (local, ready for review):
+- Account area migration started:
+  - `AccountService` created
+  - `AccountController` now delegates order/address/profile business logic to service
+- Controller still handles HTTP/form/CSRF/flash concerns
+- Cart mutation flow migration started:
+  - `CartActionService` + `CartActionResult` created
+  - `CartController` delegates add/increment business checks to service
 
 ## Known functional conventions
 - Keep CSRF validation in controllers
