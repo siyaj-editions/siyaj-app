@@ -19,7 +19,7 @@ class StripeWebhookControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(400);
     }
 
-    public function testLegacyCheckoutWebhookReturns400WithoutSignature(): void
+    public function testLegacyCheckoutWebhookRouteDoesNotExistAnymore(): void
     {
         $client = static::createClient();
         $client->request(
@@ -29,6 +29,6 @@ class StripeWebhookControllerTest extends WebTestCase
             content: '{"id":"evt_test"}'
         );
 
-        self::assertResponseRedirects('http://localhost/login', 302);
+        self::assertResponseStatusCodeSame(404);
     }
 }

@@ -34,8 +34,8 @@
 - Nginx serving wrong root path in VPS setup
 
 ## Current branch status (work in progress)
-- Branch: `refactor/stripe-webhook-cleanup-step6`
-- Goal: continue service-oriented refactor (thin controllers) outside admin
+- Branch: `fix/remove-legacy-checkout-webhook`
+- Goal: remove legacy webhook route and keep single Stripe webhook endpoint
 - Not yet pushed in this state
 
 ## Documentation discipline (mandatory)
@@ -86,7 +86,7 @@ In progress (local, ready for review):
 ## Testing notes
 - `php bin/phpunit` is green on current baseline tests.
 - Test suite currently reports PHPUnit deprecations/notices (non-blocking for now, exit code 0).
-- `/checkout/webhook` currently redirects to `/login` in test context because `security.access_control` protects `^/checkout`.
+- Legacy `/checkout/webhook` route has been removed; only `/stripe/webhook` is supported.
 
 ## Known functional conventions
 - Keep CSRF validation in controllers
