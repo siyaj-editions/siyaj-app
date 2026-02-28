@@ -82,6 +82,9 @@ In progress (local, ready for review):
   - Unit tests for `HomeService`, `CartActionService`, `StripeWebhookService`, `CheckoutFlowService`
   - Integration test for webhook endpoints behavior
   - `make smoke` added for fast local verification
+- Test coverage deepened:
+  - Unit tests added for `AdminOrderService`, `AccountService`, `CheckoutService`
+  - Total baseline test suite expanded and remains green (`php bin/phpunit`)
 
 ## Testing notes
 - `php bin/phpunit` is green on current baseline tests.

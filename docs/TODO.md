@@ -40,7 +40,7 @@
 
 ## After merge
 - [ ] Pull `main`
-- [ ] Continue test hardening batch (increase service coverage + critical integration flows)
+- [ ] Continue test hardening batch (critical integration flows + edge cases)
 - [ ] Keep one coherent PR per bounded context
 
 ## Ops/deploy follow-up
@@ -51,5 +51,7 @@
 ## Nice to have
 - [x] Add dedicated `make smoke` target for quick post-deploy checks
 - [x] Add initial service unit tests baseline
-- [ ] Add deeper service unit tests for checkout/catalog/admin edge cases
+- [x] Add deeper service unit tests for checkout/account/admin baseline edge cases
+- [ ] Add deeper tests for catalog query/filter behavior
+- [ ] Add more integration tests (account/cart/checkout happy path)
 - [x] Remove legacy `/checkout/webhook` route (keep `/stripe/webhook` only)
