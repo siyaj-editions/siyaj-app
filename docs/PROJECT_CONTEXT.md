@@ -78,6 +78,15 @@ In progress (local, ready for review):
 - Checkout orchestration cleanup started:
   - `CheckoutFlowService` + `CheckoutSuccessResult` created
   - `CheckoutController` delegates start/success/debug orchestration
+- Test baseline added:
+  - Unit tests for `HomeService`, `CartActionService`, `StripeWebhookService`, `CheckoutFlowService`
+  - Integration test for webhook endpoints behavior
+  - `make smoke` added for fast local verification
+
+## Testing notes
+- `php bin/phpunit` is green on current baseline tests.
+- Test suite currently reports PHPUnit deprecations/notices (non-blocking for now, exit code 0).
+- `/checkout/webhook` currently redirects to `/login` in test context because `security.access_control` protects `^/checkout`.
 
 ## Known functional conventions
 - Keep CSRF validation in controllers
