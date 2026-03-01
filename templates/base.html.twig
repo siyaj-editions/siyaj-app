@@ -43,12 +43,12 @@
 								Catalogue
 								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
-							<a href="{{ path('app_about') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
-								À propos
-								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-							</a>
 							<a href="{{ path('app_author_manuscript_submit') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
 								Auteurs
+								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+							</a>
+							<a href="{{ path('app_about') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
+								À propos
 								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
 						</div>
@@ -64,15 +64,15 @@
 							{# Cart #}
 							<a href="{{ path('app_cart') }}" class="group">
 								<span class="relative inline-flex items-center justify-center p-2.5 rounded-xl hover:bg-cream transition-colors duration-200">
-									<svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-									<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+									<svg class="w-5 h-5 text-ink group-hover:text-gold transition-colors" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="1.5">
+										<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
 									</svg>
 									{% if cartCount > 0 %}
 										<span class="absolute w-4 h-4 rounded-full bg-gold text-white text-[10px] font-semibold flex items-center justify-center shadow-md ring-2 ring-paper pointer-events-none" style="top: -1px; right: -1px;">
 											{{ cartCount > 99 ? '99' : cartCount }}
 										</span>
 									{% endif %}
-									</span>
+								</span>
 							</a>
 
 							{% if is_granted('ROLE_ADMIN') %}
@@ -161,10 +161,10 @@
 				{% for message in messages %}
 					<div class="container mt-6 animate-fade-in">
 						<div class="relative px-5 py-4 rounded-xl border-l-4
-								                        {% if label == 'success' %}bg-sage/10 border-sage text-sage
-								                        {% elseif label == 'error' or label == 'danger' %}bg-wine/10 border-wine text-wine
-								                        {% elseif label == 'warning' %}bg-gold/15 border-gold text-ink
-								                        {% else %}bg-ink/5 border-ink text-ink{% endif %}">
+																                        {% if label == 'success' %}bg-sage/10 border-sage text-sage
+																                        {% elseif label == 'error' or label == 'danger' %}bg-wine/10 border-wine text-wine
+																                        {% elseif label == 'warning' %}bg-gold/15 border-gold text-ink
+																                        {% else %}bg-ink/5 border-ink text-ink{% endif %}">
 							<div class="flex items-start gap-3">
 								{% if label == 'success' %}
 									<svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24" stroke-width="2">
