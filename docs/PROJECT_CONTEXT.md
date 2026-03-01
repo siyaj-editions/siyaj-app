@@ -85,6 +85,8 @@ In progress (local, ready for review):
 - Test coverage deepened:
   - Unit tests added for `AdminOrderService`, `AccountService`, `CheckoutService`
   - Total baseline test suite expanded and remains green (`php bin/phpunit`)
+  - Catalog filter/pagination normalization tests added (`CatalogService`)
+  - Checkout access integration tests added for anonymous users (`/checkout/*` -> login redirect)
 
 ## Testing notes
 - `php bin/phpunit` is green on current baseline tests.

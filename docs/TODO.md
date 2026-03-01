@@ -1,7 +1,6 @@
 # TODO
 
-## Immediate (next session)
-- [ ] Review local refactor for account + cart + submission/registration + home/webhook + checkout-flow extraction
+## Immediate
 - [ ] Manual test account routes:
   - [ ] `/mon-compte`
   - [ ] `/mon-compte/adresse`
@@ -28,30 +27,25 @@
   - [ ] `/checkout/start?session_id=...`
   - [ ] `/checkout/success?session_id=...`
   - [ ] `/checkout/debug?session_id=...`
-- [ ] Commit current refactor + tests changes
-- [ ] Push branch and open/merge PR
 
-## Validation checklist before push
-- [ ] `php -l` on changed PHP files
-- [ ] `php bin/console lint:container --no-debug`
-- [ ] `php bin/phpunit`
+## Validation
+- [x] `php -l` on changed PHP files
+- [x] `php bin/console lint:container --no-debug`
+- [x] `php bin/phpunit`
+- [x] `make smoke`
 - [ ] Quick UI smoke test desktop + mobile for impacted pages
-- [ ] Update docs (`PROJECT_CONTEXT.md` + `TODO.md` mandatory, plus `ARCHITECTURE.md`/`ROADMAP.md` if impacted)
 
-## After merge
-- [ ] Pull `main`
-- [ ] Continue test hardening batch (critical integration flows + edge cases)
-- [ ] Keep one coherent PR per bounded context
-
-## Ops/deploy follow-up
-- [ ] Confirm deploy workflow still green after account refactor merge
+## Ops follow-up
+- [ ] Confirm deploy workflow still green after latest merges
 - [ ] Verify assets are still served correctly in prod
 - [ ] Check login + checkout + account smoke test on production URL
 
-## Nice to have
+## Next test hardening
+- [x] Add deeper tests for catalog query/filter behavior (filter normalization)
+- [ ] Add more integration tests (account/cart/checkout authenticated happy path)
+
+## Completed
 - [x] Add dedicated `make smoke` target for quick post-deploy checks
 - [x] Add initial service unit tests baseline
 - [x] Add deeper service unit tests for checkout/account/admin baseline edge cases
-- [ ] Add deeper tests for catalog query/filter behavior
-- [ ] Add more integration tests (account/cart/checkout happy path)
 - [x] Remove legacy `/checkout/webhook` route (keep `/stripe/webhook` only)
