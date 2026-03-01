@@ -34,9 +34,9 @@
 - Nginx serving wrong root path in VPS setup
 
 ## Current branch status (work in progress)
-- Branch: `fix/remove-legacy-checkout-webhook`
-- Goal: remove legacy webhook route and keep single Stripe webhook endpoint
-- Not yet pushed in this state
+- Branch: `main`
+- Goal: stabilisation post-refactor + validation manuelle/prod
+- Latest refactor and test branches have been merged
 
 ## Documentation discipline (mandatory)
 - After each functional or technical change, update documentation in `docs/` before commit/push.
@@ -59,7 +59,7 @@ Completed:
   - `AdminManuscriptService`
   - `AdminNewsletterService`
 
-In progress (local, ready for review):
+Completed (merged):
 - Account area migration started:
   - `AccountService` created
   - `AccountController` now delegates order/address/profile business logic to service
@@ -87,6 +87,11 @@ In progress (local, ready for review):
   - Total baseline test suite expanded and remains green (`php bin/phpunit`)
   - Catalog filter/pagination normalization tests added (`CatalogService`)
   - Checkout access integration tests added for anonymous users (`/checkout/*` -> login redirect)
+
+Next focus:
+- Manual functional validation of critical routes
+- Production smoke checks after latest merges
+- Optional additional authenticated integration tests for happy-path checkout
 
 ## Testing notes
 - `php bin/phpunit` is green on current baseline tests.
