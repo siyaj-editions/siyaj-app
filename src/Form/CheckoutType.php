@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Service\ShippingService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -18,6 +19,15 @@ class CheckoutType extends AbstractType
             ->add('shippingAddressId', ChoiceType::class, [
                 'label' => 'Adresse de livraison',
                 'choices' => $choices,
+            ])
+            ->add('shippingMethod', ChoiceType::class, [
+                'label' => 'Mode de livraison',
+                'choices' => [
+                    'Livraison à domicile' => ShippingService::METHOD_DELIVERY,
+                    'Retrait en magasin' => ShippingService::METHOD_PICKUP,
+                ],
+                'expanded' => true,
+                'multiple' => false,
             ])
             ->add('billingSameAsShipping', CheckboxType::class, [
                 'label' => 'Utiliser la même adresse pour la facturation',

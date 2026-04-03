@@ -36,6 +36,33 @@
                 </span>
             </div>
 
+            <div class="text-left bg-paper rounded-xl p-5 mb-8 space-y-2">
+                <div class="flex justify-between gap-3 text-sm">
+                    <span class="text-ink/60">Sous-total</span>
+                    <span class="text-ink">{{ (order.itemsSubtotalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                </div>
+                <div class="flex justify-between gap-3 text-sm">
+                    <span class="text-ink/60">Livraison</span>
+                    <span class="text-ink">{{ (order.shippingCostCents / 100)|number_format(2, ',', ' ') }} €</span>
+                </div>
+                {% if order.shippingMethodLabel %}
+                    <div class="flex justify-between gap-3 text-sm">
+                        <span class="text-ink/60">Mode</span>
+                        <span class="text-ink">{{ order.shippingMethodLabel }}</span>
+                    </div>
+                {% endif %}
+                {% if order.shippingDelayLabel %}
+                    <div class="flex justify-between gap-3 text-sm">
+                        <span class="text-ink/60">Délai annoncé</span>
+                        <span class="text-ink">{{ order.shippingDelayLabel }}</span>
+                    </div>
+                {% endif %}
+                <div class="flex justify-between gap-3 text-base pt-3 border-t border-black/10">
+                    <span class="font-semibold text-ink">Total</span>
+                    <span class="font-display text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                </div>
+            </div>
+
             {# Actions #}
             <div class="space-y-3">
                 <a href="{{ path('app_account_order_show', {id: order.id}) }}" class="btn btn-primary w-full py-4">
