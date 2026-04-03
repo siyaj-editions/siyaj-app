@@ -1,0 +1,323 @@
+{{ form_start(bookForm, {'attr': {'class': 'space-y-8'}}) }}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {{ form_row(bookForm.title) }}
+        {{ form_row(bookForm.isbn) }}
+        {{ form_row(bookForm.coverImage) }}
+        {{ form_row(bookForm.priceCents) }}
+        {{ form_row(bookForm.format) }}
+        {{ form_row(bookForm.stock) }}
+        {{ form_row(bookForm.publishedAt) }}
+    </div>
+
+    {{ form_row(bookForm.description) }}
+
+    <div class="space-y-4 rounded-2xl border border-black/10 p-5">
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                <h2 class="text-lg font-semibold text-ink">Auteur(s)</h2>
+                <p class="text-sm text-ink/60">Ajoute un ou plusieurs auteurs. Un nouvel auteur sera créé automatiquement s'il n'existe pas encore.</p>
+            </div>
+            <button
+                type="button"
+                class="btn btn-secondary px-4 py-2"
+                data-author-collection-add
+            >
+                +
+            </button>
+        </div>
+
+        <div
+            data-author-collection
+            data-index="{{ bookForm.authorNames|length }}"
+            data-prototype="{{ form_widget(bookForm.authorNames.vars.prototype)|e('html_attr') }}"
+        >
+            {% for authorField in bookForm.authorNames %}
+                <div class="flex items-center gap-3 mb-3" data-author-entry>
+                    <div class="flex-1 relative" data-autocomplete-root>
+                        {{ form_widget(authorField, {'attr': {'data-author-autocomplete': 'true', 'autocomplete': 'off'}}) }}
+                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-menu></div>
+                    </div>
+                    <button type="button" class="btn btn-secondary px-3 py-2" data-author-collection-remove>Retirer</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        {{ form_errors(bookForm.authorNames) }}
+    </div>
+
+    <div class="space-y-4 rounded-2xl border border-black/10 p-5">
+        <div class="flex items-center justify-between gap-4">
+            <div>
+                <h2 class="text-lg font-semibold text-ink">Genre(s)</h2>
+                <p class="text-sm text-ink/60">Ajoute un ou plusieurs genres. Un nouveau genre sera créé automatiquement s'il n'existe pas encore.</p>
+            </div>
+            <button
+                type="button"
+                class="btn btn-secondary px-4 py-2"
+                data-genre-collection-add
+            >
+                +
+            </button>
+        </div>
+
+        <div
+            data-genre-collection
+            data-index="{{ bookForm.genreNames|length }}"
+            data-prototype="{{ form_widget(bookForm.genreNames.vars.prototype)|e('html_attr') }}"
+        >
+            {% for genreField in bookForm.genreNames %}
+                <div class="flex items-center gap-3 mb-3" data-genre-entry>
+                    <div class="flex-1 relative" data-genre-autocomplete-root>
+                        {{ form_widget(genreField, {'attr': {'data-genre-autocomplete': 'true', 'autocomplete': 'off'}}) }}
+                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-genre-autocomplete-menu></div>
+                    </div>
+                    <button type="button" class="btn btn-secondary px-3 py-2" data-genre-collection-remove>Retirer</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        {{ form_errors(bookForm.genreNames) }}
+    </div>
+
+    <div class="rounded-2xl border border-black/10 p-5">
+        {{ form_row(bookForm.isActive) }}
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-black/5">
+        <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
+        <a href="{{ path('app_admin_book_index') }}" class="btn btn-secondary">Annuler</a>
+    </div>
+{{ form_end(bookForm) }}
+
+<script>
+    (() => {
+        const collection = document.querySelector('[data-author-collection]');
+        const addButton = document.querySelector('[data-author-collection-add]');
+        const authorChoices = {{ bookForm.vars.author_choices|json_encode|raw }};
+        const genreCollection = document.querySelector('[data-genre-collection]');
+        const genreAddButton = document.querySelector('[data-genre-collection-add]');
+        const genreChoices = {{ bookForm.vars.genre_choices|json_encode|raw }};
+
+        if (!collection || !addButton || !genreCollection || !genreAddButton) {
+            return;
+        }
+
+        const normalize = (value) => (value || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '');
+
+        const renderAutocomplete = (input, menu) => {
+            const term = normalize(input.value);
+            const filteredChoices = authorChoices
+                .filter((choice) => term !== '' && normalize(choice).includes(term))
+                .slice(0, 8);
+
+            if (filteredChoices.length === 0) {
+                menu.innerHTML = '';
+                menu.classList.add('hidden');
+                return;
+            }
+
+            menu.innerHTML = filteredChoices.map((choice) => `
+                <button
+                    type="button"
+                    class="block w-full border-b border-black/5 px-4 py-3 text-left text-sm text-ink transition-colors duration-150 hover:bg-cream hover:text-gold last:border-b-0"
+                    data-autocomplete-option="${choice.replace(/"/g, '&quot;')}"
+                >
+                    ${choice}
+                </button>
+            `).join('');
+
+            menu.classList.remove('hidden');
+
+            menu.querySelectorAll('[data-autocomplete-option]').forEach((option) => {
+                option.addEventListener('click', () => {
+                    input.value = option.dataset.autocompleteOption || '';
+                    menu.classList.add('hidden');
+                    input.focus();
+                });
+            });
+        };
+
+        const bindAutocomplete = (scope) => {
+            scope.querySelectorAll('[data-author-autocomplete="true"]').forEach((input) => {
+                if (input.dataset.autocompleteBound === 'true') {
+                    return;
+                }
+
+                const root = input.closest('[data-autocomplete-root]');
+                const menu = root ? root.querySelector('[data-autocomplete-menu]') : null;
+
+                if (!root || !menu) {
+                    return;
+                }
+
+                input.dataset.autocompleteBound = 'true';
+
+                input.addEventListener('input', () => renderAutocomplete(input, menu));
+                input.addEventListener('focus', () => renderAutocomplete(input, menu));
+
+                input.addEventListener('blur', () => {
+                    window.setTimeout(() => menu.classList.add('hidden'), 120);
+                });
+            });
+        };
+
+        const renderGenreAutocomplete = (input, menu) => {
+            const term = normalize(input.value);
+            const filteredChoices = genreChoices
+                .filter((choice) => term !== '' && normalize(choice).includes(term))
+                .slice(0, 8);
+
+            if (filteredChoices.length === 0) {
+                menu.innerHTML = '';
+                menu.classList.add('hidden');
+                return;
+            }
+
+            menu.innerHTML = filteredChoices.map((choice) => `
+                <button
+                    type="button"
+                    class="block w-full border-b border-black/5 px-4 py-3 text-left text-sm text-ink transition-colors duration-150 hover:bg-cream hover:text-gold last:border-b-0"
+                    data-genre-option="${choice.replace(/"/g, '&quot;')}"
+                >
+                    ${choice}
+                </button>
+            `).join('');
+
+            menu.classList.remove('hidden');
+
+            menu.querySelectorAll('[data-genre-option]').forEach((option) => {
+                option.addEventListener('click', () => {
+                    input.value = option.dataset.genreOption || '';
+                    menu.classList.add('hidden');
+                    input.focus();
+                });
+            });
+        };
+
+        const bindGenreAutocomplete = (scope) => {
+            scope.querySelectorAll('[data-genre-autocomplete="true"]').forEach((input) => {
+                if (input.dataset.genreAutocompleteBound === 'true') {
+                    return;
+                }
+
+                const root = input.closest('[data-genre-autocomplete-root]');
+                const menu = root ? root.querySelector('[data-genre-autocomplete-menu]') : null;
+
+                if (!root || !menu) {
+                    return;
+                }
+
+                input.dataset.genreAutocompleteBound = 'true';
+                input.addEventListener('input', () => renderGenreAutocomplete(input, menu));
+                input.addEventListener('focus', () => renderGenreAutocomplete(input, menu));
+                input.addEventListener('blur', () => {
+                    window.setTimeout(() => menu.classList.add('hidden'), 120);
+                });
+            });
+        };
+
+        const bindRemoveButton = (scope) => {
+            scope.querySelectorAll('[data-author-collection-remove]').forEach((button) => {
+                if (button.dataset.removeBound === 'true') {
+                    return;
+                }
+
+                button.dataset.removeBound = 'true';
+                button.addEventListener('click', () => {
+                    const entry = button.closest('[data-author-entry]');
+
+                    if (!entry) {
+                        return;
+                    }
+
+                    if (collection.querySelectorAll('[data-author-entry]').length === 1) {
+                        const input = entry.querySelector('input');
+                        if (input) {
+                            input.value = '';
+                        }
+                        return;
+                    }
+
+                    entry.remove();
+                });
+            });
+        };
+
+        addButton.addEventListener('click', () => {
+            const wrapper = document.createElement('div');
+            const index = Number(collection.dataset.index || 0);
+            const template = collection.dataset.prototype.replace(/__name__/g, String(index));
+
+            wrapper.innerHTML = `
+                <div class="flex items-center gap-3 mb-3" data-author-entry>
+                    <div class="flex-1 relative" data-autocomplete-root>
+                        ${template}
+                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-menu></div>
+                    </div>
+                    <button type="button" class="btn btn-secondary px-3 py-2" data-author-collection-remove>Retirer</button>
+                </div>
+            `.trim();
+
+            collection.appendChild(wrapper.firstElementChild);
+            collection.dataset.index = String(index + 1);
+            bindAutocomplete(collection);
+            bindRemoveButton(collection);
+        });
+
+        genreAddButton.addEventListener('click', () => {
+            const wrapper = document.createElement('div');
+            const index = Number(genreCollection.dataset.index || 0);
+            const template = genreCollection.dataset.prototype.replace(/__name__/g, String(index));
+
+            wrapper.innerHTML = `
+                <div class="flex items-center gap-3 mb-3" data-genre-entry>
+                    <div class="flex-1 relative" data-genre-autocomplete-root>
+                        ${template}
+                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-genre-autocomplete-menu></div>
+                    </div>
+                    <button type="button" class="btn btn-secondary px-3 py-2" data-genre-collection-remove>Retirer</button>
+                </div>
+            `.trim();
+
+            genreCollection.appendChild(wrapper.firstElementChild);
+            genreCollection.dataset.index = String(index + 1);
+            bindGenreAutocomplete(genreCollection);
+            bindGenreRemoveButton(genreCollection);
+        });
+
+        const bindGenreRemoveButton = (scope) => {
+            scope.querySelectorAll('[data-genre-collection-remove]').forEach((button) => {
+                if (button.dataset.removeBound === 'true') {
+                    return;
+                }
+
+                button.dataset.removeBound = 'true';
+                button.addEventListener('click', () => {
+                    const entry = button.closest('[data-genre-entry]');
+
+                    if (!entry) {
+                        return;
+                    }
+
+                    if (genreCollection.querySelectorAll('[data-genre-entry]').length === 1) {
+                        const input = entry.querySelector('input');
+                        if (input) {
+                            input.value = '';
+                        }
+                        return;
+                    }
+
+                    entry.remove();
+                });
+            });
+        };
+
+        bindAutocomplete(collection);
+        bindRemoveButton(collection);
+        bindGenreAutocomplete(genreCollection);
+        bindGenreRemoveButton(genreCollection);
+    })();
+</script>

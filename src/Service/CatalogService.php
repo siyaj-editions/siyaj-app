@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Enum\BookFormat;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
+use App\Repository\GenreRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,8 @@ class CatalogService
 
     public function __construct(
         private BookRepository $bookRepository,
-        private AuthorRepository $authorRepository
+        private AuthorRepository $authorRepository,
+        private GenreRepository $genreRepository
     ) {
     }
 
@@ -28,11 +30,12 @@ class CatalogService
         $search = $filters['search'];
         $authorId = $filters['authorId'];
         $formatFilter = $filters['formatFilter'];
+        $genreFilter = $filters['genreFilter'];
         $page = $filters['page'];
         $perPage = $filters['perPage'];
         $format = $filters['format'];
 
-        $queryBuilder = $this->bookRepository->createActiveBooksQueryBuilder($search, $authorId, $format);
+        $queryBuilder = $this->bookRepository->createActiveBooksQueryBuilder($search, $authorId, $format, $genreFilter);
 
         $query = $queryBuilder
             ->setFirstResult(($page - 1) * $perPage)
@@ -46,9 +49,11 @@ class CatalogService
         return [
             'books' => $paginator,
             'authors' => $this->authorRepository->findActiveAuthors(),
+            'genres' => $this->genreRepository->findActiveGenres(),
             'currentSearch' => $search,
             'currentAuthor' => $authorId,
             'currentFormat' => $formatFilter,
+            'currentGenre' => $genreFilter,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'totalBooks' => $totalBooks,
@@ -62,6 +67,7 @@ class CatalogService
      *   search: ?string,
      *   authorId: ?int,
      *   formatFilter: ?string,
+     *   genreFilter: ?string,
      *   page: int,
      *   perPage: int,
      *   format: ?BookFormat
@@ -72,6 +78,7 @@ class CatalogService
         $search = $request->query->get('search') ?: null;
         $authorId = $request->query->get('author') ? (int) $request->query->get('author') : null;
         $formatFilter = $request->query->get('format') ?: null;
+        $genreFilter = $request->query->get('genre') ?: null;
         $page = max(1, $request->query->getInt('page', 1));
         $perPage = $request->query->getInt('perPage', self::DEFAULT_PER_PAGE);
 
@@ -88,6 +95,7 @@ class CatalogService
             'search' => $search,
             'authorId' => $authorId,
             'formatFilter' => $formatFilter,
+            'genreFilter' => $genreFilter,
             'page' => $page,
             'perPage' => $perPage,
             'format' => $format,

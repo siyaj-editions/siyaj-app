@@ -60,74 +60,161 @@
 <section class="py-12 lg:py-16">
     <div class="container">
         {# Filters #}
-        <div class="bg-white rounded-2xl border border-black/5 p-6 mb-8 shadow-sm">
-            <form method="get" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
-                {# Search #}
-                <div class="lg:col-span-2">
-                    <label for="search" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
+        <div class="mb-5 rounded-[28px] border border-black/5 bg-white p-4 shadow-[0_14px_40px_rgba(17,24,39,0.05)]">
+            <form method="get" class="space-y-4" id="catalog-search-form">
+                <div>
+                    <label for="search" class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/45">
                         Recherche
                     </label>
-                    <div class="relative">
-                        <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-ink/30" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="m21 21-4.35-4.35"/>
-                        </svg>
+                    <div class="flex flex-col gap-3 md:flex-row md:items-center">
+                        <div class="min-w-0 flex-1">
                         <input
                             type="text"
                             name="search"
                             id="search"
-                            class="w-full pl-14 pr-4 py-3 rounded-xl"
-                            placeholder="Titre, ISBN..."
+                            class="w-full rounded-2xl border border-black/10 bg-paper px-4 py-3 text-sm text-ink placeholder:text-ink/35 focus:border-gold focus:outline-none focus:ring-0"
+                            placeholder="Titre ou ISBN"
                             value="{{ currentSearch }}"
                         >
+                        </div>
+
+                        <div class="flex shrink-0 gap-2">
+                        <button
+                            type="submit"
+                            class="inline-flex h-10 items-center justify-center rounded-2xl bg-ink px-4 text-sm font-medium leading-none text-white transition-colors duration-200 hover:bg-gold"
+                        >
+                            Rechercher
+                        </button>
+                        <button
+                            type="button"
+                            class="group inline-flex h-10 cursor-pointer items-center justify-center gap-1.5 rounded-2xl border border-black/10 bg-paper px-4 text-sm font-medium leading-none text-ink transition-colors duration-200 hover:border-gold hover:bg-cream"
+                            data-filter-open
+                        >
+                            <svg class="h-4 w-4 text-ink/55 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:scale-110 group-hover:text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M7 12h10M10 18h4" />
+                            </svg>
+                            Filtrer
+                        </button>
+                        {% if currentSearch or currentAuthor or currentFormat or currentGenre %}
+                            <a href="{{ path('app_catalog') }}" class="inline-flex h-10 items-center justify-center rounded-2xl border border-black/10 px-4 text-sm font-medium leading-none text-ink/60 transition-colors duration-200 hover:border-gold hover:text-ink">
+                                Réinitialiser
+                            </a>
+                        {% endif %}
+                    </div>
                     </div>
                 </div>
 
-                {# Author #}
-                <div>
-                    <label for="author" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
-                        Auteur
-                    </label>
-                    <select name="author" id="author" class="w-full py-3 rounded-xl">
-                        <option value="">Tous les auteurs</option>
-                        {% for author in authors %}
-                            <option value="{{ author.id }}" {% if currentAuthor == author.id %} selected {% endif %}>
-                                {{ author.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+                {% if currentSearch or currentAuthor or currentFormat or currentGenre %}
+                    <div class="flex flex-wrap items-center gap-2 border-t border-black/5 pt-1">
+                        <span class="text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/35">Filtres actifs</span>
+                        {% if currentSearch %}
+                            <span class="inline-flex rounded-full bg-cream px-3 py-1.5 text-xs font-medium text-ink">Recherche: {{ currentSearch }}</span>
+                        {% endif %}
+                        {% if currentAuthor %}
+                            {% for author in authors %}
+                                {% if currentAuthor == author.id %}
+                                    <span class="inline-flex rounded-full bg-cream px-3 py-1.5 text-xs font-medium text-ink">Auteur: {{ author.name }}</span>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        {% if currentFormat %}
+                            <span class="inline-flex rounded-full bg-cream px-3 py-1.5 text-xs font-medium text-ink">Format: {{ currentFormat == 'physical' ? 'Physique' : 'Numérique' }}</span>
+                        {% endif %}
+                        {% if currentGenre %}
+                            <span class="inline-flex rounded-full bg-cream px-3 py-1.5 text-xs font-medium text-ink">Genre: {{ currentGenre }}</span>
+                        {% endif %}
+                    </div>
+                {% endif %}
 
-                {# Format #}
-                <div>
-                    <label for="format" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
-                        Format
-                    </label>
-                    <select name="format" id="format" class="w-full py-3 rounded-xl">
-                        <option value="">Tous les formats</option>
-                        <option value="physical" {% if currentFormat == 'physical' %} selected {% endif %}>Physique</option>
-                        <option value="digital" {% if currentFormat == 'digital' %} selected {% endif %}>Numérique</option>
-                    </select>
-                </div>
-
-                {# Actions #}
-                <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                    <button type="submit" class="btn btn-primary flex-1 py-3">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                        </svg>
-                        Filtrer
-                    </button>
-                    {% if currentSearch or currentAuthor or currentFormat %}
-                        <a href="{{ path('app_catalog') }}" class="text-sm text-ink/50 hover:text-ink underline whitespace-nowrap transition-colors">
-                            Réinitialiser
-                        </a>
-                    {% endif %}
-                </div>
-
-                {# Per Page - Hidden on mobile, visible inline on desktop #}
+                <input type="hidden" name="author" value="{{ currentAuthor }}">
+                <input type="hidden" name="format" value="{{ currentFormat }}">
+                <input type="hidden" name="genre" value="{{ currentGenre }}">
                 <input type="hidden" name="perPage" value="{{ perPage }}">
             </form>
+        </div>
+
+        <div
+            class="fixed inset-0 z-50 hidden items-center justify-center bg-ink/55 px-4 backdrop-blur-sm"
+            data-filter-modal
+            aria-hidden="true"
+        >
+            <div class="w-full max-w-xl rounded-[28px] border border-black/5 bg-white shadow-[0_24px_70px_rgba(17,24,39,0.18)]">
+                <form method="get" class="space-y-0">
+                    <input type="hidden" name="search" value="{{ currentSearch }}">
+                    <input type="hidden" name="perPage" value="{{ perPage }}">
+                    <div class="flex items-start justify-between gap-4 border-b border-black/5 px-6 py-5 sm:px-7">
+                        <div>
+                            <p class="text-[11px] font-semibold uppercase tracking-[0.26em] text-gold">Catalogue</p>
+                            <h2 class="mt-2 font-display text-2xl text-ink">Filtrer les ouvrages</h2>
+                            <p class="mt-2 text-sm text-ink/55">Sélectionne simplement les critères à appliquer.</p>
+                        </div>
+                        <button
+                            type="button"
+                            class="group inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 text-ink/55 transition-colors duration-200 hover:border-gold hover:text-ink"
+                            data-filter-close
+                            aria-label="Fermer"
+                        >
+                            <svg class="h-5 w-5 transition-transform duration-200 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6l-12 12" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="space-y-4 px-6 py-6 sm:px-7">
+                        <div class="rounded-2xl border border-black/5 bg-paper/60 p-4">
+                            <label for="modal-author" class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/40">
+                                Auteur
+                            </label>
+                            <select name="author" id="modal-author" class="w-full cursor-pointer rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink focus:border-gold focus:outline-none focus:ring-0">
+                                <option value="">Tous les auteurs</option>
+                                {% for author in authors %}
+                                    <option value="{{ author.id }}" {% if currentAuthor == author.id %} selected {% endif %}>
+                                        {{ author.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!--<div class="rounded-2xl border border-black/5 bg-paper/60 p-4">
+                            <label for="modal-format" class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/40">
+                                Format
+                            </label>
+                            <select name="format" id="modal-format" class="w-full cursor-pointer rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink focus:border-gold focus:outline-none focus:ring-0">
+                                <option value="">Tous les formats</option>
+                                <option value="physical" {% if currentFormat == 'physical' %} selected {% endif %}>Physique</option>
+                                <option value="digital" {% if currentFormat == 'digital' %} selected {% endif %}>Numérique</option>
+                            </select>
+                        </div>-->
+
+                        <div class="rounded-2xl border border-black/5 bg-paper/60 p-4">
+                            <label for="modal-genre" class="mb-2 block text-[11px] font-semibold uppercase tracking-[0.22em] text-ink/40">
+                                Genre
+                            </label>
+                            <select name="genre" id="modal-genre" class="w-full cursor-pointer rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-ink focus:border-gold focus:outline-none focus:ring-0">
+                                <option value="">Tous les genres</option>
+                                {% for genre in genres %}
+                                    <option value="{{ genre.name }}" {% if currentGenre == genre.name %} selected {% endif %}>{{ genre.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col gap-3 border-t border-black/5 pt-6 sm:flex-row sm:items-center sm:justify-between">
+                            <a href="{{ path('app_catalog', {search: currentSearch, perPage: perPage}) }}" class="inline-flex items-center justify-center rounded-2xl border border-black/10 px-4 py-2.5 text-sm font-medium text-ink/60 transition-colors duration-200 hover:border-gold hover:text-ink">
+                                Effacer les filtres
+                            </a>
+                            <div class="flex flex-col gap-3 sm:flex-row">
+                                <button type="button" class="btn btn-secondary px-4 py-2.5" data-filter-close>Annuler</button>
+                                <button type="submit" class="group inline-flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-ink px-4 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-gold">
+                                    <span>Appliquer</span>
+                                    <svg class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         {# Results Header #}
@@ -143,7 +230,7 @@
                     <label for="perPageSelect" class="text-xs text-ink/50">Afficher</label>
                     <select id="perPageSelect" onchange="window.location.href=this.value" class="py-1.5 px-3 text-sm rounded-lg border border-black/10">
                         {% for option in allowedPerPage %}
-                            <option value="{{ path('app_catalog', {page: 1, perPage: option, search: currentSearch, author: currentAuthor, format: currentFormat}) }}" {% if perPage == option %} selected {% endif %}>
+                            <option value="{{ path('app_catalog', {page: 1, perPage: option, search: currentSearch, author: currentAuthor, format: currentFormat, genre: currentGenre}) }}" {% if perPage == option %} selected {% endif %}>
                                 {{ option }}
                             </option>
                         {% endfor %}
@@ -201,6 +288,15 @@
                                     </a>
                                 </h3>
                                 <p class="text-xs lg:text-sm text-ink/50 mb-3 lg:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
+                                {% if book.genres|length > 0 %}
+                                    <div class="mb-3 flex flex-wrap gap-1.5">
+                                        {% for genre in book.genres|slice(0, 2) %}
+                                            <span class="inline-flex rounded-full bg-cream px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink/60">
+                                                {{ genre.name }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
 
                                 <div class="mobile-book-meta mt-auto pt-3 lg:pt-4 border-t border-black/5 flex items-center justify-between gap-2 sm:px-0 sm:pb-0">
                                     <span class="mobile-book-price font-display text-sm sm:text-base lg:text-xl font-semibold text-ink">
@@ -233,7 +329,7 @@
                     <ul class="flex items-center gap-1.5 flex-wrap justify-center">
                         {# Previous #}
                         <li>
-                            <a href="{{ path('app_catalog', {page: currentPage - 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                            <a href="{{ path('app_catalog', {page: currentPage - 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat, genre: currentGenre}) }}"
                                class="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-xl border border-black/10 transition-all duration-200 {% if currentPage == 1 %}opacity-40 pointer-events-none{% else %}hover:bg-cream hover:border-gold text-ink{% endif %}">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                                     <polyline points="15 18 9 12 15 6"/>
@@ -248,7 +344,7 @@
 
                         {% if startPage > 1 %}
                             <li>
-                                <a href="{{ path('app_catalog', {page: 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                                <a href="{{ path('app_catalog', {page: 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat, genre: currentGenre}) }}"
                                    class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl border border-black/10 hover:bg-cream hover:border-gold text-ink transition-all duration-200">
                                     1
                                 </a>
@@ -260,7 +356,7 @@
 
                         {% for p in startPage..endPage %}
                             <li>
-                                <a href="{{ path('app_catalog', {page: p, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                                <a href="{{ path('app_catalog', {page: p, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat, genre: currentGenre}) }}"
                                    class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl border transition-all duration-200
                                    {% if p == currentPage %}bg-ink text-white border-ink{% else %}border-black/10 hover:bg-cream hover:border-gold text-ink{% endif %}">
                                     {{ p }}
@@ -273,7 +369,7 @@
                                 <li class="px-1 text-ink/30">...</li>
                             {% endif %}
                             <li>
-                                <a href="{{ path('app_catalog', {page: totalPages, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                                <a href="{{ path('app_catalog', {page: totalPages, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat, genre: currentGenre}) }}"
                                    class="w-10 h-10 flex items-center justify-center text-sm font-medium rounded-xl border border-black/10 hover:bg-cream hover:border-gold text-ink transition-all duration-200">
                                     {{ totalPages }}
                                 </a>
@@ -282,7 +378,7 @@
 
                         {# Next #}
                         <li>
-                            <a href="{{ path('app_catalog', {page: currentPage + 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat}) }}"
+                            <a href="{{ path('app_catalog', {page: currentPage + 1, perPage: perPage, search: currentSearch, author: currentAuthor, format: currentFormat, genre: currentGenre}) }}"
                                class="flex items-center gap-1.5 px-4 py-2.5 text-sm font-medium rounded-xl border border-black/10 transition-all duration-200 {% if currentPage == totalPages %}opacity-40 pointer-events-none{% else %}hover:bg-cream hover:border-gold text-ink{% endif %}">
                                 <span class="hidden sm:inline">Suivant</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -314,4 +410,42 @@
         {% endif %}
     </div>
 </section>
+<script>
+    (() => {
+        const modal = document.querySelector('[data-filter-modal]');
+        const openButton = document.querySelector('[data-filter-open]');
+        const closeButtons = document.querySelectorAll('[data-filter-close]');
+
+        if (!modal || !openButton) {
+            return;
+        }
+
+        const openModal = () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.classList.add('overflow-hidden');
+        };
+
+        const closeModal = () => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.body.classList.remove('overflow-hidden');
+        };
+
+        openButton.addEventListener('click', openModal);
+        closeButtons.forEach((button) => button.addEventListener('click', closeModal));
+
+        modal.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    })();
+</script>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier genre - SIYAJ{% endblock %}
+
+{% block body %}
+<section class="py-12 md:py-16">
+    <div class="container max-w-4xl space-y-6">
+        <div>
+            <p class="text-sm text-sage">Administration</p>
+            <h1 class="text-4xl md:text-5xl text-ink">Modifier le genre</h1>
+            <p class="mt-2 text-sage">{{ genre.name }}</p>
+        </div>
+
+        <section class="card p-6 md:p-8">
+            {{ form_start(genreForm, {'attr': {'class': 'space-y-6'}}) }}
+                {{ form_widget(genreForm) }}
+                <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-black/5">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <a href="{{ path('app_admin_genre_index') }}" class="btn btn-secondary">Annuler</a>
+                </div>
+            {{ form_end(genreForm) }}
+        </section>
+    </div>
+</section>
+{% endblock %}

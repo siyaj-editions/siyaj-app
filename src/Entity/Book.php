@@ -61,6 +61,13 @@ class Book
     private Collection $authors;
 
     /**
+     * @var Collection<int, Genre>
+     */
+    #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'books')]
+    #[ORM\JoinTable(name: 'book_genre')]
+    private Collection $genres;
+
+    /**
      * @var Collection<int, OrderItem>
      */
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'book')]
@@ -69,6 +76,7 @@ class Book
     public function __construct()
     {
         $this->authors = new ArrayCollection();
+        $this->genres = new ArrayCollection();
         $this->orderItems = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->isActive = true;
@@ -253,6 +261,9 @@ class Book
     {
         if (!$this->authors->contains($author)) {
             $this->authors->add($author);
+            if (!$author->getBooks()->contains($this)) {
+                $author->addBook($this);
+            }
         }
 
         return $this;
@@ -260,7 +271,38 @@ class Book
 
     public function removeAuthor(Author $author): static
     {
-        $this->authors->removeElement($author);
+        if ($this->authors->removeElement($author) && $author->getBooks()->contains($this)) {
+            $author->removeBook($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Genre>
+     */
+    public function getGenres(): Collection
+    {
+        return $this->genres;
+    }
+
+    public function addGenre(Genre $genre): static
+    {
+        if (!$this->genres->contains($genre)) {
+            $this->genres->add($genre);
+            if (!$genre->getBooks()->contains($this)) {
+                $genre->addBook($this);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): static
+    {
+        if ($this->genres->removeElement($genre) && $genre->getBooks()->contains($this)) {
+            $genre->removeBook($this);
+        }
 
         return $this;
     }
@@ -315,6 +357,11 @@ class Book
     public function getAuthorsNames(): string
     {
         return implode(', ', $this->authors->map(fn(Author $a) => $a->getName())->toArray());
+    }
+
+    public function getGenresNames(): string
+    {
+        return implode(', ', $this->genres->map(fn(Genre $genre) => $genre->getName())->toArray());
     }
 
     public function __toString(): string

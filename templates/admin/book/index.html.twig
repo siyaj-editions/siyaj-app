@@ -20,6 +20,7 @@
                         <tr>
                             <th class="text-left px-6 py-4">Titre</th>
                             <th class="text-left px-6 py-4">Auteurs</th>
+                            <th class="text-left px-6 py-4">Genres</th>
                             <th class="text-left px-6 py-4">Prix</th>
                             <th class="text-left px-6 py-4">Stock</th>
                             <th class="text-left px-6 py-4">Actif</th>
@@ -31,6 +32,7 @@
                             <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors">
                                 <td class="px-6 py-4 font-medium text-ink">{{ book.title }}</td>
                                 <td class="px-6 py-4 text-ink/80">{{ book.authorsNames }}</td>
+                                <td class="px-6 py-4 text-ink/80">{{ book.genresNames ?: 'Aucun' }}</td>
                                 <td class="px-6 py-4 text-ink">{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</td>
                                 <td class="px-6 py-4 text-ink/80">{{ book.stock ?? 'N/A' }}</td>
                                 <td class="px-6 py-4">
@@ -52,7 +54,7 @@
                             </tr>
                         {% else %}
                             <tr class="border-t border-black/5">
-                                <td colspan="6" class="px-6 py-8 text-center text-sage">Aucun livre.</td>
+                                <td colspan="7" class="px-6 py-8 text-center text-sage">Aucun livre.</td>
                             </tr>
                         {% endfor %}
                     </tbody>

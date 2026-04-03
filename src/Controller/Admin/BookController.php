@@ -27,11 +27,20 @@ class BookController extends AbstractController
     public function new(Request $request, AdminBookService $adminBookService): Response
     {
         $book = new Book();
-        $form = $this->createForm(BookFormType::class, $book);
+        $form = $this->createForm(BookFormType::class, $book, [
+            'genre_choices' => $adminBookService->listGenres(),
+            'author_choices' => $adminBookService->listAuthorNames(),
+        ]);
+        $this->seedCollectionField($form, 'authorNames', $book->getAuthors()->map(static fn ($author) => $author->getName())->toArray());
+        $this->seedCollectionField($form, 'genreNames', $book->getGenres()->map(static fn ($genre) => $genre->getName())->toArray());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $adminBookService->createBook($book);
+            $adminBookService->createBook(
+                $book,
+                (array) $form->get('authorNames')->getData(),
+                (array) $form->get('genreNames')->getData()
+            );
 
             $this->addFlash('success', 'Le livre a été créé avec succès.');
 
@@ -39,18 +48,27 @@ class BookController extends AbstractController
         }
 
         return $this->render('admin/book/new.html.twig', [
-            'bookForm' => $form,
+            'bookForm' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_admin_book_edit')]
     public function edit(Request $request, Book $book, AdminBookService $adminBookService): Response
     {
-        $form = $this->createForm(BookFormType::class, $book);
+        $form = $this->createForm(BookFormType::class, $book, [
+            'genre_choices' => $adminBookService->listGenres(),
+            'author_choices' => $adminBookService->listAuthorNames(),
+        ]);
+        $this->seedCollectionField($form, 'authorNames', $book->getAuthors()->map(static fn ($author) => $author->getName())->toArray());
+        $this->seedCollectionField($form, 'genreNames', $book->getGenres()->map(static fn ($genre) => $genre->getName())->toArray());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $adminBookService->updateBook();
+            $adminBookService->updateBook(
+                $book,
+                (array) $form->get('authorNames')->getData(),
+                (array) $form->get('genreNames')->getData()
+            );
 
             $this->addFlash('success', 'Le livre a été modifié avec succès.');
 
@@ -59,7 +77,7 @@ class BookController extends AbstractController
 
         return $this->render('admin/book/edit.html.twig', [
             'book' => $book,
-            'bookForm' => $form,
+            'bookForm' => $form->createView(),
         ]);
     }
 
@@ -73,5 +91,15 @@ class BookController extends AbstractController
         }
 
         return $this->redirectToRoute('app_admin_book_index');
+    }
+
+    private function seedCollectionField(\Symfony\Component\Form\FormInterface $form, string $fieldName, array $values): void
+    {
+        if (!$form->has($fieldName)) {
+            return;
+        }
+
+        $filteredValues = array_values(array_filter($values, static fn ($value) => is_string($value) && trim($value) !== ''));
+        $form->get($fieldName)->setData($filteredValues !== [] ? $filteredValues : ['']);
     }
 }

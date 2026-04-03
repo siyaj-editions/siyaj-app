@@ -5,6 +5,7 @@ namespace App\Tests\Service;
 use App\Enum\BookFormat;
 use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
+use App\Repository\GenreRepository;
 use App\Service\CatalogService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,8 @@ class CatalogServiceTest extends TestCase
     {
         return new CatalogService(
             $this->createMock(BookRepository::class),
-            $this->createMock(AuthorRepository::class)
+            $this->createMock(AuthorRepository::class),
+            $this->createMock(GenreRepository::class)
         );
     }
 
@@ -25,6 +27,7 @@ class CatalogServiceTest extends TestCase
             'search' => 'Victor Hugo',
             'author' => '12',
             'format' => 'physical',
+            'genre' => 'Roman',
             'page' => '3',
             'perPage' => '24',
         ]);
@@ -34,6 +37,7 @@ class CatalogServiceTest extends TestCase
         self::assertSame('Victor Hugo', $filters['search']);
         self::assertSame(12, $filters['authorId']);
         self::assertSame('physical', $filters['formatFilter']);
+        self::assertSame('Roman', $filters['genreFilter']);
         self::assertSame(3, $filters['page']);
         self::assertSame(24, $filters['perPage']);
         self::assertSame(BookFormat::PHYSICAL, $filters['format']);
@@ -75,5 +79,6 @@ class CatalogServiceTest extends TestCase
 
         self::assertNull($filters['search']);
         self::assertNull($filters['authorId']);
+        self::assertNull($filters['genreFilter']);
     }
 }
