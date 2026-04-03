@@ -71,7 +71,7 @@ jobs:
             docker compose --env-file .env.prod -f compose.vps.yml run --rm app php bin/console cache:clear --env=prod
 
             docker compose --env-file .env.prod -f compose.vps.yml up -d app
-            docker compose --env-file .env.prod -f compose.vps.yml exec -T app sh -lc 'mkdir -p /var/www/html/public && cp -an /opt/public/. /var/www/html/public/'
+            docker compose --env-file .env.prod -f compose.vps.yml exec -T app sh -lc 'rm -rf /var/www/html/public/* && mkdir -p /var/www/html/public && cp -a /opt/public/. /var/www/html/public/'
             docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console importmap:install --env=prod
             docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console tailwind:build --env=prod --minify
             docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console asset-map:compile --env=prod
