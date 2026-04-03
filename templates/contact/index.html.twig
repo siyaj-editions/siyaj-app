@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - SIYAJ Éditions{% endblock %}
+
+{% block body %}
+<section class="py-12 md:py-16">
+    <div class="container">
+        <div class="mx-auto max-w-3xl space-y-6">
+            <div class="text-center space-y-3">
+                <p class="text-sm text-sage uppercase tracking-[0.18em]">Contact</p>
+                <h1 class="text-4xl md:text-5xl text-ink">Nous écrire</h1>
+                <p class="text-ink/65 leading-relaxed">
+                    Une question en relations publiques, communication ou médias ? Écrivez-nous et nous reviendrons vers vous rapidement.
+                </p>
+            </div>
+
+            <div class="rounded-2xl border border-gold/20 bg-cream px-5 py-4 text-sm leading-6 text-ink/75">
+                Les soumissions de manuscrits ou de portfolios d’artistes se font sur la page
+                <a href="{{ path('app_author_manuscript_submit') }}" class="font-medium text-ink underline decoration-gold/60 underline-offset-4 hover:text-gold">
+                    Manuscrit
+                </a>.
+            </div>
+
+            <section class="card p-6 md:p-8">
+                {{ form_start(contactForm, {'attr': {'class': 'space-y-6'}}) }}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            {{ form_label(contactForm.firstname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(contactForm.firstname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            {{ form_errors(contactForm.firstname) }}
+                        </div>
+                        <div>
+                            {{ form_label(contactForm.lastname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(contactForm.lastname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            {{ form_errors(contactForm.lastname) }}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            {{ form_label(contactForm.email, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(contactForm.email, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': 'votre@email.com'}}) }}
+                            {{ form_errors(contactForm.email) }}
+                        </div>
+                        <div>
+                            {{ form_label(contactForm.subject, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            {{ form_widget(contactForm.subject, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            {{ form_errors(contactForm.subject) }}
+                        </div>
+                    </div>
+
+                    <div>
+                        {{ form_label(contactForm.message, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                        {{ form_widget(contactForm.message, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': 'Décrivez votre demande...'}}) }}
+                        {{ form_errors(contactForm.message) }}
+                    </div>
+
+                    <div class="hidden" aria-hidden="true">
+                        {{ form_widget(contactForm.website) }}
+                    </div>
+
+                    <div class="pt-2 flex flex-col sm:flex-row gap-3">
+                        <button type="submit" class="btn btn-primary px-6 py-3">Envoyer mon message</button>
+                        <a href="mailto:contact@siyaj-editions.fr" class="btn btn-secondary px-6 py-3">contact@siyaj-editions.fr</a>
+                    </div>
+                {{ form_end(contactForm) }}
+            </section>
+        </div>
+    </div>
+</section>
+{% endblock %}

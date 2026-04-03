@@ -1,0 +1,11 @@
+<div style="font-family: Arial, sans-serif; color: #1f2937; line-height: 1.6;">
+    <h2 style="margin: 0 0 16px;">Nouveau message de contact</h2>
+
+    <p style="margin: 0 0 8px;"><strong>Nom :</strong> {{ contactMessage.fullName }}</p>
+    <p style="margin: 0 0 8px;"><strong>Email :</strong> {{ contactMessage.email }}</p>
+    <p style="margin: 0 0 20px;"><strong>Motif :</strong> {{ subjectLabel }}</p>
+
+    <div style="padding: 16px; background: #f8f5ef; border-radius: 12px;">
+        {{ contactMessage.message|nl2br }}
+    </div>
+</div>

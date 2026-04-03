@@ -51,6 +51,10 @@
 								À propos
 								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
+							<a href="{{ path('app_contact') }}" class="text-sm font-medium text-ink/60 hover:text-ink uppercase tracking-[0.1em] transition-colors duration-200 relative group">
+								Contact
+								<span class="absolute bottom-0 left-0 w-full h-px bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+							</a>
 						</div>
 
 						{# Right Side Actions #}
@@ -129,6 +133,9 @@
 							</a>
 							<a href="{{ path('app_author_manuscript_submit') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
 								Espace auteurs
+							</a>
+							<a href="{{ path('app_contact') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
+								Contact
 							</a>
 							{% if is_granted('ROLE_ADMIN') %}
 								<a href="{{ path('app_admin_dashboard') }}" class="px-4 py-3 text-sm font-medium text-ink/80 hover:text-ink hover:bg-cream rounded-xl transition-all duration-200">
@@ -227,6 +234,11 @@
 									<li>
 										<a href="{{ path('app_about') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
 											À propos
+										</a>
+									</li>
+									<li>
+										<a href="{{ path('app_contact') }}" class="text-sm text-white/60 hover:text-gold transition-colors duration-200">
+											Contact
 										</a>
 									</li>
 									<li>
