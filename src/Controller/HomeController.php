@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Newsletter;
 use App\Form\NewsletterType;
 use App\Service\HomeService;
+use App\Service\HoneypotService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,8 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(
         Request $request,
-        HomeService $homeService
+        HomeService $homeService,
+        HoneypotService $honeypotService
     ): Response
     {
         $latestBooks = $homeService->getLatestActiveBooks();
@@ -25,6 +27,12 @@ class HomeController extends AbstractController
         $newsletterForm->handleRequest($request);
 
         if ($newsletterForm->isSubmitted() && $newsletterForm->isValid()) {
+            if ($honeypotService->isTriggered($newsletterForm)) {
+                $this->addFlash('success', 'Inscription à la newsletter confirmée.');
+
+                return $this->redirectToRoute('app_home');
+            }
+
             $result = $homeService->subscribeToNewsletter($newsletter);
             $this->addFlash($result->flashType, $result->flashMessage);
 

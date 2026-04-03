@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Newsletter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Email;
@@ -23,6 +24,16 @@ class NewsletterType extends AbstractType
             'constraints' => [
                 new NotBlank(message: 'Veuillez renseigner une adresse email.'),
                 new Email(message: 'Adresse email invalide.'),
+            ],
+        ])->add('company', TextType::class, [
+            'label' => false,
+            'mapped' => false,
+            'required' => false,
+            'attr' => [
+                'tabindex' => '-1',
+                'autocomplete' => 'nope',
+                'spellcheck' => 'false',
+                'class' => 'absolute -left-[10000px] top-auto h-px w-px overflow-hidden opacity-0 pointer-events-none',
             ],
         ]);
     }

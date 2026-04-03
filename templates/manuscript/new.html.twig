@@ -68,6 +68,10 @@
                         {{ form_errors(submissionForm.manuscriptUrl) }}
                     </div>
 
+                    <div aria-hidden="true">
+                        {{ form_widget(submissionForm.company) }}
+                    </div>
+
                     <div class="pt-2 flex flex-col sm:flex-row gap-3">
                         <button type="submit" class="btn btn-primary px-6 py-3">Envoyer ma proposition</button>
                         <a href="{{ path('app_about') }}" class="btn btn-secondary px-6 py-3">À propos de la maison</a>
