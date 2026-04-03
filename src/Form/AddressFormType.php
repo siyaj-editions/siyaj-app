@@ -5,11 +5,13 @@ namespace App\Form;
 use App\Entity\Address;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AddressFormType extends AbstractType
@@ -48,13 +50,16 @@ class AddressFormType extends AbstractType
                 'label' => 'Ville',
                 'constraints' => [new NotBlank(message: 'La ville est requise.')],
             ])
-            ->add('country', ChoiceType::class, [
+            ->add('country', TextType::class, [
                 'label' => 'Pays',
-                'choices' => array_flip($countries),
-                'placeholder' => 'Sélectionnez un pays',
-                'constraints' => [new NotBlank(message: 'Le pays est requis.')],
+                'constraints' => [
+                    new NotBlank(message: 'Le pays est requis.'),
+                    new Choice(choices: array_values($countries), message: 'Sélectionnez un pays existant dans la liste.'),
+                ],
                 'attr' => [
-                    'data-country-select' => 'true',
+                    'class' => 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper',
+                    'placeholder' => 'Rechercher un pays',
+                    'autocomplete' => 'off',
                 ],
             ])
             ->add('isDefault', CheckboxType::class, [
@@ -68,5 +73,13 @@ class AddressFormType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Address::class,
         ]);
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $countries = array_values(Countries::getNames('fr'));
+        sort($countries, SORT_NATURAL | SORT_FLAG_CASE);
+
+        $view->vars['country_choices'] = $countries;
     }
 }

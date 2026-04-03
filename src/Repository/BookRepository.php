@@ -32,7 +32,9 @@ class BookRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('b')
             ->leftJoin('b.authors', 'a')
+            ->leftJoin('b.genres', 'g')
             ->addSelect('a')
+            ->addSelect('g')
             ->andWhere('b.slug = :slug')
             ->andWhere('b.isActive = :active')
             ->setParameter('slug', $slug)
@@ -41,20 +43,23 @@ class BookRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findActiveBooksWithFilters(?string $search = null, ?int $authorId = null, ?BookFormat $format = null): array
+    public function findActiveBooksWithFilters(?string $search = null, ?int $authorId = null, ?BookFormat $format = null, ?string $genre = null): array
     {
-        return $this->createActiveBooksQueryBuilder($search, $authorId, $format)
+        return $this->createActiveBooksQueryBuilder($search, $authorId, $format, $genre)
             ->getQuery()
             ->getResult();
     }
 
-    public function createActiveBooksQueryBuilder(?string $search = null, ?int $authorId = null, ?BookFormat $format = null): QueryBuilder
+    public function createActiveBooksQueryBuilder(?string $search = null, ?int $authorId = null, ?BookFormat $format = null, ?string $genre = null): QueryBuilder
     {
         $qb = $this->createQueryBuilder('b')
             ->leftJoin('b.authors', 'a')
+            ->leftJoin('b.genres', 'g')
             ->addSelect('a')
+            ->addSelect('g')
             ->andWhere('b.isActive = :active')
-            ->setParameter('active', true);
+            ->setParameter('active', true)
+            ->distinct();
 
         if ($search) {
             // Recherche insensible à la casse et aux accents (PostgreSQL)
@@ -70,6 +75,11 @@ class BookRepository extends ServiceEntityRepository
         if ($format) {
             $qb->andWhere('b.format = :format')
                 ->setParameter('format', $format);
+        }
+
+        if ($genre) {
+            $qb->andWhere('g.name = :genre')
+                ->setParameter('genre', $genre);
         }
 
         return $qb->orderBy('b.publishedAt', 'DESC');
