@@ -86,6 +86,9 @@
                                     {% if address.numero %}<p>Tél: {{ address.numero }}</p>{% endif %}
                                 </div>
                                 <div class="flex flex-col items-end gap-2">
+                                    <a href="{{ path('app_account_address_edit', {id: address.id}) }}" class="text-xs text-ink/60 hover:text-ink hover:underline">
+                                        Modifier
+                                    </a>
                                     {% if not address.isDefault %}
                                         <form method="post" action="{{ path('app_account_address_default', {id: address.id}) }}">
                                             <input type="hidden" name="_token" value="{{ csrf_token('default_address_' ~ address.id) }}">

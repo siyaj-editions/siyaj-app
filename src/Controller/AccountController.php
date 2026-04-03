@@ -110,6 +110,38 @@ class AccountController extends AbstractController
         return $this->redirectToRoute('app_account_address');
     }
 
+    #[Route('/adresse/{id}/modifier', name: 'app_account_address_edit', methods: ['GET', 'POST'])]
+    public function editAddress(
+        int $id,
+        Request $request,
+        AccountService $accountService
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+        $address = $accountService->findUserAddressById($user, $id);
+
+        if (!$address) {
+            throw $this->createNotFoundException('Adresse non trouvée.');
+        }
+
+        $form = $this->createForm(AddressFormType::class, $address);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $address->setUser($user);
+            $accountService->saveAddress($address);
+
+            $this->addFlash('success', 'Adresse mise à jour.');
+
+            return $this->redirectToRoute('app_account_address');
+        }
+
+        return $this->render('account/address_edit.html.twig', [
+            'address' => $address,
+            'addressForm' => $form,
+        ]);
+    }
+
     #[Route('/profil', name: 'app_account_profile')]
     public function profile(
         Request $request,
