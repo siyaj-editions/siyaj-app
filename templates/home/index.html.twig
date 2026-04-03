@@ -273,6 +273,9 @@
             </p>
             {{ form_start(newsletterForm, {'attr': {'class': 'flex flex-col sm:flex-row gap-3 max-w-md mx-auto'}}) }}
                 {{ form_widget(newsletterForm.email) }}
+                <div aria-hidden="true">
+                    {{ form_widget(newsletterForm.company) }}
+                </div>
                 <button type="submit" class="btn btn-gold px-6 py-3.5 whitespace-nowrap">
                     S'inscrire
                 </button>

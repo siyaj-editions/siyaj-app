@@ -51,6 +51,17 @@ class ManuscriptSubmissionType extends AbstractType
             ->add('manuscriptUrl', UrlType::class, [
                 'label' => 'Lien vers le manuscrit (Drive, Dropbox, PDF...)',
                 'required' => false,
+            ])
+            ->add('company', TextType::class, [
+                'label' => false,
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'tabindex' => '-1',
+                    'autocomplete' => 'nope',
+                    'spellcheck' => 'false',
+                    'class' => 'absolute -left-[10000px] top-auto h-px w-px overflow-hidden opacity-0 pointer-events-none',
+                ],
             ]);
     }
 
