@@ -150,9 +150,13 @@
                         </div>
                         <div class="sm:col-span-2">
                             {{ form_label(addressForm.country, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            <div class="relative" data-country-autocomplete-root>
-                                {{ form_widget(addressForm.country, {'attr': {'data-country-autocomplete': 'true'}}) }}
-                                <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-country-autocomplete-menu></div>
+                            <div
+                                class="relative"
+                                data-controller="autocomplete"
+                                data-autocomplete-choices-value='{{ addressForm.vars.country_choices|json_encode|e('html_attr') }}'
+                            >
+                                {{ form_widget(addressForm.country, {'attr': {'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close'}}) }}
+                                <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-target="menu" data-action="mousedown->autocomplete#handleMouseDown click->autocomplete#select"></div>
                             </div>
                             {{ form_errors(addressForm.country) }}
                         </div>
@@ -178,58 +182,6 @@
 (function () {
     var btn = document.getElementById('toggle-address-form');
     var panel = document.getElementById('address-form-panel');
-    var countryInput = document.querySelector('[data-country-autocomplete="true"]');
-    var countryRoot = document.querySelector('[data-country-autocomplete-root]');
-    var countryMenu = countryRoot ? countryRoot.querySelector('[data-country-autocomplete-menu]') : null;
-    var countryChoices = {{ addressForm.vars.country_choices|json_encode|raw }};
-
-    var normalize = function (value) {
-        return (value || '')
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '');
-    };
-
-    var renderCountryChoices = function () {
-        if (!countryInput || !countryMenu) {
-            return;
-        }
-
-        var term = normalize(countryInput.value);
-        var choices = countryChoices.filter(function (choice) {
-            return term !== '' && normalize(choice).includes(term);
-        }).slice(0, 8);
-
-        if (choices.length === 0) {
-            countryMenu.innerHTML = '';
-            countryMenu.classList.add('hidden');
-            return;
-        }
-
-        countryMenu.innerHTML = choices.map(function (choice) {
-            return '<button type="button" class="block w-full border-b border-black/5 px-4 py-3 text-left text-sm text-ink transition-colors duration-150 hover:bg-cream hover:text-gold last:border-b-0" data-country-option="' + choice.replace(/"/g, '&quot;') + '">' + choice + '</button>';
-        }).join('');
-
-        countryMenu.classList.remove('hidden');
-
-        Array.prototype.slice.call(countryMenu.querySelectorAll('[data-country-option]')).forEach(function (option) {
-            option.addEventListener('click', function () {
-                countryInput.value = option.getAttribute('data-country-option') || '';
-                countryMenu.classList.add('hidden');
-                countryInput.focus();
-            });
-        });
-    };
-
-    if (countryInput && countryMenu) {
-        countryInput.addEventListener('input', renderCountryChoices);
-        countryInput.addEventListener('focus', renderCountryChoices);
-        countryInput.addEventListener('blur', function () {
-            window.setTimeout(function () {
-                countryMenu.classList.add('hidden');
-            }, 120);
-        });
-    }
 
     if (!btn || !panel) return;
     btn.addEventListener('click', function () {

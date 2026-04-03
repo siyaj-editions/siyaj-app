@@ -11,7 +11,13 @@
 
     {{ form_row(bookForm.description) }}
 
-    <div class="space-y-4 rounded-2xl border border-black/10 p-5">
+    <div
+        class="space-y-4 rounded-2xl border border-black/10 p-5"
+        data-controller="collection"
+        data-collection-index-value="{{ bookForm.authorNames|length }}"
+        data-collection-item-selector-value="[data-author-entry]"
+        data-collection-template-value="{% apply escape('html_attr') %}<div class='flex items-center gap-3 mb-3' data-author-entry data-collection-item><div class='flex-1 relative' data-controller='autocomplete' data-autocomplete-choices-value='{{ bookForm.vars.author_choices|json_encode|e('html_attr') }}'>{{ form_widget(bookForm.authorNames.vars.prototype, {'attr': {'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close', 'autocomplete': 'off'}}) }}<div class='absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]' data-autocomplete-target='menu' data-action='mousedown->autocomplete#handleMouseDown click->autocomplete#select'></div></div><button type='button' class='btn btn-secondary px-3 py-2' data-action='click->collection#remove'>Retirer</button></div>{% endapply %}"
+    >
         <div class="flex items-center justify-between gap-4">
             <div>
                 <h2 class="text-lg font-semibold text-ink">Auteur(s)</h2>
@@ -20,24 +26,24 @@
             <button
                 type="button"
                 class="btn btn-secondary px-4 py-2"
-                data-author-collection-add
+                data-action="click->collection#add"
             >
                 +
             </button>
         </div>
 
-        <div
-            data-author-collection
-            data-index="{{ bookForm.authorNames|length }}"
-            data-prototype="{{ form_widget(bookForm.authorNames.vars.prototype)|e('html_attr') }}"
-        >
+        <div data-collection-target="list">
             {% for authorField in bookForm.authorNames %}
                 <div class="flex items-center gap-3 mb-3" data-author-entry>
-                    <div class="flex-1 relative" data-autocomplete-root>
-                        {{ form_widget(authorField, {'attr': {'data-author-autocomplete': 'true', 'autocomplete': 'off'}}) }}
-                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-menu></div>
+                    <div
+                        class="flex-1 relative"
+                        data-controller="autocomplete"
+                        data-autocomplete-choices-value='{{ bookForm.vars.author_choices|json_encode|e('html_attr') }}'
+                    >
+                        {{ form_widget(authorField, {'attr': {'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close', 'autocomplete': 'off'}}) }}
+                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-target="menu" data-action="mousedown->autocomplete#handleMouseDown click->autocomplete#select"></div>
                     </div>
-                    <button type="button" class="btn btn-secondary px-3 py-2" data-author-collection-remove>Retirer</button>
+                    <button type="button" class="btn btn-secondary px-3 py-2" data-action="click->collection#remove">Retirer</button>
                 </div>
             {% endfor %}
         </div>
@@ -45,7 +51,13 @@
         {{ form_errors(bookForm.authorNames) }}
     </div>
 
-    <div class="space-y-4 rounded-2xl border border-black/10 p-5">
+    <div
+        class="space-y-4 rounded-2xl border border-black/10 p-5"
+        data-controller="collection"
+        data-collection-index-value="{{ bookForm.genreNames|length }}"
+        data-collection-item-selector-value="[data-genre-entry]"
+        data-collection-template-value="{% apply escape('html_attr') %}<div class='flex items-center gap-3 mb-3' data-genre-entry data-collection-item><div class='flex-1 relative' data-controller='autocomplete' data-autocomplete-choices-value='{{ bookForm.vars.genre_choices|json_encode|e('html_attr') }}'>{{ form_widget(bookForm.genreNames.vars.prototype, {'attr': {'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close', 'autocomplete': 'off'}}) }}<div class='absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]' data-autocomplete-target='menu' data-action='mousedown->autocomplete#handleMouseDown click->autocomplete#select'></div></div><button type='button' class='btn btn-secondary px-3 py-2' data-action='click->collection#remove'>Retirer</button></div>{% endapply %}"
+    >
         <div class="flex items-center justify-between gap-4">
             <div>
                 <h2 class="text-lg font-semibold text-ink">Genre(s)</h2>
@@ -54,24 +66,24 @@
             <button
                 type="button"
                 class="btn btn-secondary px-4 py-2"
-                data-genre-collection-add
+                data-action="click->collection#add"
             >
                 +
             </button>
         </div>
 
-        <div
-            data-genre-collection
-            data-index="{{ bookForm.genreNames|length }}"
-            data-prototype="{{ form_widget(bookForm.genreNames.vars.prototype)|e('html_attr') }}"
-        >
+        <div data-collection-target="list">
             {% for genreField in bookForm.genreNames %}
                 <div class="flex items-center gap-3 mb-3" data-genre-entry>
-                    <div class="flex-1 relative" data-genre-autocomplete-root>
-                        {{ form_widget(genreField, {'attr': {'data-genre-autocomplete': 'true', 'autocomplete': 'off'}}) }}
-                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-genre-autocomplete-menu></div>
+                    <div
+                        class="flex-1 relative"
+                        data-controller="autocomplete"
+                        data-autocomplete-choices-value='{{ bookForm.vars.genre_choices|json_encode|e('html_attr') }}'
+                    >
+                        {{ form_widget(genreField, {'attr': {'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close', 'autocomplete': 'off'}}) }}
+                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-target="menu" data-action="mousedown->autocomplete#handleMouseDown click->autocomplete#select"></div>
                     </div>
-                    <button type="button" class="btn btn-secondary px-3 py-2" data-genre-collection-remove>Retirer</button>
+                    <button type="button" class="btn btn-secondary px-3 py-2" data-action="click->collection#remove">Retirer</button>
                 </div>
             {% endfor %}
         </div>
@@ -88,236 +100,3 @@
         <a href="{{ path('app_admin_book_index') }}" class="btn btn-secondary">Annuler</a>
     </div>
 {{ form_end(bookForm) }}
-
-<script>
-    (() => {
-        const collection = document.querySelector('[data-author-collection]');
-        const addButton = document.querySelector('[data-author-collection-add]');
-        const authorChoices = {{ bookForm.vars.author_choices|json_encode|raw }};
-        const genreCollection = document.querySelector('[data-genre-collection]');
-        const genreAddButton = document.querySelector('[data-genre-collection-add]');
-        const genreChoices = {{ bookForm.vars.genre_choices|json_encode|raw }};
-
-        if (!collection || !addButton || !genreCollection || !genreAddButton) {
-            return;
-        }
-
-        const normalize = (value) => (value || '')
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '');
-
-        const renderAutocomplete = (input, menu) => {
-            const term = normalize(input.value);
-            const filteredChoices = authorChoices
-                .filter((choice) => term !== '' && normalize(choice).includes(term))
-                .slice(0, 8);
-
-            if (filteredChoices.length === 0) {
-                menu.innerHTML = '';
-                menu.classList.add('hidden');
-                return;
-            }
-
-            menu.innerHTML = filteredChoices.map((choice) => `
-                <button
-                    type="button"
-                    class="block w-full border-b border-black/5 px-4 py-3 text-left text-sm text-ink transition-colors duration-150 hover:bg-cream hover:text-gold last:border-b-0"
-                    data-autocomplete-option="${choice.replace(/"/g, '&quot;')}"
-                >
-                    ${choice}
-                </button>
-            `).join('');
-
-            menu.classList.remove('hidden');
-
-            menu.querySelectorAll('[data-autocomplete-option]').forEach((option) => {
-                option.addEventListener('click', () => {
-                    input.value = option.dataset.autocompleteOption || '';
-                    menu.classList.add('hidden');
-                    input.focus();
-                });
-            });
-        };
-
-        const bindAutocomplete = (scope) => {
-            scope.querySelectorAll('[data-author-autocomplete="true"]').forEach((input) => {
-                if (input.dataset.autocompleteBound === 'true') {
-                    return;
-                }
-
-                const root = input.closest('[data-autocomplete-root]');
-                const menu = root ? root.querySelector('[data-autocomplete-menu]') : null;
-
-                if (!root || !menu) {
-                    return;
-                }
-
-                input.dataset.autocompleteBound = 'true';
-
-                input.addEventListener('input', () => renderAutocomplete(input, menu));
-                input.addEventListener('focus', () => renderAutocomplete(input, menu));
-
-                input.addEventListener('blur', () => {
-                    window.setTimeout(() => menu.classList.add('hidden'), 120);
-                });
-            });
-        };
-
-        const renderGenreAutocomplete = (input, menu) => {
-            const term = normalize(input.value);
-            const filteredChoices = genreChoices
-                .filter((choice) => term !== '' && normalize(choice).includes(term))
-                .slice(0, 8);
-
-            if (filteredChoices.length === 0) {
-                menu.innerHTML = '';
-                menu.classList.add('hidden');
-                return;
-            }
-
-            menu.innerHTML = filteredChoices.map((choice) => `
-                <button
-                    type="button"
-                    class="block w-full border-b border-black/5 px-4 py-3 text-left text-sm text-ink transition-colors duration-150 hover:bg-cream hover:text-gold last:border-b-0"
-                    data-genre-option="${choice.replace(/"/g, '&quot;')}"
-                >
-                    ${choice}
-                </button>
-            `).join('');
-
-            menu.classList.remove('hidden');
-
-            menu.querySelectorAll('[data-genre-option]').forEach((option) => {
-                option.addEventListener('click', () => {
-                    input.value = option.dataset.genreOption || '';
-                    menu.classList.add('hidden');
-                    input.focus();
-                });
-            });
-        };
-
-        const bindGenreAutocomplete = (scope) => {
-            scope.querySelectorAll('[data-genre-autocomplete="true"]').forEach((input) => {
-                if (input.dataset.genreAutocompleteBound === 'true') {
-                    return;
-                }
-
-                const root = input.closest('[data-genre-autocomplete-root]');
-                const menu = root ? root.querySelector('[data-genre-autocomplete-menu]') : null;
-
-                if (!root || !menu) {
-                    return;
-                }
-
-                input.dataset.genreAutocompleteBound = 'true';
-                input.addEventListener('input', () => renderGenreAutocomplete(input, menu));
-                input.addEventListener('focus', () => renderGenreAutocomplete(input, menu));
-                input.addEventListener('blur', () => {
-                    window.setTimeout(() => menu.classList.add('hidden'), 120);
-                });
-            });
-        };
-
-        const bindRemoveButton = (scope) => {
-            scope.querySelectorAll('[data-author-collection-remove]').forEach((button) => {
-                if (button.dataset.removeBound === 'true') {
-                    return;
-                }
-
-                button.dataset.removeBound = 'true';
-                button.addEventListener('click', () => {
-                    const entry = button.closest('[data-author-entry]');
-
-                    if (!entry) {
-                        return;
-                    }
-
-                    if (collection.querySelectorAll('[data-author-entry]').length === 1) {
-                        const input = entry.querySelector('input');
-                        if (input) {
-                            input.value = '';
-                        }
-                        return;
-                    }
-
-                    entry.remove();
-                });
-            });
-        };
-
-        addButton.addEventListener('click', () => {
-            const wrapper = document.createElement('div');
-            const index = Number(collection.dataset.index || 0);
-            const template = collection.dataset.prototype.replace(/__name__/g, String(index));
-
-            wrapper.innerHTML = `
-                <div class="flex items-center gap-3 mb-3" data-author-entry>
-                    <div class="flex-1 relative" data-autocomplete-root>
-                        ${template}
-                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-menu></div>
-                    </div>
-                    <button type="button" class="btn btn-secondary px-3 py-2" data-author-collection-remove>Retirer</button>
-                </div>
-            `.trim();
-
-            collection.appendChild(wrapper.firstElementChild);
-            collection.dataset.index = String(index + 1);
-            bindAutocomplete(collection);
-            bindRemoveButton(collection);
-        });
-
-        genreAddButton.addEventListener('click', () => {
-            const wrapper = document.createElement('div');
-            const index = Number(genreCollection.dataset.index || 0);
-            const template = genreCollection.dataset.prototype.replace(/__name__/g, String(index));
-
-            wrapper.innerHTML = `
-                <div class="flex items-center gap-3 mb-3" data-genre-entry>
-                    <div class="flex-1 relative" data-genre-autocomplete-root>
-                        ${template}
-                        <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-genre-autocomplete-menu></div>
-                    </div>
-                    <button type="button" class="btn btn-secondary px-3 py-2" data-genre-collection-remove>Retirer</button>
-                </div>
-            `.trim();
-
-            genreCollection.appendChild(wrapper.firstElementChild);
-            genreCollection.dataset.index = String(index + 1);
-            bindGenreAutocomplete(genreCollection);
-            bindGenreRemoveButton(genreCollection);
-        });
-
-        const bindGenreRemoveButton = (scope) => {
-            scope.querySelectorAll('[data-genre-collection-remove]').forEach((button) => {
-                if (button.dataset.removeBound === 'true') {
-                    return;
-                }
-
-                button.dataset.removeBound = 'true';
-                button.addEventListener('click', () => {
-                    const entry = button.closest('[data-genre-entry]');
-
-                    if (!entry) {
-                        return;
-                    }
-
-                    if (genreCollection.querySelectorAll('[data-genre-entry]').length === 1) {
-                        const input = entry.querySelector('input');
-                        if (input) {
-                            input.value = '';
-                        }
-                        return;
-                    }
-
-                    entry.remove();
-                });
-            });
-        };
-
-        bindAutocomplete(collection);
-        bindRemoveButton(collection);
-        bindGenreAutocomplete(genreCollection);
-        bindGenreRemoveButton(genreCollection);
-    })();
-</script>
