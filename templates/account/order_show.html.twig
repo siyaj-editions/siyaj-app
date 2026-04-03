@@ -51,6 +51,24 @@
                             <span class="text-sm text-ink/60">Articles</span>
                             <span class="text-sm font-medium text-ink">{{ order.orderItems|length }}</span>
                         </div>
+                        {% if order.shippingZoneLabel %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-ink/60">Zone</span>
+                                <span class="text-sm font-medium text-ink">{{ order.shippingZoneLabel }}</span>
+                            </div>
+                        {% endif %}
+                        {% if order.shippingMethodLabel %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-ink/60">Mode</span>
+                                <span class="text-sm font-medium text-ink">{{ order.shippingMethodLabel }}</span>
+                            </div>
+                        {% endif %}
+                        {% if order.shippingDelayLabel %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-ink/60">Délai annoncé</span>
+                                <span class="text-sm font-medium text-ink">{{ order.shippingDelayLabel }}</span>
+                            </div>
+                        {% endif %}
                         {% if order.shippingAddress %}
                             <div class="pt-3 border-t border-black/5 space-y-2">
                                 <p class="text-xs uppercase tracking-wider text-ink/40">Livraison</p>
@@ -73,9 +91,19 @@
                         {% endif %}
                     </div>
 
-                    <div class="flex justify-between items-center pt-6 border-t-2 border-ink">
-                        <span class="font-semibold text-ink">Total de la commande</span>
-                        <span class="font-display text-2xl font-bold text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                    <div class="space-y-3 pt-6 border-t-2 border-ink">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Sous-total articles</span>
+                            <span class="text-sm font-medium text-ink">{{ (order.itemsSubtotalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Livraison</span>
+                            <span class="text-sm font-medium text-ink">{{ (order.shippingCostCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-ink">Total de la commande</span>
+                            <span class="font-display text-2xl font-bold text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        </div>
                     </div>
                 </div>
             </aside>
@@ -125,9 +153,19 @@
                     </div>
 
                     {# Footer Total #}
-                    <div class="flex justify-between items-center mt-6 pt-6 border-t border-black/5">
-                        <span class="font-semibold text-ink">Total</span>
-                        <span class="font-display text-xl font-semibold text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                    <div class="mt-6 pt-6 border-t border-black/5 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Sous-total articles</span>
+                            <span class="text-sm font-medium text-ink">{{ (order.itemsSubtotalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Livraison</span>
+                            <span class="text-sm font-medium text-ink">{{ (order.shippingCostCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-semibold text-ink">Total</span>
+                            <span class="font-display text-xl font-semibold text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</span>
+                        </div>
                     </div>
                 </div>
             </main>

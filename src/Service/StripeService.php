@@ -63,6 +63,19 @@ class StripeService
             ];
         }
 
+        if ($order->getShippingCostCents() > 0) {
+            $lineItems[] = [
+                'price_data' => [
+                    'currency' => strtolower((string) $order->getCurrency()),
+                    'product_data' => [
+                        'name' => $order->getShippingMethodLabel() ?: 'Livraison',
+                    ],
+                    'unit_amount' => $order->getShippingCostCents(),
+                ],
+                'quantity' => 1,
+            ];
+        }
+
         try {
             $session = Session::create([
                 'payment_method_types' => ['card'],

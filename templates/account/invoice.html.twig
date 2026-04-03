@@ -37,6 +37,29 @@
                 </div>
             </div>
 
+            {% if order.shippingZoneLabel or order.shippingMethodLabel or order.shippingDelayLabel %}
+                <div class="grid sm:grid-cols-3 gap-4 pt-6">
+                    {% if order.shippingZoneLabel %}
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-ink/40 mb-2">Zone</p>
+                            <p class="text-sm text-ink/70">{{ order.shippingZoneLabel }}</p>
+                        </div>
+                    {% endif %}
+                    {% if order.shippingMethodLabel %}
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-ink/40 mb-2">Mode</p>
+                            <p class="text-sm text-ink/70">{{ order.shippingMethodLabel }}</p>
+                        </div>
+                    {% endif %}
+                    {% if order.shippingDelayLabel %}
+                        <div>
+                            <p class="text-xs uppercase tracking-wider text-ink/40 mb-2">Délai annoncé</p>
+                            <p class="text-sm text-ink/70">{{ order.shippingDelayLabel }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+
             <div class="overflow-x-auto mt-8">
                 <table class="min-w-full text-sm">
                     <thead class="bg-paper text-ink/60 uppercase text-xs tracking-wider">
@@ -61,7 +84,11 @@
             </div>
 
             <div class="mt-6 pt-4 border-t border-black/10 flex justify-end">
-                <p class="font-display text-2xl text-ink">Total: {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</p>
+                <div class="text-right space-y-1">
+                    <p class="text-sm text-ink/60">Sous-total: {{ (order.itemsSubtotalCents / 100)|number_format(2, ',', ' ') }} €</p>
+                    <p class="text-sm text-ink/60">Livraison: {{ (order.shippingCostCents / 100)|number_format(2, ',', ' ') }} €</p>
+                    <p class="font-display text-2xl text-ink">Total: {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</p>
+                </div>
             </div>
 
             <div class="mt-8 flex flex-col sm:flex-row gap-3">

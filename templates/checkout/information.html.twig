@@ -27,6 +27,42 @@
                     </div>
 
                     <div class="space-y-4 pt-6 border-t border-black/5">
+                        <div class="flex items-start justify-between gap-4">
+                            <div>
+                                <h2 class="font-display text-2xl text-ink">Choisissez votre mode de livraison</h2>
+                                <p class="text-sm text-ink/60 mt-2">
+                                    Zone détectée :
+                                    <span class="font-medium text-ink" id="shipping-zone-label">-</span>
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-xs font-semibold uppercase tracking-wider text-ink/40">Délai estimé</p>
+                                <p class="text-sm text-ink" id="shipping-delay-label">-</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3" id="shipping-methods">
+                            {% for child in checkoutForm.shippingMethod %}
+                                <label class="block rounded-2xl border border-black/10 p-4 bg-paper/80 transition-all duration-200 has-[:checked]:border-gold has-[:checked]:bg-cream" data-shipping-method-card="{{ child.vars.value }}">
+                                    <div class="flex items-start gap-3">
+                                        {{ form_widget(child, {'attr': {'class': 'mt-1 w-4 h-4 text-gold border-black/20 focus:ring-gold'}}) }}
+                                        <div class="flex-1">
+                                            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                                                <div>
+                                                    <p class="font-semibold text-ink">{{ child.vars.label }}</p>
+                                                    <p class="text-sm text-ink/60" data-shipping-delay-for="{{ child.vars.value }}">-</p>
+                                                </div>
+                                                <p class="font-display text-xl text-ink" data-shipping-price-for="{{ child.vars.value }}">-</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </label>
+                            {% endfor %}
+                        </div>
+                        {{ form_errors(checkoutForm.shippingMethod) }}
+                    </div>
+
+                    <div class="space-y-4 pt-6 border-t border-black/5">
                         <div class="flex items-center gap-3">
                             {{ form_widget(checkoutForm.billingSameAsShipping, {'attr': {'class': 'w-5 h-5 rounded border-black/20'}}) }}
                             {{ form_label(checkoutForm.billingSameAsShipping, null, {'label_attr': {'class': 'text-sm text-ink/70'}}) }}
@@ -75,9 +111,31 @@
                             </div>
                         {% endfor %}
                     </div>
+                    <div class="mt-4 pt-4 border-t border-black/10 space-y-2 text-sm">
+                        <div class="flex justify-between gap-3">
+                            <span class="text-ink/60">Sous-total</span>
+                            <span class="text-ink">{{ total|number_format(2, ',', ' ') }} €</span>
+                        </div>
+                        <div class="flex justify-between gap-3">
+                            <span class="text-ink/60">Zone</span>
+                            <span class="text-ink text-right" id="summary-zone-label">-</span>
+                        </div>
+                        <div class="flex justify-between gap-3">
+                            <span class="text-ink/60">Mode</span>
+                            <span class="text-ink text-right" id="summary-method-label">-</span>
+                        </div>
+                        <div class="flex justify-between gap-3">
+                            <span class="text-ink/60">Livraison</span>
+                            <span class="text-ink" id="summary-shipping-cost">-</span>
+                        </div>
+                        <div class="flex justify-between gap-3">
+                            <span class="text-ink/60">Délai annoncé</span>
+                            <span class="text-ink text-right" id="summary-shipping-delay">-</span>
+                        </div>
+                    </div>
                     <div class="mt-4 pt-4 border-t border-black/10 flex justify-between items-center">
                         <span class="font-semibold text-ink">Total</span>
-                        <span class="font-display text-2xl text-ink">{{ total|number_format(2, ',', ' ') }} €</span>
+                        <span class="font-display text-2xl text-ink" id="summary-total">-</span>
                     </div>
                 </div>
             </aside>
@@ -89,7 +147,10 @@
     (function () {
         var checkbox = document.getElementById('{{ checkoutForm.billingSameAsShipping.vars.id }}');
         var billingFields = document.getElementById('billing-fields');
-        if (!checkbox || !billingFields) return;
+        var shippingAddressSelect = document.getElementById('{{ checkoutForm.shippingAddressId.vars.id }}');
+        var shippingMethodInputs = document.querySelectorAll('input[name="{{ checkoutForm.shippingMethod.vars.full_name }}"]');
+        var shippingPreviewMap = {{ shippingPreviewMap|json_encode|raw }};
+        if (!checkbox || !billingFields || !shippingAddressSelect) return;
 
         var toggle = function () {
             if (checkbox.checked) {
@@ -99,8 +160,64 @@
             }
         };
 
+        var formatSummary = function () {
+            var addressId = shippingAddressSelect.value;
+            var preview = shippingPreviewMap[addressId];
+            if (!preview) {
+                return;
+            }
+
+            var selectedMethod = null;
+            shippingMethodInputs.forEach(function (input) {
+                var card = document.querySelector('[data-shipping-method-card="' + input.value + '"]');
+                var methodPreview = preview.methods[input.value];
+                var available = !!methodPreview;
+
+                if (card) {
+                    card.classList.toggle('hidden', !available);
+                }
+
+                input.disabled = !available;
+
+                if (available) {
+                    document.querySelector('[data-shipping-price-for="' + input.value + '"]').textContent = methodPreview.costFormatted;
+                    document.querySelector('[data-shipping-delay-for="' + input.value + '"]').textContent = methodPreview.delayLabel;
+                }
+
+                if (input.checked && available) {
+                    selectedMethod = input.value;
+                }
+            });
+
+            if (!selectedMethod) {
+                selectedMethod = preview.defaultMethod;
+                var fallbackInput = document.querySelector('input[name="{{ checkoutForm.shippingMethod.vars.full_name }}"][value="' + selectedMethod + '"]');
+                if (fallbackInput) {
+                    fallbackInput.checked = true;
+                }
+            }
+
+            var selectedPreview = preview.methods[selectedMethod];
+            if (!selectedPreview) {
+                return;
+            }
+
+            document.getElementById('shipping-zone-label').textContent = preview.zoneLabel;
+            document.getElementById('shipping-delay-label').textContent = selectedPreview.delayLabel;
+            document.getElementById('summary-zone-label').textContent = preview.zoneLabel;
+            document.getElementById('summary-method-label').textContent = selectedPreview.methodLabel;
+            document.getElementById('summary-shipping-cost').textContent = selectedPreview.costFormatted;
+            document.getElementById('summary-shipping-delay').textContent = selectedPreview.delayLabel;
+            document.getElementById('summary-total').textContent = selectedPreview.totalFormatted;
+        };
+
         checkbox.addEventListener('change', toggle);
+        shippingAddressSelect.addEventListener('change', formatSummary);
+        shippingMethodInputs.forEach(function (input) {
+            input.addEventListener('change', formatSummary);
+        });
         toggle();
+        formatSummary();
     })();
 </script>
 {% endblock %}

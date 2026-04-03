@@ -27,6 +27,27 @@ class Order
     #[ORM\Column]
     private ?int $totalCents = null;
 
+    #[ORM\Column(options: ['default' => 0])]
+    private int $itemsSubtotalCents = 0;
+
+    #[ORM\Column(options: ['default' => 0])]
+    private int $shippingCostCents = 0;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $shippingZone = null;
+
+    #[ORM\Column(length: 120, nullable: true)]
+    private ?string $shippingZoneLabel = null;
+
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $shippingMethod = null;
+
+    #[ORM\Column(length: 120, nullable: true)]
+    private ?string $shippingMethodLabel = null;
+
+    #[ORM\Column(length: 120, nullable: true)]
+    private ?string $shippingDelayLabel = null;
+
     #[ORM\Column(length: 3)]
     private ?string $currency = 'EUR';
 
@@ -104,6 +125,100 @@ class Order
     public function getTotalEuros(): float
     {
         return $this->totalCents / 100;
+    }
+
+    public function getItemsSubtotalCents(): int
+    {
+        return $this->itemsSubtotalCents;
+    }
+
+    public function setItemsSubtotalCents(int $itemsSubtotalCents): static
+    {
+        $this->itemsSubtotalCents = $itemsSubtotalCents;
+
+        return $this;
+    }
+
+    public function getItemsSubtotalEuros(): float
+    {
+        return $this->itemsSubtotalCents / 100;
+    }
+
+    public function getShippingCostCents(): int
+    {
+        return $this->shippingCostCents;
+    }
+
+    public function setShippingCostCents(int $shippingCostCents): static
+    {
+        $this->shippingCostCents = $shippingCostCents;
+
+        return $this;
+    }
+
+    public function getShippingCostEuros(): float
+    {
+        return $this->shippingCostCents / 100;
+    }
+
+    public function getShippingZone(): ?string
+    {
+        return $this->shippingZone;
+    }
+
+    public function setShippingZone(?string $shippingZone): static
+    {
+        $this->shippingZone = $shippingZone;
+
+        return $this;
+    }
+
+    public function getShippingZoneLabel(): ?string
+    {
+        return $this->shippingZoneLabel;
+    }
+
+    public function setShippingZoneLabel(?string $shippingZoneLabel): static
+    {
+        $this->shippingZoneLabel = $shippingZoneLabel;
+
+        return $this;
+    }
+
+    public function getShippingMethod(): ?string
+    {
+        return $this->shippingMethod;
+    }
+
+    public function setShippingMethod(?string $shippingMethod): static
+    {
+        $this->shippingMethod = $shippingMethod;
+
+        return $this;
+    }
+
+    public function getShippingMethodLabel(): ?string
+    {
+        return $this->shippingMethodLabel;
+    }
+
+    public function setShippingMethodLabel(?string $shippingMethodLabel): static
+    {
+        $this->shippingMethodLabel = $shippingMethodLabel;
+
+        return $this;
+    }
+
+    public function getShippingDelayLabel(): ?string
+    {
+        return $this->shippingDelayLabel;
+    }
+
+    public function setShippingDelayLabel(?string $shippingDelayLabel): static
+    {
+        $this->shippingDelayLabel = $shippingDelayLabel;
+
+        return $this;
     }
 
     public function getCurrency(): ?string
@@ -209,11 +324,12 @@ class Order
 
     public function calculateTotal(): void
     {
-        $total = 0;
+        $itemsSubtotal = 0;
         foreach ($this->orderItems as $item) {
-            $total += $item->getPriceSnapshot() * $item->getQuantity();
+            $itemsSubtotal += $item->getPriceSnapshot() * $item->getQuantity();
         }
-        $this->totalCents = $total;
+        $this->itemsSubtotalCents = $itemsSubtotal;
+        $this->totalCents = $itemsSubtotal + $this->shippingCostCents;
     }
 
     public function getReference(): string

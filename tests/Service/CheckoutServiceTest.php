@@ -9,6 +9,7 @@ use App\Exception\CheckoutException;
 use App\Repository\AddressRepository;
 use App\Service\CartService;
 use App\Service\CheckoutService;
+use App\Service\ShippingService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -40,10 +41,11 @@ class CheckoutServiceTest extends TestCase
         $cartService = $this->createMock(CartService::class);
         $addressRepository = $this->createMock(AddressRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $shippingService = new ShippingService();
 
         $cartService->method('isEmpty')->willReturn(true);
 
-        $service = new CheckoutService($cartService, $addressRepository, $entityManager);
+        $service = new CheckoutService($cartService, $addressRepository, $shippingService, $entityManager);
         self::assertSame(['Votre panier est vide.'], $service->getCartValidationErrors());
     }
 
@@ -52,6 +54,7 @@ class CheckoutServiceTest extends TestCase
         $cartService = $this->createMock(CartService::class);
         $addressRepository = $this->createMock(AddressRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $shippingService = new ShippingService();
 
         $user = $this->createUser();
 
@@ -60,7 +63,7 @@ class CheckoutServiceTest extends TestCase
             ->with(1, $user)
             ->willReturn(null);
 
-        $service = new CheckoutService($cartService, $addressRepository, $entityManager);
+        $service = new CheckoutService($cartService, $addressRepository, $shippingService, $entityManager);
 
         $this->expectException(CheckoutException::class);
         $this->expectExceptionMessage('Adresse de livraison invalide.');
@@ -76,6 +79,7 @@ class CheckoutServiceTest extends TestCase
         $cartService = $this->createMock(CartService::class);
         $addressRepository = $this->createMock(AddressRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $shippingService = new ShippingService();
 
         $user = $this->createUser();
         $shipping = $this->createAddress($user);
@@ -87,7 +91,7 @@ class CheckoutServiceTest extends TestCase
 
         $cartService->method('getFullCart')->willReturn([]);
 
-        $service = new CheckoutService($cartService, $addressRepository, $entityManager);
+        $service = new CheckoutService($cartService, $addressRepository, $shippingService, $entityManager);
 
         $this->expectException(CheckoutException::class);
         $this->expectExceptionMessage('Votre panier est vide.');
@@ -103,6 +107,7 @@ class CheckoutServiceTest extends TestCase
         $cartService = $this->createMock(CartService::class);
         $addressRepository = $this->createMock(AddressRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
+        $shippingService = new ShippingService();
 
         $user = $this->createUser();
         $shipping = $this->createAddress($user, 'Shipping street');
@@ -130,10 +135,11 @@ class CheckoutServiceTest extends TestCase
         $entityManager->expects(self::once())->method('persist');
         $entityManager->expects(self::once())->method('flush');
 
-        $service = new CheckoutService($cartService, $addressRepository, $entityManager);
+        $service = new CheckoutService($cartService, $addressRepository, $shippingService, $entityManager);
 
         $order = $service->createOrderFromFormData($user, [
             'shippingAddressId' => 1,
+            'shippingMethod' => ShippingService::METHOD_DELIVERY,
             'billingSameAsShipping' => false,
             'billingAddressId' => 2,
         ]);
@@ -142,6 +148,11 @@ class CheckoutServiceTest extends TestCase
         self::assertSame($shipping, $order->getShippingAddress());
         self::assertSame($billing, $order->getBillingAddress());
         self::assertFalse($order->isBillingSameAsShipping());
+        self::assertSame('Europe', $order->getShippingZoneLabel());
+        self::assertSame('Livraison', $order->getShippingMethodLabel());
+        self::assertSame('8 à 10 jours', $order->getShippingDelayLabel());
+        self::assertSame(3198, $order->getItemsSubtotalCents());
+        self::assertSame(0, $order->getShippingCostCents());
         self::assertSame(3198, $order->getTotalCents());
         self::assertCount(1, $order->getOrderItems());
     }

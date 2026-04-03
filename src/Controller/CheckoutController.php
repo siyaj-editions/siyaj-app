@@ -51,8 +51,13 @@ class CheckoutController extends AbstractController
 
         $choices = $this->checkoutService->buildAddressChoices($addresses);
         $defaultAddressId = $this->checkoutService->getDefaultAddressId($addresses);
+        $shippingPreviewMap = $this->checkoutService->buildShippingPreviewMap($addresses);
+        $defaultShippingMethod = $defaultAddressId !== null && isset($shippingPreviewMap[$defaultAddressId])
+            ? (string) $shippingPreviewMap[$defaultAddressId]['defaultMethod']
+            : 'delivery';
         $formData = [
             'shippingAddressId' => $defaultAddressId,
+            'shippingMethod' => $defaultShippingMethod,
             'billingSameAsShipping' => true,
             'billingAddressId' => $defaultAddressId,
         ];
@@ -85,7 +90,9 @@ class CheckoutController extends AbstractController
             'checkoutForm' => $form,
             'cart' => $this->cartService->getFullCart(),
             'total' => $this->cartService->getTotalEuros(),
+            'itemsSubtotalCents' => $this->cartService->getTotalCents(),
             'addresses' => $addresses,
+            'shippingPreviewMap' => $shippingPreviewMap,
         ]);
     }
 
