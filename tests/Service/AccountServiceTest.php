@@ -30,6 +30,11 @@ class AccountServiceTest extends TestCase
         $addressRepository = $this->createMock(AddressRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
+        $addressRepository
+            ->expects(self::once())
+            ->method('findDefaultForUser')
+            ->willReturn(null);
+
         $service = new AccountService($orderRepository, $addressRepository, $entityManager);
         $user = $this->createUser();
 
@@ -39,7 +44,8 @@ class AccountServiceTest extends TestCase
         self::assertSame('John', $address->getFirstname());
         self::assertSame('Doe', $address->getLastname());
         self::assertSame('0600000000', $address->getNumero());
-        self::assertSame('France', $address->getCountry());
+        self::assertSame('FR', $address->getCountry());
+        self::assertTrue($address->isDefault());
     }
 
     public function testUpdateProfileHashesPasswordWhenProvided(): void
@@ -89,12 +95,23 @@ class AccountServiceTest extends TestCase
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $address = (new Address())
+            ->setUser($this->createUser())
             ->setFirstname('A')
             ->setLastname('B')
             ->setStreet('Street')
             ->setPostalCode('75000')
             ->setCity('Paris')
             ->setCountry('France');
+
+        $addressRepository->expects(self::once())
+            ->method('findDefaultForUser')
+            ->willReturn(null);
+        $addressRepository->expects(self::once())
+            ->method('findByUser')
+            ->willReturn([]);
+        $addressRepository->expects(self::once())
+            ->method('findLatestForUser')
+            ->willReturn(null);
 
         $entityManager->expects(self::once())->method('persist')->with($address);
         $entityManager->expects(self::once())->method('remove')->with($address);
@@ -105,5 +122,44 @@ class AccountServiceTest extends TestCase
         $service->deleteAddress($address);
 
         self::assertTrue(true);
+    }
+
+    public function testSetDefaultAddressUnsetsPreviousDefault(): void
+    {
+        $orderRepository = $this->createMock(OrderRepository::class);
+        $addressRepository = $this->createMock(AddressRepository::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+
+        $user = $this->createUser();
+        $oldDefault = (new Address())
+            ->setUser($user)
+            ->setFirstname('Old')
+            ->setLastname('Default')
+            ->setStreet('Street')
+            ->setPostalCode('75000')
+            ->setCity('Paris')
+            ->setCountry('France')
+            ->setIsDefault(true);
+        $newDefault = (new Address())
+            ->setUser($user)
+            ->setFirstname('New')
+            ->setLastname('Default')
+            ->setStreet('Street')
+            ->setPostalCode('97100')
+            ->setCity('Basse-Terre')
+            ->setCountry('France');
+
+        $addressRepository->expects(self::once())
+            ->method('findByUser')
+            ->with($user)
+            ->willReturn([$oldDefault, $newDefault]);
+
+        $entityManager->expects(self::once())->method('flush');
+
+        $service = new AccountService($orderRepository, $addressRepository, $entityManager);
+        $service->setDefaultAddress($user, $newDefault);
+
+        self::assertFalse($oldDefault->isDefault());
+        self::assertTrue($newDefault->isDefault());
     }
 }

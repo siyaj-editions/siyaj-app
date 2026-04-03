@@ -92,6 +92,7 @@ class CheckoutController extends AbstractController
             'total' => $this->cartService->getTotalEuros(),
             'itemsSubtotalCents' => $this->cartService->getTotalCents(),
             'addresses' => $addresses,
+            'addressSummaryMap' => $this->checkoutService->buildAddressSummaryMap($addresses),
             'shippingPreviewMap' => $shippingPreviewMap,
         ]);
     }

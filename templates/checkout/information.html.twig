@@ -96,11 +96,11 @@
                 <div class="card p-6">
                     <h3 class="font-display text-xl text-ink mb-4">Récapitulatif</h3>
                     <div class="mb-4 p-4 rounded-xl bg-paper border border-black/5">
-                        <p class="text-xs font-semibold uppercase tracking-wider text-ink/40 mb-2">Adresses disponibles</p>
-                        <div class="space-y-2 text-xs text-ink/70">
-                            {% for address in addresses %}
-                                <p>{{ address.fullName }} - {{ address.inline }}</p>
-                            {% endfor %}
+                        <p class="text-xs font-semibold uppercase tracking-wider text-ink/40 mb-2">Adresse sélectionnée</p>
+                        <div class="space-y-1 text-xs text-ink/70">
+                            <p id="selected-address-full-name">-</p>
+                            <p id="selected-address-inline">-</p>
+                            <p id="selected-address-phone" class="hidden"></p>
                         </div>
                     </div>
                     <div class="space-y-2 text-sm text-ink/70">
@@ -149,6 +149,7 @@
         var billingFields = document.getElementById('billing-fields');
         var shippingAddressSelect = document.getElementById('{{ checkoutForm.shippingAddressId.vars.id }}');
         var shippingMethodInputs = document.querySelectorAll('input[name="{{ checkoutForm.shippingMethod.vars.full_name }}"]');
+        var addressSummaryMap = {{ addressSummaryMap|json_encode|raw }};
         var shippingPreviewMap = {{ shippingPreviewMap|json_encode|raw }};
         if (!checkbox || !billingFields || !shippingAddressSelect) return;
 
@@ -163,6 +164,7 @@
         var formatSummary = function () {
             var addressId = shippingAddressSelect.value;
             var preview = shippingPreviewMap[addressId];
+            var addressSummary = addressSummaryMap[addressId];
             if (!preview) {
                 return;
             }
@@ -209,6 +211,20 @@
             document.getElementById('summary-shipping-cost').textContent = selectedPreview.costFormatted;
             document.getElementById('summary-shipping-delay').textContent = selectedPreview.delayLabel;
             document.getElementById('summary-total').textContent = selectedPreview.totalFormatted;
+
+            if (addressSummary) {
+                document.getElementById('selected-address-full-name').textContent = addressSummary.fullName;
+                document.getElementById('selected-address-inline').textContent = addressSummary.inline;
+
+                var phone = document.getElementById('selected-address-phone');
+                if (addressSummary.numero) {
+                    phone.textContent = 'Tél: ' + addressSummary.numero;
+                    phone.classList.remove('hidden');
+                } else {
+                    phone.textContent = '';
+                    phone.classList.add('hidden');
+                }
+            }
         };
 
         checkbox.addEventListener('change', toggle);

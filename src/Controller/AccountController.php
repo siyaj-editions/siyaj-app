@@ -84,6 +84,32 @@ class AccountController extends AbstractController
         return $this->redirectToRoute('app_account_address');
     }
 
+    #[Route('/adresse/{id}/defaut', name: 'app_account_address_default', methods: ['POST'])]
+    public function setDefaultAddress(
+        int $id,
+        Request $request,
+        AccountService $accountService
+    ): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+        $address = $accountService->findUserAddressById($user, $id);
+
+        if (!$address) {
+            throw $this->createNotFoundException('Adresse non trouvée.');
+        }
+
+        if (!$this->isCsrfTokenValid('default_address_' . $address->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+
+            return $this->redirectToRoute('app_account_address');
+        }
+
+        $accountService->setDefaultAddress($user, $address);
+        $this->addFlash('success', 'Adresse par défaut mise à jour.');
+
+        return $this->redirectToRoute('app_account_address');
+    }
+
     #[Route('/profil', name: 'app_account_profile')]
     public function profile(
         Request $request,

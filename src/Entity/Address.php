@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Intl\Countries;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -40,6 +41,9 @@ class Address
 
     #[ORM\Column(length: 120)]
     private ?string $country = 'France';
+
+    #[ORM\Column(options: ['default' => false])]
+    private bool $isDefault = false;
 
     public function getId(): ?int
     {
@@ -154,6 +158,18 @@ class Address
         return $this;
     }
 
+    public function isDefault(): bool
+    {
+        return $this->isDefault;
+    }
+
+    public function setIsDefault(bool $isDefault): static
+    {
+        $this->isDefault = $isDefault;
+
+        return $this;
+    }
+
     public function getFullName(): string
     {
         return trim(($this->firstname ?? '') . ' ' . ($this->lastname ?? ''));
@@ -166,8 +182,22 @@ class Address
             $parts[] = $this->street2;
         }
         $parts[] = trim(($this->postalCode ?? '') . ' ' . ($this->city ?? ''));
-        $parts[] = $this->country;
+        $parts[] = $this->getCountryLabel();
 
         return implode(', ', array_filter($parts));
+    }
+
+    public function getCountryLabel(): string
+    {
+        $country = (string) ($this->country ?? '');
+
+        if (strlen($country) === 2) {
+            $upperCountry = strtoupper($country);
+            if (Countries::exists($upperCountry)) {
+                return Countries::getName($upperCountry, 'fr') ?? $country;
+            }
+        }
+
+        return $country;
     }
 }
