@@ -19,6 +19,10 @@ class AuthorRepository extends ServiceEntityRepository
     public function findActiveAuthors(): array
     {
         return $this->createQueryBuilder('a')
+            ->innerJoin('a.books', 'b')
+            ->andWhere('b.isActive = :active')
+            ->setParameter('active', true)
+            ->distinct()
             ->orderBy('a.name', 'ASC')
             ->getQuery()
             ->getResult();
