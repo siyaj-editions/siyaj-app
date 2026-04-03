@@ -28,6 +28,17 @@ class AddressRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    public function findDefaultForUser(User $user): ?Address
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.user = :user')
+            ->andWhere('a.isDefault = true')
+            ->setParameter('user', $user)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     /**
      * @return Address[]
      */
@@ -36,7 +47,8 @@ class AddressRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('a')
             ->andWhere('a.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('a.id', 'DESC')
+            ->orderBy('a.isDefault', 'DESC')
+            ->addOrderBy('a.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

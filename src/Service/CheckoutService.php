@@ -64,7 +64,37 @@ class CheckoutService
             return null;
         }
 
+        foreach ($addresses as $address) {
+            if ($address->isDefault()) {
+                return (string) $address->getId();
+            }
+        }
+
         return (string) $addresses[0]->getId();
+    }
+
+    /**
+     * @param Address[] $addresses
+     * @return array<string, array<string, string|null>>
+     */
+    public function buildAddressSummaryMap(array $addresses): array
+    {
+        $summaries = [];
+
+        foreach ($addresses as $address) {
+            $addressId = $address->getId();
+            if ($addressId === null) {
+                continue;
+            }
+
+            $summaries[(string) $addressId] = [
+                'fullName' => $address->getFullName(),
+                'inline' => $address->getInline(),
+                'numero' => $address->getNumero(),
+            ];
+        }
+
+        return $summaries;
     }
 
     /**

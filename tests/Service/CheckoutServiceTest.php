@@ -36,6 +36,47 @@ class CheckoutServiceTest extends TestCase
             ->setCountry('France');
     }
 
+    public function testGetDefaultAddressIdPrefersDefaultAddress(): void
+    {
+        $cartService = $this->createMock(CartService::class);
+        $addressRepository = $this->createMock(AddressRepository::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $shippingService = new ShippingService();
+
+        $user = $this->createUser();
+        $first = $this->createAddress($user, 'First');
+        $second = $this->createAddress($user, 'Second')->setIsDefault(true);
+
+        $reflection = new \ReflectionProperty(Address::class, 'id');
+        $reflection->setValue($first, 1);
+        $reflection->setValue($second, 2);
+
+        $service = new CheckoutService($cartService, $addressRepository, $shippingService, $entityManager);
+
+        self::assertSame('2', $service->getDefaultAddressId([$first, $second]));
+    }
+
+    public function testBuildAddressSummaryMapReturnsReadableAddressData(): void
+    {
+        $cartService = $this->createMock(CartService::class);
+        $addressRepository = $this->createMock(AddressRepository::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $shippingService = new ShippingService();
+
+        $user = $this->createUser();
+        $address = $this->createAddress($user, '10 rue Victor Hugo')->setNumero('0600000000');
+
+        $reflection = new \ReflectionProperty(Address::class, 'id');
+        $reflection->setValue($address, 7);
+
+        $service = new CheckoutService($cartService, $addressRepository, $shippingService, $entityManager);
+        $summaries = $service->buildAddressSummaryMap([$address]);
+
+        self::assertSame('John Doe', $summaries['7']['fullName']);
+        self::assertStringContainsString('10 rue Victor Hugo', (string) $summaries['7']['inline']);
+        self::assertSame('0600000000', $summaries['7']['numero']);
+    }
+
     public function testGetCartValidationErrorsReturnsEmptyCartMessage(): void
     {
         $cartService = $this->createMock(CartService::class);

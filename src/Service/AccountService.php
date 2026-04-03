@@ -46,13 +46,20 @@ class AccountService
         $address->setFirstname($user->getFirstname());
         $address->setLastname($user->getLastname());
         $address->setNumero($user->getNumero());
-        $address->setCountry('France');
+        $address->setCountry('FR');
+        $address->setIsDefault($this->addressRepository->findDefaultForUser($user) === null);
 
         return $address;
     }
 
     public function saveAddress(Address $address): void
     {
+        $user = $address->getUser();
+        if ($user && ($address->isDefault() || $this->addressRepository->findDefaultForUser($user) === null)) {
+            $this->unsetDefaultAddressForUser($user, $address);
+            $address->setIsDefault(true);
+        }
+
         $this->entityManager->persist($address);
         $this->entityManager->flush();
     }
@@ -64,7 +71,33 @@ class AccountService
 
     public function deleteAddress(Address $address): void
     {
+        $user = $address->getUser();
+        $wasDefault = $address->isDefault();
+
         $this->entityManager->remove($address);
+        $this->entityManager->flush();
+
+        if (!$wasDefault || !$user) {
+            return;
+        }
+
+        $fallbackAddress = $this->addressRepository->findLatestForUser($user);
+        if (!$fallbackAddress) {
+            return;
+        }
+
+        $fallbackAddress->setIsDefault(true);
+        $this->entityManager->flush();
+    }
+
+    public function setDefaultAddress(User $user, Address $address): void
+    {
+        if ($address->getUser() !== $user) {
+            throw new \InvalidArgumentException('Adresse invalide pour cet utilisateur.');
+        }
+
+        $this->unsetDefaultAddressForUser($user, $address);
+        $address->setIsDefault(true);
         $this->entityManager->flush();
     }
 
@@ -93,5 +126,22 @@ class AccountService
         }
 
         return $order;
+    }
+
+    private function unsetDefaultAddressForUser(User $user, ?Address $except = null): void
+    {
+        foreach ($this->addressRepository->findByUser($user) as $existingAddress) {
+            if ($except && $existingAddress === $except) {
+                continue;
+            }
+
+            if ($except && $existingAddress->getId() !== null && $existingAddress->getId() === $except->getId()) {
+                continue;
+            }
+
+            if ($existingAddress->isDefault()) {
+                $existingAddress->setIsDefault(false);
+            }
+        }
     }
 }
