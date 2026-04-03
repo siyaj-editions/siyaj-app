@@ -61,7 +61,7 @@
 
                     <div class="pt-2 flex flex-col sm:flex-row gap-3">
                         <button type="submit" class="btn btn-primary px-6 py-3">Envoyer mon message</button>
-                        <a href="mailto:contact@siyaj-editions.fr" class="btn btn-secondary px-6 py-3">contact@siyaj-editions.fr</a>
+                        <a href="mailto:{{ contact_email }}" class="btn btn-secondary px-6 py-3">{{ contact_email }}</a>
                     </div>
                 {{ form_end(contactForm) }}
             </section>

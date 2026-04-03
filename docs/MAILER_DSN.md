@@ -85,7 +85,13 @@ Le formulaire contact envoie via :
 - [ContactService.php](/Users/ludwigelatre/Desktop/siyag-projet/siyag/src/Service/ContactService.php)
 
 Le destinataire configuré est :
-- `contact@siyaj-editions.fr`
+- `CONTACT_EMAIL`
+
+Valeur par défaut dans [`.env`](/Users/ludwigelatre/Desktop/siyag-projet/siyag/.env) :
+
+```env
+CONTACT_EMAIL=contact@siyaj-editions.fr
+```
 
 Le plus simple pour tester en local :
 1. définir `MAILER_DSN` dans `.env.local`
@@ -102,5 +108,5 @@ Exemple :
 Le formulaire contact utilise un `replyTo` avec l'email saisi par l'utilisateur.
 
 Donc :
-- l'email arrive sur `contact@siyaj-editions.fr`
+- l'email arrive sur `CONTACT_EMAIL`
 - en répondant depuis la boîte mail, la réponse repart vers l'expéditeur du formulaire
