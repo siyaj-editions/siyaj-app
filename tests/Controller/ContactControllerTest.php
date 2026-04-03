@@ -26,7 +26,7 @@ class ContactControllerTest extends WebTestCase
             'contact_form[email]' => '',
             'contact_form[subject]' => '',
             'contact_form[message]' => '',
-            'contact_form[website]' => '',
+            'contact_form[company]' => '',
         ]);
 
         $client->submit($form);
@@ -49,7 +49,7 @@ class ContactControllerTest extends WebTestCase
             'contact_form[email]' => 'user@mail.com',
             'contact_form[subject]' => 'communication',
             'contact_form[message]' => 'Bonjour, ceci est un message suffisamment long.',
-            'contact_form[website]' => 'https://spam.example',
+            'contact_form[company]' => 'https://spam.example',
         ]);
 
         $client->submit($form);

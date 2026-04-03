@@ -62,13 +62,15 @@ class ContactFormType extends AbstractType
                     new Length(min: 10, max: 4000, minMessage: 'Le message doit contenir au moins 10 caractères.'),
                 ],
             ])
-            ->add('website', TextType::class, [
+            ->add('company', TextType::class, [
                 'label' => false,
+                'mapped' => false,
                 'required' => false,
                 'attr' => [
                     'tabindex' => '-1',
-                    'autocomplete' => 'off',
-                    'class' => 'hidden',
+                    'autocomplete' => 'nope',
+                    'spellcheck' => 'false',
+                    'class' => 'absolute -left-[10000px] top-auto h-px w-px overflow-hidden opacity-0 pointer-events-none',
                 ],
             ]);
     }

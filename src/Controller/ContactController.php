@@ -20,7 +20,7 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if (trim((string) $contactMessage->getWebsite()) !== '') {
+            if (trim((string) $form->get('company')->getData()) !== '') {
                 $this->addFlash('success', 'Votre message a bien été envoyé. Nous vous répondrons rapidement.');
 
                 return $this->redirectToRoute('app_contact');
