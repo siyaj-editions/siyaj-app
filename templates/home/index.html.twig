@@ -2,285 +2,232 @@
 
 {% block title %}Accueil - SIYAJ Éditions{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <style>
-        .home-latest-card {
-            border: 1px solid rgba(17, 24, 39, 0.08);
-            box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
-            background: #fff;
-        }
-
-        @media (max-width: 639px) {
-            .mobile-book-meta {
-                padding-left: 10px;
-                padding-bottom: 5px;
-            }
-
-            .mobile-book-price {
-                flex-shrink: 0;
-                font-size: 0.95rem;
-                line-height: 1;
-            }
-
-            .shrink-0{
-                padding-right: 5px;
-            }
-
-            .mobile-book-add {
-                width: 1.5rem;
-                height: 1.5rem;
-            }
-
-            .mobile-book-add svg {
-                width: 0.75rem;
-                height: 0.75rem;
-            }
-        }
-    </style>
-{% endblock %}
-
 {% block body %}
-{# Hero Section #}
-<section class="relative overflow-hidden bg-gradient-to-br from-paper via-cream/50 to-paper">
-    {# Background Pattern #}
-    <div class="absolute inset-0 opacity-30">
-        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23c9a962&quot; fill-opacity=&quot;0.1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    </div>
+    {% set featuredBooks = latestBooks|slice(0, 3) %}
+    {% set accentPalette = ['#0C4EDD', '#EB5A27', '#FFA500'] %}
+    <div style="background:#F7F4ED;color:#061BB0;">
+        <section class="relative overflow-hidden">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,165,0,0.08),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(235,90,39,0.07),transparent_28%)]"></div>
 
-    <div class="container relative py-20 lg:py-32">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {# Content #}
-            <div class="text-center lg:text-left order-2 lg:order-1">
-                <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-4 animate-fade-in">
-                    Maison d'édition
-                </span>
-                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.1] text-ink mb-6 animate-fade-in stagger-1">
-                    Découvrez des œuvres
-                    <span class="block text-gradient mt-2">qui vous transforment</span>
-                </h1>
-                <p class="text-lg text-ink/70 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8 animate-fade-in stagger-2">
-                    SIYAJ Éditions vous invite à explorer une collection soigneusement sélectionnée d'ouvrages littéraires, où chaque page raconte une histoire unique.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in stagger-3">
-                    <a href="{{ path('app_catalog') }}" class="btn btn-primary px-8 py-4 text-base">
-                        Explorer le catalogue
-                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                    </a>
-                    <a href="#dernieres-parutions" class="btn btn-secondary px-8 py-4 text-base">
-                        Nouveautés
-                    </a>
+            <div class="container relative grid min-h-[86vh] items-center gap-14 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:py-24">
+                <div class="max-w-2xl">
+                    <p class="section-kicker mb-5">
+                        Maison d'édition
+                    </p>
+
+                    <h1 class="editorial-title-xl">
+                        Une littérature engagée
+                        <span class="text-[#EB5A27]">pour rêver</span>
+                        et résister.
+                    </h1>
+
+                    <p class="editorial-copy mt-8 max-w-xl text-lg">
+                        Chez Siyaj, nous publions des romans et des ouvrages de poésie puissants issus de la littérature caribéenne contemporaine :
+                        plus qu'une maison d'édition, un espace de création et de dialogue foisonnant.
+                    </p>
+
+                    <div class="mt-10 flex flex-wrap gap-4">
+                        <a href="{{ path('app_catalog') }}" class="editorial-cta-primary">
+                            Explorer le catalogue
+                        </a>
+                        <a href="#nouveautes" class="editorial-cta-secondary">
+                            Découvrir les nouveautés
+                        </a>
+                    </div>
+
+                    <div class="mt-12 grid gap-4 sm:grid-cols-3">
+                        <div class="editorial-surface p-5">
+                            <p class="section-kicker">Voix</p>
+                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">Romans, poésie et récits portés par des imaginaires caribéens contemporains.</p>
+                        </div>
+                        <div class="editorial-surface p-5">
+                            <p class="section-kicker">Ligne</p>
+                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">Une maison féministe, décoloniale, exigeante et profondément littéraire.</p>
+                        </div>
+                        <div class="editorial-surface p-5">
+                            <p class="section-kicker">Portée</p>
+                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">Des ouvrages pensés pour circuler entre Guadeloupe, Martinique et le monde.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            {# Visual - Books Stack #}
-            <div class="hidden lg:block order-1 lg:order-2">
-                <div class="relative h-[500px] animate-fade-in">
-                    {# Decorative Circle #}
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gold/10 rounded-full blur-3xl"></div>
-
-                    {# Books #}
-                    <div class="absolute top-[15%] left-[10%] w-44 h-64 rounded-lg shadow-2xl transform -rotate-12 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #722f37 0%, #8b3a42 100%);"></div>
-                    <div class="absolute top-[10%] left-[30%] w-44 h-64 rounded-lg shadow-2xl transform rotate-6 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #7d8471 0%, #6a7360 100%);"></div>
-                    <div class="absolute top-[20%] left-[55%] w-44 h-64 rounded-lg shadow-2xl transform -rotate-3 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #c9a962 0%, #b8944d 100%);"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{# Featured Books Section #}
-<section id="dernieres-parutions" class="py-20 lg:py-28 bg-white">
-    <div class="container">
-        {# Section Header #}
-        <div class="text-center mb-16">
-            <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
-                Nouveautés
-            </span>
-            <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-ink mb-4">
-                Dernières parutions
-            </h2>
-            <p class="text-lg text-ink/60 max-w-2xl mx-auto">
-                Les ouvrages récemment ajoutés à notre collection
-            </p>
-        </div>
-
-        {% if latestBooks|length > 0 %}
-            {# Books Grid #}
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-8">
-                {% for book in latestBooks %}
-                    <article class="group">
-                        <div class="card home-latest-card h-full flex flex-col">
-                            {# Cover #}
-                            <div class="relative aspect-book overflow-hidden bg-cream">
-                                {% if book.coverImage %}
-                                    <img
-                                        src="{{ book.coverImage }}"
-                                        alt="{{ book.title }}"
-                                        loading="lazy"
-                                        decoding="async"
-                                        referrerpolicy="no-referrer"
-                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    >
-                                {% else %}
-                                    <div class="w-full h-full flex items-center justify-center text-ink/20">
-                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                                        </svg>
+                <div class="relative flex min-h-[420px] items-center justify-center lg:min-h-[620px]">
+                    <div class="relative w-full max-w-[39rem]">
+                        <div class="absolute inset-0 rounded-[3rem] blur-3xl" style="background:rgba(12,78,221,0.08);"></div>
+                        <div class="relative rounded-[2.8rem] border border-[rgba(6,27,176,0.1)] bg-[rgba(255,255,255,0.75)] p-4 shadow-[0_28px_54px_rgba(6,27,176,0.09)] lg:p-5">
+                            <div class="relative overflow-hidden rounded-[2.2rem] p-6 lg:p-7" style="background:#061BB0;">
+                                <div class="absolute inset-0" style="background:radial-gradient(circle at top right, rgba(255,165,0,0.18), transparent 34%), radial-gradient(circle at bottom left, rgba(235,90,39,0.16), transparent 36%);"></div>
+                                <div class="relative grid items-end gap-6 sm:grid-cols-[0.86fr_1.14fr]">
+                                    <div class="order-2 sm:order-1">
+                                        <p class="text-xs uppercase tracking-[0.26em] text-white/65">Signature éditoriale</p>
+                                        <p class="mt-5 text-3xl leading-[1.05] text-white sm:text-[2.55rem]" style="font-family: var(--font-display);">
+                                            Des livres qui déplacent les regards, réveillent les récits et ouvrent de nouveaux espaces.
+                                        </p>
                                     </div>
-                                {% endif %}
-
-                                {# Overlay #}
-                                <div class="absolute inset-0 bg-ink/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-gold px-6 py-3 text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                        Découvrir
-                                    </a>
-                                </div>
-                            </div>
-
-                            {# Content #}
-                            <div class="p-3 sm:p-4 lg:p-5 flex flex-col flex-1">
-                                <h3 class="font-display text-base sm:text-lg font-semibold text-ink mb-1.5 line-clamp-2 group-hover:text-gold transition-colors duration-200">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}">
-                                        {{ book.title }}
-                                    </a>
-                                </h3>
-                                <p class="text-xs sm:text-sm text-ink/50 mb-3 sm:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
-
-                                <div class="mobile-book-meta mt-auto pt-3 sm:pt-4 border-t border-black/5 flex items-center justify-between gap-2 sm:px-0 sm:pb-0">
-                                    <span class="mobile-book-price font-display text-sm sm:text-lg lg:text-xl font-semibold text-ink">
-                                        {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
-                                    </span>
-
-                                    {% if book.isInStock %}
-                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post" class="shrink-0">
-                                            <button type="submit" class="mobile-book-add sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
-                                                <svg class="sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <span class="text-[10px] sm:text-xs font-medium text-ink/40 uppercase tracking-wider">
-                                            Indisponible
-                                        </span>
-                                    {% endif %}
+                                    <div class="order-1 sm:order-2">
+                                        <img
+                                            src="{{ asset('images/home/hero-home.jpg') }}"
+                                            alt="Paysage caribéen de SIYAJ Éditions"
+                                            class="h-[360px] w-full rounded-[1.8rem] object-cover object-center shadow-[0_20px_42px_rgba(0,0,0,0.16)] lg:h-[480px]"
+                                            loading="eager"
+                                            decoding="async"
+                                        >
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </article>
-                {% endfor %}
+
+                        <div class="absolute -bottom-6 right-4 hidden max-w-sm rounded-[2rem] bg-white px-6 py-5 shadow-[0_22px_44px_rgba(6,27,176,0.12)] lg:block">
+                            <p class="text-xs uppercase tracking-[0.24em] text-[#8B6B2E]">
+                                Signature
+                            </p>
+                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">
+                                Première maison d'édition indépendante, féministe et décoloniale des Petites Antilles.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="nouveautes" class="container py-20">
+            <div class="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                    <p class="section-kicker">Nouveautés</p>
+                    <h2 class="editorial-title-lg mt-3">Dernières parutions</h2>
+                </div>
+
+                <p class="editorial-copy-soft max-w-2xl text-base">
+                    Ici les mots poussent dans des sillons millénaires, sur des terres chargées d'histoire et de murmures longtemps tus.
+                </p>
             </div>
 
-            {# CTA #}
-            <div class="text-center mt-12">
-                <a href="{{ path('app_catalog') }}" class="btn btn-secondary px-8 py-4 text-base">
+            {% if featuredBooks|length > 0 %}
+                <div class="grid gap-6 md:grid-cols-3">
+                    {% for book in featuredBooks %}
+                        {{ include('components/book_card.html.twig', {
+                            book: book,
+                            variant: 'home',
+                            accentColor: accentPalette[loop.index0]
+                        }) }}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="rounded-[2rem] border border-[rgba(6,27,176,0.1)] bg-white/60 p-10 text-center shadow-sm">
+                    <p class="section-kicker text-center">Bientôt</p>
+                    <h3 class="editorial-title-md mt-3">Les premières parutions arrivent</h3>
+                    <p class="editorial-copy-soft mx-auto mt-4 max-w-2xl">
+                        La collection se prépare. La homepage est déjà prête à accueillir les ouvrages dès leur publication.
+                    </p>
+                </div>
+            {% endif %}
+
+            <div class="mt-10">
+                <a href="{{ path('app_catalog') }}" class="editorial-cta-secondary">
                     Voir tout le catalogue
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
                 </a>
             </div>
-        {% else %}
-            {# Empty State #}
-            <div class="text-center py-16">
-                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-cream flex items-center justify-center text-ink/20">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                    </svg>
-                </div>
-                <h3 class="font-display text-2xl font-semibold text-ink mb-2">Notre collection arrive bientôt</h3>
-                <p class="text-ink/60 max-w-md mx-auto">
-                    Nous préparons une sélection d'ouvrages exceptionnels pour vous.
+        </section>
+
+        <section class="container py-6">
+            <div class="px-8 py-14 lg:px-14" style="background:#061BB0;color:#fff;border-radius:2.5rem;box-shadow:0 22px 42px rgba(6,27,176,0.15);">
+                <p class="max-w-4xl text-3xl leading-tight md:text-4xl">
+                    « Nous croyons que la littérature peut être un espace de résistance et de libération. »
                 </p>
             </div>
-        {% endif %}
-    </div>
-</section>
+        </section>
 
-{# Values Section #}
-<section class="py-20 lg:py-28 bg-cream">
-    <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {# Value 1 #}
-            <div class="text-center p-6 lg:p-8">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
+        <section class="container py-20">
+            <div class="grid gap-6 md:grid-cols-3">
+                <div class="editorial-surface p-8">
+                    <div class="mb-5 h-1.5 w-14 rounded-full bg-[#FFA500]"></div>
+                    <h3 class="editorial-title-md text-[2rem]">Sélection exigeante</h3>
+                    <p class="editorial-copy-soft mt-4">
+                        Une ligne éditoriale affirmée, au service de textes singuliers, sensibles et engagés.
+                    </p>
                 </div>
-                <h3 class="font-display text-xl font-semibold text-ink mb-3">Sélection exigeante</h3>
-                <p class="text-ink/60 leading-relaxed">
-                    Chaque ouvrage est choisi pour sa qualité littéraire et son apport au lecteur.
-                </p>
+
+                <div class="editorial-surface p-8">
+                    <div class="mb-5 h-1.5 w-14 rounded-full bg-[#FFA500]"></div>
+                    <h3 class="editorial-title-md text-[2rem]">Passion du livre</h3>
+                    <p class="editorial-copy-soft mt-4">
+                        Une équipe de passionnées au service de nos littératures et de nos auteur.ice.s.
+                    </p>
+                </div>
+
+                <div class="editorial-surface p-8">
+                    <div class="mb-5 h-1.5 w-14 rounded-full bg-[#FFA500]"></div>
+                    <h3 class="editorial-title-md text-[2rem]">Livraison soignée</h3>
+                    <p class="editorial-copy-soft mt-4">
+                        Expédiées dans le monde entier avec attention, plutôt que rapidement.
+                    </p>
+                </div>
             </div>
+        </section>
 
-            {# Value 2 #}
-            <div class="text-center p-6 lg:p-8">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                </div>
-                <h3 class="font-display text-xl font-semibold text-ink mb-3">Passion du livre</h3>
-                <p class="text-ink/60 leading-relaxed">
-                    Une équipe de passionnés au service de la littérature et des auteurs.
-                </p>
+        <section class="container py-20">
+            <div class="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
+                <article class="overflow-hidden rounded-[2.5rem] border border-[rgba(6,27,176,0.08)] bg-white shadow-[0_24px_54px_rgba(6,27,176,0.08)]">
+                    <div class="grid h-full lg:grid-cols-[0.9fr_1.1fr]">
+                        <div class="px-8 py-10 text-white lg:px-10 lg:py-12" style="background:#061BB0;">
+                            <p class="text-xs uppercase tracking-[0.28em] text-white/65">Qui sommes-nous ?</p>
+                            <h2 class="mt-4 text-4xl leading-none md:text-5xl" style="font-family: var(--font-display);">
+                                Une maison qui pense le livre comme un espace de transmission.
+                            </h2>
+                            <p class="mt-6 max-w-md text-base leading-8 text-white/82">
+                                Notre manifeste, notre histoire et l’esprit Kaskòd vivent sur une page dédiée plus incarnée.
+                            </p>
+                            <a href="{{ path('app_about') }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-[#061BB0] transition hover:bg-[rgba(255,255,255,0.92)]">
+                                Découvrir Siyaj
+                            </a>
+                        </div>
+                        <div class="flex items-center px-8 py-10 lg:px-10 lg:py-12" style="background:linear-gradient(135deg,rgba(255,165,0,0.12),rgba(235,90,39,0.08));">
+                            <p class="text-3xl leading-[1.14] text-[#061BB0] md:text-[2.55rem]" style="font-family: var(--font-display);">
+                                Première maison d’édition indépendante, féministe et décoloniale des Petites Antilles.
+                            </p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="rounded-[2.5rem] px-8 py-10 text-white shadow-[0_24px_54px_rgba(235,90,39,0.15)] lg:px-10 lg:py-12" style="background:#EB5A27;">
+                    <p class="text-xs uppercase tracking-[0.28em] text-white/68">Soumettre un manuscrit</p>
+                    <h2 class="mt-4 text-4xl leading-none md:text-5xl" style="font-family: var(--font-display);">
+                        Un parcours clair pour envoyer votre projet.
+                    </h2>
+                    <p class="mt-6 max-w-lg text-base leading-8 text-white/88">
+                        Les consignes, le formulaire et la structure de soumission sont regroupés dans un espace dédié, pensé pour rassurer et guider.
+                    </p>
+                    <a href="{{ path('app_author_manuscript_submit') }}" class="mt-8 inline-flex items-center justify-center rounded-full border border-white/24 px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#EB5A27]">
+                        Soumettre un projet
+                    </a>
+                </article>
             </div>
+        </section>
 
-            {# Value 3 #}
-            <div class="text-center p-6 lg:p-8">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <rect x="1" y="3" width="15" height="13"/>
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                        <circle cx="5.5" cy="18.5" r="2.5"/>
-                        <circle cx="18.5" cy="18.5" r="2.5"/>
-                    </svg>
+        <section class="mt-4 py-20 text-white" style="background:#061BB0;">
+            <div class="container">
+                <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+                    <div>
+                        <p class="text-xs uppercase tracking-[0.28em] text-white/60">Newsletter</p>
+                        <h2 class="mt-4 text-4xl md:text-5xl">Recevoir les parutions, appels et nouvelles de la maison.</h2>
+                        <p class="mt-6 max-w-2xl leading-8 text-white/75">
+                            La homepage change, mais on garde le lien direct avec les lectrices, lecteurs, auteurs et allié.e.s de Siyaj.
+                        </p>
+                    </div>
+
+                    <div class="rounded-[2rem] border border-white/10 p-6 backdrop-blur-sm" style="background:rgba(255,255,255,0.08);">
+                        {{ form_start(newsletterForm, {'attr': {'class': 'space-y-4'}}) }}
+                            {{ form_widget(newsletterForm.email, {'attr': {'class': '!rounded-full !px-5 !py-4 !text-white', 'style': 'border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);', 'placeholder': 'Votre adresse email'}}) }}
+                            <div aria-hidden="true">
+                                {{ form_widget(newsletterForm.company) }}
+                            </div>
+                            <button type="submit" class="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] transition hover:bg-[rgba(255,255,255,0.92)]" style="color:#061BB0;">
+                                S'inscrire à la newsletter
+                            </button>
+                        {{ form_end(newsletterForm) }}
+                    </div>
                 </div>
-                <h3 class="font-display text-xl font-semibold text-ink mb-3">Livraison soignée</h3>
-                <p class="text-ink/60 leading-relaxed">
-                    Vos commandes préparées avec soin et expédiées rapidement.
-                </p>
             </div>
-        </div>
+        </section>
     </div>
-</section>
-
-{# Newsletter Section #}
-<section class="py-20 lg:py-28 bg-ink text-white relative overflow-hidden">
-    {# Background Pattern #}
-    <div class="absolute inset-0 opacity-5">
-        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    </div>
-
-    <div class="container relative">
-        <div class="max-w-2xl mx-auto text-center">
-            <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-4">
-                Newsletter
-            </span>
-            <h2 class="font-display text-3xl sm:text-4xl font-semibold mb-4">
-                Restez informé
-            </h2>
-            <p class="text-white/60 mb-8 leading-relaxed">
-                Inscrivez-vous pour recevoir nos nouveautés, recommandations et offres exclusives.
-            </p>
-            {{ form_start(newsletterForm, {'attr': {'class': 'flex flex-col sm:flex-row gap-3 max-w-md mx-auto'}}) }}
-                {{ form_widget(newsletterForm.email) }}
-                <div aria-hidden="true">
-                    {{ form_widget(newsletterForm.company) }}
-                </div>
-                <button type="submit" class="btn btn-gold px-6 py-3.5 whitespace-nowrap">
-                    S'inscrire
-                </button>
-            {{ form_end(newsletterForm) }}
-        </div>
-    </div>
-</section>
 {% endblock %}

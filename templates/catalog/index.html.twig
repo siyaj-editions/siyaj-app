@@ -243,83 +243,10 @@
             {# Books Grid #}
             <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
                 {% for book in books %}
-                    <article class="group">
-                        <div class="card catalog-book-card h-full flex flex-col">
-                            {# Cover #}
-                            <div class="relative aspect-book overflow-hidden bg-cream">
-                                {% if book.coverImage %}
-                                    <img
-                                        src="{{ book.coverImage }}"
-                                        alt="{{ book.title }}"
-                                        loading="lazy"
-                                        decoding="async"
-                                        referrerpolicy="no-referrer"
-                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    >
-                                {% else %}
-                                    <div class="w-full h-full flex items-center justify-center text-ink/20">
-                                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                                        </svg>
-                                    </div>
-                                {% endif %}
-
-                                {# Format Badge #}
-                                {% if book.format.value == 'digital' %}
-                                    <span class="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-ink text-white rounded-md z-10">
-                                        Numérique
-                                    </span>
-                                {% endif %}
-
-                                {# Overlay #}
-                                <div class="absolute inset-0 bg-ink/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-gold px-5 py-2.5 text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                        Découvrir
-                                    </a>
-                                </div>
-                            </div>
-
-                            {# Content #}
-                            <div class="p-3 sm:p-4 lg:p-5 flex flex-col flex-1">
-                                <h3 class="font-display text-base lg:text-lg font-semibold text-ink mb-1 line-clamp-2 group-hover:text-gold transition-colors duration-200">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}">
-                                        {{ book.title }}
-                                    </a>
-                                </h3>
-                                <p class="text-xs lg:text-sm text-ink/50 mb-3 lg:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
-                                {% if book.genres|length > 0 %}
-                                    <div class="mb-3 flex flex-wrap gap-1.5">
-                                        {% for genre in book.genres|slice(0, 2) %}
-                                            <span class="inline-flex rounded-full bg-cream px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink/60">
-                                                {{ genre.name }}
-                                            </span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-
-                                <div class="mobile-book-meta mt-auto pt-3 lg:pt-4 border-t border-black/5 flex items-center justify-between gap-2 sm:px-0 sm:pb-0">
-                                    <span class="mobile-book-price font-display text-sm sm:text-base lg:text-xl font-semibold text-ink">
-                                        {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
-                                    </span>
-
-                                    {% if book.isInStock %}
-                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post" class="shrink-0">
-                                            <button type="submit" class="mobile-book-add sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
-                                                <svg class="sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <span class="text-[10px] lg:text-xs font-medium text-ink/40 uppercase tracking-wider">
-                                            Indisponible
-                                        </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+                    {{ include('components/book_card.html.twig', {
+                        book: book,
+                        variant: 'catalog'
+                    }) }}
                 {% endfor %}
             </div>
 

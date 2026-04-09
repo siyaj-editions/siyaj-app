@@ -3,69 +3,93 @@
 {% block title %}Contact - SIYAJ Éditions{% endblock %}
 
 {% block body %}
-<section class="py-12 md:py-16">
-    <div class="container">
-        <div class="mx-auto max-w-3xl space-y-6">
-            <div class="text-center space-y-3">
-                <p class="text-sm text-sage uppercase tracking-[0.18em]">Contact</p>
-                <h1 class="text-4xl md:text-5xl text-ink">Nous écrire</h1>
-                <p class="text-ink/65 leading-relaxed">
-                    Une question en relations publiques, communication ou médias ? Écrivez-nous et nous reviendrons vers vous rapidement.
-                </p>
+    <div class="bg-[#F7F4ED] text-[#061BB0]">
+        <section class="container py-20 lg:py-24">
+            <div class="grid gap-10 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+                <div>
+                    <h1 class="editorial-title-lg">Nous écrire</h1>
+                    <p class="editorial-copy mt-8 max-w-xl text-lg">
+                        Une question en relations publiques, communication ou médias ? Écrivez-nous et nous reviendrons vers vous rapidement.
+                    </p>
+
+                    <div class="mt-10 overflow-hidden rounded-[2.4rem] border border-[rgba(6,27,176,0.08)] bg-white shadow-[0_24px_54px_rgba(6,27,176,0.08)]">
+                        <div class="px-6 py-6 text-white lg:px-8" style="background:#061BB0;">
+                            <p class="text-xs uppercase tracking-[0.28em] text-white/65">Important</p>
+                            <p class="mt-4 text-3xl leading-[1.08]" style="font-family: var(--font-display);">
+                                Les manuscrits et portfolios passent par un parcours dédié.
+                            </p>
+                        </div>
+                        <div class="px-6 py-7 lg:px-8">
+                            <p class="editorial-copy">
+                                Les soumissions de manuscrits ou de portfolios d'artistes se font sur la page
+                                <a href="{{ path('app_author_manuscript_submit') }}" class="font-medium underline decoration-[rgba(139,107,46,0.55)] underline-offset-4 transition hover:text-[#EB5A27]">
+                                    Manuscrit
+                                </a>.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <section class="editorial-surface-strong p-8 lg:p-10">
+                    <div class="mb-8 flex items-start justify-between gap-4 border-b border-[rgba(6,27,176,0.08)] pb-6">
+                        <div>
+                            <p class="section-kicker">Formulaire</p>
+                            <h2 class="editorial-title-md mt-3 text-[2.5rem]">Envoyer un message</h2>
+                        </div>
+                        <div class="hidden rounded-full bg-[rgba(255,165,0,0.12)] px-4 py-2 text-xs uppercase tracking-[0.24em] text-[#8B6B2E] md:block">
+                            Réponse rapide
+                        </div>
+                    </div>
+
+                    {{ form_start(contactForm, {'attr': {'class': 'space-y-6'}}) }}
+                        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                            <div>
+                                {{ form_label(contactForm.firstname, null, {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
+                                {{ form_widget(contactForm.firstname) }}
+                                {{ form_errors(contactForm.firstname) }}
+                            </div>
+                            <div>
+                                {{ form_label(contactForm.lastname, null, {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
+                                {{ form_widget(contactForm.lastname) }}
+                                {{ form_errors(contactForm.lastname) }}
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+                            <div>
+                                {{ form_label(contactForm.email, null, {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
+                                {{ form_widget(contactForm.email, {'attr': {'placeholder': 'votre@email.com'}}) }}
+                                {{ form_errors(contactForm.email) }}
+                            </div>
+                            <div>
+                                {{ form_label(contactForm.subject, null, {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
+                                {{ form_widget(contactForm.subject) }}
+                                {{ form_errors(contactForm.subject) }}
+                            </div>
+                        </div>
+
+                        <div>
+                            {{ form_label(contactForm.message, null, {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
+                            {{ form_widget(contactForm.message, {'attr': {'class': '!min-h-[220px]', 'placeholder': 'Décrivez votre demande...'}}) }}
+                            {{ form_errors(contactForm.message) }}
+                        </div>
+
+                        <div aria-hidden="true">
+                            {{ form_widget(contactForm.company) }}
+                        </div>
+
+                        <div class="flex flex-col gap-3 pt-2 sm:flex-row">
+                            <button type="submit" class="editorial-cta-primary">
+                                Envoyer mon message
+                            </button>
+                            <a href="mailto:{{ contact_email }}" class="editorial-cta-secondary">
+                                {{ contact_email }}
+                            </a>
+                        </div>
+                    {{ form_end(contactForm) }}
+                </section>
             </div>
-
-            <div class="rounded-2xl border border-gold/20 bg-cream px-5 py-4 text-sm leading-6 text-ink/75">
-                Les soumissions de manuscrits ou de portfolios d’artistes se font sur la page
-                <a href="{{ path('app_author_manuscript_submit') }}" class="font-medium text-ink underline decoration-gold/60 underline-offset-4 hover:text-gold">
-                    Manuscrit
-                </a>.
-            </div>
-
-            <section class="card p-6 md:p-8">
-                {{ form_start(contactForm, {'attr': {'class': 'space-y-6'}}) }}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            {{ form_label(contactForm.firstname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(contactForm.firstname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            {{ form_errors(contactForm.firstname) }}
-                        </div>
-                        <div>
-                            {{ form_label(contactForm.lastname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(contactForm.lastname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            {{ form_errors(contactForm.lastname) }}
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <div>
-                            {{ form_label(contactForm.email, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(contactForm.email, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': 'votre@email.com'}}) }}
-                            {{ form_errors(contactForm.email) }}
-                        </div>
-                        <div>
-                            {{ form_label(contactForm.subject, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(contactForm.subject, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
-                            {{ form_errors(contactForm.subject) }}
-                        </div>
-                    </div>
-
-                    <div>
-                        {{ form_label(contactForm.message, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                        {{ form_widget(contactForm.message, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': 'Décrivez votre demande...'}}) }}
-                        {{ form_errors(contactForm.message) }}
-                    </div>
-
-                    <div aria-hidden="true">
-                        {{ form_widget(contactForm.company) }}
-                    </div>
-
-                    <div class="pt-2 flex flex-col sm:flex-row gap-3">
-                        <button type="submit" class="btn btn-primary px-6 py-3">Envoyer mon message</button>
-                        <a href="mailto:{{ contact_email }}" class="btn btn-secondary px-6 py-3">{{ contact_email }}</a>
-                    </div>
-                {{ form_end(contactForm) }}
-            </section>
-        </div>
+        </section>
     </div>
-</section>
 {% endblock %}
