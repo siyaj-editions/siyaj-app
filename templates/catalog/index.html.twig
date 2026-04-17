@@ -42,17 +42,42 @@
 
 {% block body %}
 {# Header #}
-<section class="bg-gradient-to-br from-paper to-cream py-16 lg:py-20">
-    <div class="container text-center">
-        <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
-            Notre collection
-        </span>
-        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold text-ink mb-4">
-            Catalogue
-        </h1>
-        <p class="text-lg text-ink/60 max-w-2xl mx-auto">
-            Explorez notre sélection d'ouvrages littéraires
-        </p>
+<section class="py-6 md:py-10">
+    <div class="container">
+        <div class="overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
+            <div class="relative overflow-hidden px-6 py-10 text-center md:px-8 md:py-12 lg:px-10 lg:py-16" style="min-height:22rem;">
+                <img
+                    src="{{ asset('images/home/hero-home.jpg') }}"
+                    alt="Univers éditorial du catalogue SIYAJ"
+                    class="absolute inset-0 h-full w-full object-cover"
+                    loading="eager"
+                    decoding="async"
+                >
+                <div class="absolute inset-0 bg-[rgba(0,0,0,0.58)]"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.18),rgba(0,0,0,0.48))]"></div>
+
+                <div class="relative z-10 mx-auto flex min-h-[15rem] max-w-3xl flex-col items-center justify-center">
+                    <p class="text-white/75" style="font-size:11px;letter-spacing:0.06em;">
+                        Notre collection
+                    </p>
+                    <h1 class="mt-2 text-[#EB5A27]" style="font-family: var(--font-display);font-size:3.2rem;line-height:0.95;">
+                        Catalogue
+                    </h1>
+                    <p class="mt-5 max-w-2xl text-white/88" style="font-size:1.02rem;line-height:1.8;">
+                        Explorez notre sélection d’ouvrages littéraires et laissez-vous guider par des voix, des formes et des imaginaires qui prolongent la ligne éditoriale de la maison.
+                    </p>
+
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <a href="#search" class="inline-flex items-center justify-center rounded-full bg-[#0C4EDD] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#061BB0]">
+                            Rechercher
+                        </a>
+                        <a href="#catalog-grid" class="inline-flex items-center justify-center rounded-full border border-white/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#061BB0]">
+                            Voir les ouvrages
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -241,7 +266,7 @@
 
         {% if books|length > 0 %}
             {# Books Grid #}
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
+            <div id="catalog-grid" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
                 {% for book in books %}
                     {{ include('components/book_card.html.twig', {
                         book: book,

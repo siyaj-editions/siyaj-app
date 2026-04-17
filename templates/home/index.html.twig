@@ -2,220 +2,360 @@
 
 {% block title %}Accueil - SIYAJ Éditions{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .home-owner-shell {
+            max-width: 30rem;
+        }
+
+        .home-owner-hero {
+            min-height: 22rem;
+        }
+
+        .home-owner-hero-content {
+            min-height: 17rem;
+        }
+
+        .home-owner-grid-2,
+        .home-owner-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .home-owner-book-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .home-owner-tags {
+            display: flex;
+            align-items: center;
+            gap: 1.35rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .home-owner-tags span {
+            color: #3257ea;
+        }
+
+        .home-owner-tags span:first-child {
+            color: #F59A16;
+        }
+
+        .home-owner-tags-line {
+            position: relative;
+            margin-top: 0.7rem;
+            height: 3px;
+            width: 100%;
+            background: #3257ea;
+            border-radius: 999px;
+        }
+
+        .home-owner-tags-line::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 5.5rem;
+            background: #F59A16;
+            border-radius: 999px;
+        }
+
+        @media (min-width: 768px) {
+            .home-owner-shell {
+                max-width: 46rem;
+                padding-top: 2.5rem;
+                padding-bottom: 3rem;
+            }
+
+            .home-owner-hero {
+                min-height: 25rem;
+            }
+
+            .home-owner-hero-content {
+                min-height: 20rem;
+            }
+
+            .home-owner-hero-title {
+                font-size: 4.1rem !important;
+            }
+
+            .home-owner-grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .home-owner-grid-3,
+            .home-owner-book-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 1.25rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .home-owner-shell {
+                max-width: 72rem;
+                padding-top: 3.25rem;
+                padding-bottom: 4.25rem;
+            }
+
+            .home-owner-hero {
+                min-height: 31rem;
+            }
+
+            .home-owner-hero-content {
+                min-height: 24rem;
+            }
+
+            .home-owner-hero-title {
+                font-size: 5.25rem !important;
+            }
+
+            .home-owner-copy {
+                font-size: 1.08rem !important;
+                line-height: 1.82 !important;
+            }
+
+            .home-owner-highlight {
+                font-size: 1.5rem !important;
+                line-height: 1.68 !important;
+            }
+
+            .home-owner-tags {
+                gap: 2.3rem;
+                font-size: 1.32rem;
+            }
+
+            .home-owner-tags-line::before {
+                width: 7rem;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     {% set featuredBooks = latestBooks|slice(0, 3) %}
-    {% set accentPalette = ['#0C4EDD', '#EB5A27', '#FFA500'] %}
+    {% set accentPalette = ['#F59A16', '#EB5A27', '#1735D0'] %}
     <div style="background:#F7F4ED;color:#061BB0;">
-        <section class="relative overflow-hidden">
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,165,0,0.08),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(235,90,39,0.07),transparent_28%)]"></div>
+        <div class="home-owner-shell mx-auto px-4 py-6 md:px-6 md:py-10">
+            <section class="overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
+                <div class="home-owner-hero relative overflow-hidden px-6 py-8 text-center md:px-8 md:py-10">
+                    <img
+                        src="{{ asset('images/home/hero-home.jpg') }}"
+                        alt="Paysage caribéen de SIYAJ Éditions"
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="eager"
+                        decoding="async"
+                    >
+                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.58)]"></div>
+                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.18),rgba(0,0,0,0.48))]"></div>
 
-            <div class="container relative grid min-h-[86vh] items-center gap-14 py-16 lg:grid-cols-[0.92fr_1.08fr] lg:py-24">
-                <div class="max-w-2xl">
-                    <p class="section-kicker mb-5">
-                        Maison d'édition
-                    </p>
+                    <div class="home-owner-hero-content relative z-10 flex flex-col items-center justify-center">
+                        <p class="text-white/75" style="font-size:11px;letter-spacing:0.06em;">
+                            La première maison d’édition indépendante, féministe et décoloniale des Petites Antilles
+                        </p>
+                        <h1 class="home-owner-hero-title mt-2 text-[#EB5A27]" style="font-family: var(--font-display);font-size:3rem;line-height:0.95;">
+                            Une littérature<br>pour rêver & résister
+                        </h1>
 
-                    <h1 class="editorial-title-xl">
-                        Une littérature engagée
-                        <span class="text-[#EB5A27]">pour rêver</span>
-                        et résister.
-                    </h1>
-
-                    <p class="editorial-copy mt-8 max-w-xl text-lg">
-                        Chez Siyaj, nous publions des romans et des ouvrages de poésie puissants issus de la littérature caribéenne contemporaine :
-                        plus qu'une maison d'édition, un espace de création et de dialogue foisonnant.
-                    </p>
-
-                    <div class="mt-10 flex flex-wrap gap-4">
-                        <a href="{{ path('app_catalog') }}" class="editorial-cta-primary">
-                            Explorer le catalogue
-                        </a>
-                        <a href="#nouveautes" class="editorial-cta-secondary">
-                            Découvrir les nouveautés
-                        </a>
-                    </div>
-
-                    <div class="mt-12 grid gap-4 sm:grid-cols-3">
-                        <div class="editorial-surface p-5">
-                            <p class="section-kicker">Voix</p>
-                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">Romans, poésie et récits portés par des imaginaires caribéens contemporains.</p>
-                        </div>
-                        <div class="editorial-surface p-5">
-                            <p class="section-kicker">Ligne</p>
-                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">Une maison féministe, décoloniale, exigeante et profondément littéraire.</p>
-                        </div>
-                        <div class="editorial-surface p-5">
-                            <p class="section-kicker">Portée</p>
-                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">Des ouvrages pensés pour circuler entre Guadeloupe, Martinique et le monde.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="relative flex min-h-[420px] items-center justify-center lg:min-h-[620px]">
-                    <div class="relative w-full max-w-[39rem]">
-                        <div class="absolute inset-0 rounded-[3rem] blur-3xl" style="background:rgba(12,78,221,0.08);"></div>
-                        <div class="relative rounded-[2.8rem] border border-[rgba(6,27,176,0.1)] bg-[rgba(255,255,255,0.75)] p-4 shadow-[0_28px_54px_rgba(6,27,176,0.09)] lg:p-5">
-                            <div class="relative overflow-hidden rounded-[2.2rem] p-6 lg:p-7" style="background:#061BB0;">
-                                <div class="absolute inset-0" style="background:radial-gradient(circle at top right, rgba(255,165,0,0.18), transparent 34%), radial-gradient(circle at bottom left, rgba(235,90,39,0.16), transparent 36%);"></div>
-                                <div class="relative grid items-end gap-6 sm:grid-cols-[0.86fr_1.14fr]">
-                                    <div class="order-2 sm:order-1">
-                                        <p class="text-xs uppercase tracking-[0.26em] text-white/65">Signature éditoriale</p>
-                                        <p class="mt-5 text-3xl leading-[1.05] text-white sm:text-[2.55rem]" style="font-family: var(--font-display);">
-                                            Des livres qui déplacent les regards, réveillent les récits et ouvrent de nouveaux espaces.
-                                        </p>
-                                    </div>
-                                    <div class="order-1 sm:order-2">
-                                        <img
-                                            src="{{ asset('images/home/hero-home.jpg') }}"
-                                            alt="Paysage caribéen de SIYAJ Éditions"
-                                            class="h-[360px] w-full rounded-[1.8rem] object-cover object-center shadow-[0_20px_42px_rgba(0,0,0,0.16)] lg:h-[480px]"
-                                            loading="eager"
-                                            decoding="async"
-                                        >
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="absolute -bottom-6 right-4 hidden max-w-sm rounded-[2rem] bg-white px-6 py-5 shadow-[0_22px_44px_rgba(6,27,176,0.12)] lg:block">
-                            <p class="text-xs uppercase tracking-[0.24em] text-[#8B6B2E]">
-                                Signature
-                            </p>
-                            <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.8)]">
-                                Première maison d'édition indépendante, féministe et décoloniale des Petites Antilles.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="nouveautes" class="container py-20">
-            <div class="mb-10 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                    <p class="section-kicker">Nouveautés</p>
-                    <h2 class="editorial-title-lg mt-3">Dernières parutions</h2>
-                </div>
-
-                <p class="editorial-copy-soft max-w-2xl text-base">
-                    Ici les mots poussent dans des sillons millénaires, sur des terres chargées d'histoire et de murmures longtemps tus.
-                </p>
-            </div>
-
-            {% if featuredBooks|length > 0 %}
-                <div class="grid gap-6 md:grid-cols-3">
-                    {% for book in featuredBooks %}
-                        {{ include('components/book_card.html.twig', {
-                            book: book,
-                            variant: 'home',
-                            accentColor: accentPalette[loop.index0]
-                        }) }}
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="rounded-[2rem] border border-[rgba(6,27,176,0.1)] bg-white/60 p-10 text-center shadow-sm">
-                    <p class="section-kicker text-center">Bientôt</p>
-                    <h3 class="editorial-title-md mt-3">Les premières parutions arrivent</h3>
-                    <p class="editorial-copy-soft mx-auto mt-4 max-w-2xl">
-                        La collection se prépare. La homepage est déjà prête à accueillir les ouvrages dès leur publication.
-                    </p>
-                </div>
-            {% endif %}
-
-            <div class="mt-10">
-                <a href="{{ path('app_catalog') }}" class="editorial-cta-secondary">
-                    Voir tout le catalogue
-                </a>
-            </div>
-        </section>
-
-        <section class="container py-6">
-            <div class="px-8 py-14 lg:px-14" style="background:#061BB0;color:#fff;border-radius:2.5rem;box-shadow:0 22px 42px rgba(6,27,176,0.15);">
-                <p class="max-w-4xl text-3xl leading-tight md:text-4xl">
-                    « Nous croyons que la littérature peut être un espace de résistance et de libération. »
-                </p>
-            </div>
-        </section>
-
-        <section class="container py-20">
-            <div class="grid gap-6 md:grid-cols-3">
-                <div class="editorial-surface p-8">
-                    <div class="mb-5 h-1.5 w-14 rounded-full bg-[#FFA500]"></div>
-                    <h3 class="editorial-title-md text-[2rem]">Sélection exigeante</h3>
-                    <p class="editorial-copy-soft mt-4">
-                        Une ligne éditoriale affirmée, au service de textes singuliers, sensibles et engagés.
-                    </p>
-                </div>
-
-                <div class="editorial-surface p-8">
-                    <div class="mb-5 h-1.5 w-14 rounded-full bg-[#FFA500]"></div>
-                    <h3 class="editorial-title-md text-[2rem]">Passion du livre</h3>
-                    <p class="editorial-copy-soft mt-4">
-                        Une équipe de passionnées au service de nos littératures et de nos auteur.ice.s.
-                    </p>
-                </div>
-
-                <div class="editorial-surface p-8">
-                    <div class="mb-5 h-1.5 w-14 rounded-full bg-[#FFA500]"></div>
-                    <h3 class="editorial-title-md text-[2rem]">Livraison soignée</h3>
-                    <p class="editorial-copy-soft mt-4">
-                        Expédiées dans le monde entier avec attention, plutôt que rapidement.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <section class="container py-20">
-            <div class="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-stretch">
-                <article class="overflow-hidden rounded-[2.5rem] border border-[rgba(6,27,176,0.08)] bg-white shadow-[0_24px_54px_rgba(6,27,176,0.08)]">
-                    <div class="grid h-full lg:grid-cols-[0.9fr_1.1fr]">
-                        <div class="px-8 py-10 text-white lg:px-10 lg:py-12" style="background:#061BB0;">
-                            <p class="text-xs uppercase tracking-[0.28em] text-white/65">Qui sommes-nous ?</p>
-                            <h2 class="mt-4 text-4xl leading-none md:text-5xl" style="font-family: var(--font-display);">
-                                Une maison qui pense le livre comme un espace de transmission.
-                            </h2>
-                            <p class="mt-6 max-w-md text-base leading-8 text-white/82">
-                                Notre manifeste, notre histoire et l’esprit Kaskòd vivent sur une page dédiée plus incarnée.
-                            </p>
-                            <a href="{{ path('app_about') }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-[#061BB0] transition hover:bg-[rgba(255,255,255,0.92)]">
-                                Découvrir Siyaj
+                        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                            <a href="{{ path('app_catalog') }}" class="inline-flex items-center justify-center rounded-full bg-[#0C4EDD] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#061BB0]">
+                                Notre sélection
+                            </a>
+                            <a href="{{ path('app_about') }}" class="inline-flex items-center justify-center rounded-full border border-white/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#061BB0]">
+                                Nous découvrir
                             </a>
                         </div>
-                        <div class="flex items-center px-8 py-10 lg:px-10 lg:py-12" style="background:linear-gradient(135deg,rgba(255,165,0,0.12),rgba(235,90,39,0.08));">
-                            <p class="text-3xl leading-[1.14] text-[#061BB0] md:text-[2.55rem]" style="font-family: var(--font-display);">
-                                Première maison d’édition indépendante, féministe et décoloniale des Petites Antilles.
-                            </p>
-                        </div>
                     </div>
-                </article>
+                </div>
+            </section>
 
-                <article class="rounded-[2.5rem] px-8 py-10 text-white shadow-[0_24px_54px_rgba(235,90,39,0.15)] lg:px-10 lg:py-12" style="background:#EB5A27;">
-                    <p class="text-xs uppercase tracking-[0.28em] text-white/68">Soumettre un manuscrit</p>
-                    <h2 class="mt-4 text-4xl leading-none md:text-5xl" style="font-family: var(--font-display);">
-                        Un parcours clair pour envoyer votre projet.
-                    </h2>
-                    <p class="mt-6 max-w-lg text-base leading-8 text-white/88">
-                        Les consignes, le formulaire et la structure de soumission sont regroupés dans un espace dédié, pensé pour rassurer et guider.
-                    </p>
-                    <a href="{{ path('app_author_manuscript_submit') }}" class="mt-8 inline-flex items-center justify-center rounded-full border border-white/24 px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#EB5A27]">
-                        Soumettre un projet
-                    </a>
-                </article>
-            </div>
-        </section>
-
-        <section class="mt-4 py-20 text-white" style="background:#061BB0;">
-            <div class="container">
-                <div class="grid gap-10 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+            <section class="px-2 py-8">
+                <div class="home-owner-grid-2">
                     <div>
-                        <p class="text-xs uppercase tracking-[0.28em] text-white/60">Newsletter</p>
-                        <h2 class="mt-4 text-4xl md:text-5xl">Recevoir les parutions, appels et nouvelles de la maison.</h2>
-                        <p class="mt-6 max-w-2xl leading-8 text-white/75">
-                            La homepage change, mais on garde le lien direct avec les lectrices, lecteurs, auteurs et allié.e.s de Siyaj.
+                        <p class="text-[#EB5A27]" style="font-size:1.6rem;line-height:1.15;font-weight:700;">
+                            Des voix vives,<br>des récits en mouvement
+                        </p>
+                        <p class="mt-4 text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                            Notre maison, notre ligne, nos résonances.
+                        </p>
+                        <p class="home-owner-copy mt-5 text-[#F59A16]" style="font-size:1.05rem;line-height:1.78;font-weight:600;">
+                            Chez Siyaj, nous publions des romans et des ouvrages de poésie puissants, portés par des imaginaires caribéens contemporains, des mémoires vives et des écritures qui refusent l’étroitesse des catégories.
                         </p>
                     </div>
 
-                    <div class="rounded-[2rem] border border-white/10 p-6 backdrop-blur-sm" style="background:rgba(255,255,255,0.08);">
+                    <div>
+                        <div class="home-owner-tags">
+                            <span>Raconter</span>
+                            <span>Résister</span>
+                            <span>Rêver</span>
+                        </div>
+                        <div class="home-owner-tags-line"></div>
+                        <p class="home-owner-copy mt-5 leading-7 text-[#3257ea]" style="font-size:1.08rem;line-height:1.72;max-width:32rem;">
+                            Nous voulons accueillir une littérature de fiction et de poésie singulière, audacieuse et sensible, traversée par les vécus, les luttes, les mémoires et les imaginaires de nos territoires sans jamais enfermer les auteur.ice.s dans des cadres restrictifs.
+                        </p>
+                        <div class="mt-6 flex items-center justify-end gap-3">
+                            <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                                Je découvre le catalogue
+                            </a>
+                            <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="nouveautes" class="px-2 py-4">
+                <h2 class="font-semibold uppercase text-[#EB5A27]" style="font-size:1.45rem;letter-spacing:0.02em;line-height:1.15;">
+                    NOS NOUVEAUTÉS
+                </h2>
+
+                <div class="mt-6">
+                    <p class="italic text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                        Des parutions qui déplacent les regards et prolongent nos conversations.
+                    </p>
+
+                    <p class="home-owner-highlight mt-6 max-w-4xl" style="font-size:1.18rem;line-height:1.64;font-weight:600;">
+                        <span class="text-[#F59A16]">Nos livres s’inscrivent dans une ligne exigeante, sensible et engagée</span>
+                        <span class="text-[#5E74E9]"> qui fait dialoguer fiction, poésie, mémoire, résistance et imaginaire caribéen contemporain.</span>
+                    </p>
+
+                    <div class="mt-8 flex items-center gap-4">
+                        <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                            Voir tout le catalogue
+                        </a>
+                        <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                {% if featuredBooks|length > 0 %}
+                    <div class="home-owner-book-grid mt-10">
+                        {% for book in featuredBooks %}
+                            {{ include('components/book_card.html.twig', {
+                                book: book,
+                                variant: 'home',
+                                accentColor: accentPalette[loop.index0]
+                            }) }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="mt-10 rounded-[2rem] border border-[rgba(6,27,176,0.1)] bg-white/70 p-8 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <p class="italic text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                            Les premières parutions arrivent.
+                        </p>
+                        <p class="mt-5 text-[#5E74E9]" style="font-size:1.05rem;line-height:1.75;">
+                            La collection se prépare. La homepage est déjà prête à accueillir les ouvrages dès leur publication.
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
+
+            <section class="mt-8 bg-[#1735D0] px-6 py-10 text-white shadow-[0_18px_42px_rgba(6,27,176,0.18)] md:px-8 md:py-12" style="border-radius:2.4rem;">
+                <div class="leading-none text-[#F5D38B]" style="font-family: var(--font-display);font-size:5rem;">
+                    “
+                </div>
+                <p class="-mt-3 text-center text-white" style="font-family: var(--font-display);font-size:2rem;line-height:1.08;max-width:50rem;margin-left:auto;margin-right:auto;">
+                    « Nous croyons que la littérature peut être un espace de résistance et de libération. »
+                </p>
+            </section>
+
+            <section class="px-2 py-8">
+                <div class="home-owner-grid-3">
+                    <article class="rounded-[2rem] bg-white px-6 py-6 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <div class="mb-4 h-1.5 w-14 rounded-full bg-[#F59A16]"></div>
+                        <h3 class="text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.05;">
+                            Sélection exigeante
+                        </h3>
+                        <p class="mt-4 text-[#5E74E9]" style="font-size:1rem;line-height:1.75;">
+                            Une ligne éditoriale affirmée, au service de textes singuliers, sensibles et engagés.
+                        </p>
+                    </article>
+
+                    <article class="rounded-[2rem] bg-white px-6 py-6 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <div class="mb-4 h-1.5 w-14 rounded-full bg-[#F59A16]"></div>
+                        <h3 class="text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.05;">
+                            Passion du livre
+                        </h3>
+                        <p class="mt-4 text-[#5E74E9]" style="font-size:1rem;line-height:1.75;">
+                            Une équipe investie pour accompagner les auteur.ice.s avec attention, soin et conviction.
+                        </p>
+                    </article>
+
+                    <article class="rounded-[2rem] bg-white px-6 py-6 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <div class="mb-4 h-1.5 w-14 rounded-full bg-[#F59A16]"></div>
+                        <h3 class="text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.05;">
+                            Livraison soignée
+                        </h3>
+                        <p class="mt-4 text-[#5E74E9]" style="font-size:1rem;line-height:1.75;">
+                            Des ouvrages préparés avec attention et expédiés dans le monde entier.
+                        </p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="px-2 py-4">
+                <div class="home-owner-grid-2">
+                    <article class="overflow-hidden rounded-[2.4rem] bg-[#1735D0] text-white shadow-[0_18px_42px_rgba(6,27,176,0.16)]">
+                        <div class="grid h-full lg:grid-cols-[0.9fr_1.1fr]">
+                            <div class="px-6 py-8 lg:px-8 lg:py-10">
+                                <p class="text-xs uppercase tracking-[0.26em] text-white/65">Qui sommes-nous ?</p>
+                                <p class="mt-4 text-white" style="font-family:var(--font-display);font-size:2.15rem;line-height:1.05;">
+                                    Une maison qui pense le livre comme un espace de transmission.
+                                </p>
+                                <p class="mt-5 text-white/84" style="font-size:1rem;line-height:1.75;">
+                                    Notre manifeste, notre histoire et l’esprit Kaskòd vivent sur une page dédiée plus incarnée.
+                                </p>
+                                <a href="{{ path('app_about') }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-[#061BB0] transition hover:bg-[rgba(255,255,255,0.92)] max-width:15rem width:15rem;">
+                                    Découvrir Siyaj
+                                </a>
+                            </div>
+                            <div class="flex items-center px-6 py-8 lg:px-8 lg:py-10" style="background:linear-gradient(135deg,rgba(255,165,0,0.12),rgba(235,90,39,0.08));">
+                                <p class="text-white" style="font-family:var(--font-display);font-size:2rem;line-height:1.15;">
+                                    Première maison d’édition indépendante, féministe et décoloniale des Petites Antilles.
+                                </p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="rounded-[2.4rem] bg-[#EB5A27] px-6 py-8 text-white shadow-[0_18px_42px_rgba(235,90,39,0.16)] lg:px-8 lg:py-10">
+                        <p class="text-xs uppercase tracking-[0.26em] text-white/68">Soumettre un manuscrit</p>
+                        <p class="mt-4 text-white" style="font-family:var(--font-display);font-size:2.15rem;line-height:1.05;">
+                            Un parcours clair pour envoyer votre projet.
+                        </p>
+                        <p class="mt-5 text-white/88" style="font-size:1rem;line-height:1.75;">
+                            Les consignes, le formulaire et la structure de soumission sont regroupés dans un espace dédié, pensé pour rassurer et guider.
+                        </p>
+                        <a href="{{ path('app_author_manuscript_submit') }}" class="mt-8 inline-flex items-center justify-center rounded-full border border-white/24 px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#EB5A27]">
+                            Soumettre un projet
+                        </a>
+                    </article>
+                </div>
+            </section>
+
+            <section class="mt-8 bg-[#1735D0] px-6 py-10 text-white shadow-[0_18px_42px_rgba(6,27,176,0.18)] md:px-8 md:py-12" style="border-radius:2.4rem;">
+                <p class="text-xs uppercase tracking-[0.26em] text-white/64">Newsletter</p>
+                <div class="home-owner-grid-2 mt-6 items-center">
+                    <div>
+                        <p style="font-family:var(--font-display);font-size:2.2rem;line-height:1.08;">
+                            Recevoir les parutions, appels et nouvelles de la maison.
+                        </p>
+                        <p class="mt-5 text-white/80" style="font-size:1rem;line-height:1.75;">
+                            On garde le lien direct avec les lectrices, lecteurs, auteurs et allié.e.s de Siyaj.
+                        </p>
+                    </div>
+
+                    <div class="rounded-[2rem] border border-white/10 p-5" style="background:rgba(255,255,255,0.08);backdrop-filter: blur(10px);">
                         {{ form_start(newsletterForm, {'attr': {'class': 'space-y-4'}}) }}
                             {{ form_widget(newsletterForm.email, {'attr': {'class': '!rounded-full !px-5 !py-4 !text-white', 'style': 'border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);', 'placeholder': 'Votre adresse email'}}) }}
                             <div aria-hidden="true">
@@ -227,7 +367,7 @@
                         {{ form_end(newsletterForm) }}
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     </div>
 {% endblock %}

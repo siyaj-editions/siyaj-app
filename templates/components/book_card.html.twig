@@ -6,33 +6,40 @@
 {% set wrapperClasses = wrapperClasses|default('') %}
 
 {% if variant == 'home' %}
-    <article class="group editorial-surface p-6 transition hover:-translate-y-1 {{ wrapperClasses }}">
-        {% if book.coverImage %}
-            <img
-                src="{{ book.coverImage }}"
-                alt="{{ book.title }}"
-                class="aspect-[4/5] w-full rounded-[1.5rem] object-cover shadow-inner"
-                loading="lazy"
-                decoding="async"
-                referrerpolicy="no-referrer"
-            >
-        {% else %}
-            <div class="aspect-[4/5] w-full rounded-[1.5rem] shadow-inner" style="background-color: {{ accentColor }};"></div>
-        {% endif %}
-
-        <h3 class="editorial-title-md mt-6 text-[2rem]">{{ book.title }}</h3>
-        <p class="mt-2 text-sm leading-7 text-[rgba(6,27,176,0.7)]">
-            {{ book.authorsNames ?: 'Voix éditoriale SIYAJ' }}
-            {% if book.genresNames %}
-                · {{ book.genresNames }}
+    <article class="group flex h-full flex-col rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white px-5 py-5 shadow-[0_18px_42px_rgba(6,27,176,0.08)] transition hover:-translate-y-1 {{ wrapperClasses }}">
+        <div class="overflow-hidden rounded-[1.6rem] bg-[rgba(247,244,237,0.95)]">
+            {% if book.coverImage %}
+                <img
+                    src="{{ book.coverImage }}"
+                    alt="{{ book.title }}"
+                    class="h-[18rem] w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.03]"
+                    style="background:rgba(247,244,237,0.95);"
+                    loading="lazy"
+                    decoding="async"
+                    referrerpolicy="no-referrer"
+                >
             {% else %}
-                · {{ book.format.label }}
+                <div class="h-[18rem] w-full" style="background-color: {{ accentColor }};"></div>
             {% endif %}
-        </p>
+        </div>
 
-        <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="mt-6 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-[#EB5A27]">
-            Voir l'ouvrage →
-        </a>
+        <div class="flex flex-1 flex-col">
+            <h3 class="mt-5 text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.02;">
+                {{ book.title }}
+            </h3>
+            <p class="mt-3 text-[#5E74E9]" style="font-size:0.98rem;line-height:1.75;">
+                {{ book.authorsNames ?: 'Voix éditoriale SIYAJ' }}
+                {% if book.genresNames %}
+                    · {{ book.genresNames }}
+                {% else %}
+                    · {{ book.format.label }}
+                {% endif %}
+            </p>
+
+            <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="mt-auto pt-6 inline-block text-sm font-semibold uppercase tracking-[0.14em] text-[#EB5A27]">
+                Voir l'ouvrage →
+            </a>
+        </div>
     </article>
 {% else %}
     <article class="group {{ wrapperClasses }}">
@@ -48,11 +55,8 @@
                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     >
                 {% else %}
-                    <div class="w-full h-full flex items-center justify-center text-ink/20">
-                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                        </svg>
+                    <div class="w-full h-full p-4 bg-white">
+                        <div class="w-full h-full rounded-[1.25rem]" style="background-color:#F59A16;"></div>
                     </div>
                 {% endif %}
 
