@@ -11,7 +11,8 @@ class ContactService
 {
     public function __construct(
         private readonly MailerInterface $mailer,
-        private readonly string $contactEmail
+        private readonly string $contactEmail,
+        private readonly string $mailerFromEmail,
     ) {
     }
 
@@ -21,7 +22,7 @@ class ContactService
         $senderName = $contactMessage->getFullName();
 
         $email = (new TemplatedEmail())
-            ->from(new Address($this->contactEmail, 'SIYAJ Editions'))
+            ->from(new Address($this->mailerFromEmail, 'SIYAJ Editions'))
             ->to(new Address($this->contactEmail, 'SIYAJ Editions'))
             ->replyTo(new Address($senderEmail, $senderName !== '' ? $senderName : $senderEmail))
             ->subject(sprintf('[Contact] %s', $this->labelForSubject((string) $contactMessage->getSubject())))

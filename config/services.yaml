@@ -11,6 +11,7 @@ parameters:
     stripe_secret_key: '%env(STRIPE_SECRET_KEY)%'
     stripe_webhook_secret: '%env(STRIPE_WEBHOOK_SECRET)%'
     contact_email: '%env(CONTACT_EMAIL)%'
+    mailer_from_email: '%env(MAILER_FROM_EMAIL)%'
 
 services:
     # default configuration for services in *this* file
@@ -34,3 +35,4 @@ services:
     App\Service\ContactService:
         arguments:
             $contactEmail: '%contact_email%'
+            $mailerFromEmail: '%mailer_from_email%'

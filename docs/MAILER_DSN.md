@@ -86,11 +86,13 @@ Le formulaire contact envoie via :
 
 Le destinataire configuré est :
 - `CONTACT_EMAIL`
+- l'expéditeur technique est `MAILER_FROM_EMAIL`
 
 Valeur par défaut dans [`.env`](/Users/ludwigelatre/Desktop/siyag-projet/siyag/.env) :
 
 ```env
 CONTACT_EMAIL=contact@siyaj-editions.fr
+MAILER_FROM_EMAIL=no-reply@example.com
 ```
 
 Le plus simple pour tester en local :
@@ -109,4 +111,17 @@ Le formulaire contact utilise un `replyTo` avec l'email saisi par l'utilisateur.
 
 Donc :
 - l'email arrive sur `CONTACT_EMAIL`
+- l'email part techniquement depuis `MAILER_FROM_EMAIL`
 - en répondant depuis la boîte mail, la réponse repart vers l'expéditeur du formulaire
+
+Exemple de configuration Gmail :
+
+```env
+MAILER_DSN=smtp://siyaj.editions%40gmail.com:APP_PASSWORD@smtp.gmail.com:587?encryption=tls&auth_mode=login
+MAILER_FROM_EMAIL=contact@siyaj-editions.fr
+CONTACT_EMAIL=siyaj.editions@gmail.com
+```
+
+Important :
+- si `MAILER_FROM_EMAIL` n'est pas une adresse/alias autorisé(e) par le compte Gmail qui envoie, Gmail peut réécrire l'expéditeur ou refuser l'envoi
+- le plus fiable est d'ajouter cette adresse comme alias dans Gmail, ou d'utiliser comme `MAILER_FROM_EMAIL` l'adresse Gmail elle-même

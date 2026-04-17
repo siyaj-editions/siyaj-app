@@ -1,0 +1,89 @@
+.contact-owner-shell {
+  max-width: 30rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-block: 1.5rem;
+}
+
+.contact-owner-hero {
+  min-height: 22rem;
+}
+
+.contact-owner-hero-content {
+  min-height: 17rem;
+}
+
+.contact-owner-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.contact-owner-form {
+  margin-top: 2.5rem;
+}
+
+.contact-owner-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .contact-owner-shell {
+    max-width: 46rem;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .contact-owner-hero {
+    min-height: 24rem;
+  }
+
+  .contact-owner-hero-content {
+    min-height: 19rem;
+  }
+
+  .contact-owner-grid-2,
+  .contact-owner-form-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contact-owner-hero-title {
+    font-size: 4.1rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .contact-owner-shell {
+    max-width: 72rem;
+    padding-top: 3.25rem;
+    padding-bottom: 4.25rem;
+  }
+
+  .contact-owner-hero {
+    min-height: 31rem;
+  }
+
+  .contact-owner-hero-content {
+    min-height: 24rem;
+  }
+
+  .contact-owner-hero-title {
+    font-size: 5.2rem !important;
+  }
+
+  .contact-owner-copy {
+    font-size: 1.08rem !important;
+    line-height: 1.82 !important;
+  }
+
+  .contact-owner-highlight {
+    font-size: 1.52rem !important;
+    line-height: 1.62 !important;
+  }
+
+  .contact-owner-form {
+    margin-top: 3.25rem;
+  }
+}
