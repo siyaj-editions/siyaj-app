@@ -5,282 +5,369 @@
 {% block stylesheets %}
     {{ parent() }}
     <style>
-        .home-latest-card {
-            border: 1px solid rgba(17, 24, 39, 0.08);
-            box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
-            background: #fff;
+        .home-owner-shell {
+            max-width: 30rem;
         }
 
-        @media (max-width: 639px) {
-            .mobile-book-meta {
-                padding-left: 10px;
-                padding-bottom: 5px;
+        .home-owner-hero {
+            min-height: 22rem;
+        }
+
+        .home-owner-hero-content {
+            min-height: 17rem;
+        }
+
+        .home-owner-grid-2,
+        .home-owner-grid-3 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .home-owner-book-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .home-owner-tags {
+            display: flex;
+            align-items: center;
+            gap: 1.35rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .home-owner-tags span {
+            color: #3257ea;
+        }
+
+        .home-owner-tags span:first-child {
+            color: #F59A16;
+        }
+
+        .home-owner-tags-line {
+            position: relative;
+            margin-top: 0.7rem;
+            height: 3px;
+            width: 100%;
+            background: #3257ea;
+            border-radius: 999px;
+        }
+
+        .home-owner-tags-line::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 5.5rem;
+            background: #F59A16;
+            border-radius: 999px;
+        }
+
+        @media (min-width: 768px) {
+            .home-owner-shell {
+                max-width: 46rem;
+                padding-top: 2.5rem;
+                padding-bottom: 3rem;
             }
 
-            .mobile-book-price {
-                flex-shrink: 0;
-                font-size: 0.95rem;
-                line-height: 1;
+            .home-owner-hero {
+                min-height: 25rem;
             }
 
-            .shrink-0{
-                padding-right: 5px;
+            .home-owner-hero-content {
+                min-height: 20rem;
             }
 
-            .mobile-book-add {
-                width: 1.5rem;
-                height: 1.5rem;
+            .home-owner-hero-title {
+                font-size: 4.1rem !important;
             }
 
-            .mobile-book-add svg {
-                width: 0.75rem;
-                height: 0.75rem;
+            .home-owner-grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .home-owner-grid-3,
+            .home-owner-book-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 1.25rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .home-owner-shell {
+                max-width: 72rem;
+                padding-top: 3.25rem;
+                padding-bottom: 4.25rem;
+            }
+
+            .home-owner-hero {
+                min-height: 31rem;
+            }
+
+            .home-owner-hero-content {
+                min-height: 24rem;
+            }
+
+            .home-owner-hero-title {
+                font-size: 5.25rem !important;
+            }
+
+            .home-owner-copy {
+                font-size: 1.08rem !important;
+                line-height: 1.82 !important;
+            }
+
+            .home-owner-highlight {
+                font-size: 1.5rem !important;
+                line-height: 1.68 !important;
+            }
+
+            .home-owner-tags {
+                gap: 2.3rem;
+                font-size: 1.32rem;
+            }
+
+            .home-owner-tags-line::before {
+                width: 7rem;
             }
         }
     </style>
 {% endblock %}
 
 {% block body %}
-{# Hero Section #}
-<section class="relative overflow-hidden bg-gradient-to-br from-paper via-cream/50 to-paper">
-    {# Background Pattern #}
-    <div class="absolute inset-0 opacity-30">
-        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23c9a962&quot; fill-opacity=&quot;0.1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    </div>
+    {% set featuredBooks = latestBooks|slice(0, 3) %}
+    {% set accentPalette = ['#F59A16', '#EB5A27', '#1735D0'] %}
+    <div style="background:#F7F4ED;color:#061BB0;">
+        <div class="home-owner-shell mx-auto px-4 py-6 md:px-6 md:py-10">
+            <section class="overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
+                <div class="home-owner-hero relative overflow-hidden px-6 py-8 text-center md:px-8 md:py-10">
+                    <img
+                        src="{{ asset('images/home/hero-home.jpg') }}"
+                        alt="Paysage caribéen de SIYAJ Éditions"
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="eager"
+                        decoding="async"
+                    >
+                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.58)]"></div>
+                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.18),rgba(0,0,0,0.48))]"></div>
 
-    <div class="container relative py-20 lg:py-32">
-        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {# Content #}
-            <div class="text-center lg:text-left order-2 lg:order-1">
-                <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-4 animate-fade-in">
-                    Maison d'édition
-                </span>
-                <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold leading-[1.1] text-ink mb-6 animate-fade-in stagger-1">
-                    Découvrez des œuvres
-                    <span class="block text-gradient mt-2">qui vous transforment</span>
-                </h1>
-                <p class="text-lg text-ink/70 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-8 animate-fade-in stagger-2">
-                    SIYAJ Éditions vous invite à explorer une collection soigneusement sélectionnée d'ouvrages littéraires, où chaque page raconte une histoire unique.
+                    <div class="home-owner-hero-content relative z-10 flex flex-col items-center justify-center">
+                        <p class="text-white/75" style="font-size:11px;letter-spacing:0.06em;">
+                            La première maison d’édition indépendante, féministe et décoloniale des Petites Antilles
+                        </p>
+                        <h1 class="home-owner-hero-title mt-2 text-[#EB5A27]" style="font-family: var(--font-display);font-size:3rem;line-height:0.95;">
+                            Une littérature<br>pour rêver & résister
+                        </h1>
+
+                        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                            <a href="{{ path('app_catalog') }}" class="inline-flex items-center justify-center rounded-full bg-[#0C4EDD] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#061BB0]">
+                                Notre sélection
+                            </a>
+                            <a href="{{ path('app_about') }}" class="inline-flex items-center justify-center rounded-full border border-white/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#061BB0]">
+                                Nous découvrir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="px-2 py-8">
+                <div class="home-owner-grid-2">
+                    <div>
+                        <p class="text-[#EB5A27]" style="font-size:1.6rem;line-height:1.15;font-weight:700;">
+                            Des voix vives,<br>des récits en mouvement
+                        </p>
+                        <p class="mt-4 text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                            Notre maison, notre ligne, nos résonances.
+                        </p>
+                        <p class="home-owner-copy mt-5 text-[#F59A16]" style="font-size:1.05rem;line-height:1.78;font-weight:600;">
+                            Chez Siyaj, nous publions des romans et des ouvrages de poésie puissants, portés par des imaginaires caribéens contemporains, des mémoires vives et des écritures qui refusent l’étroitesse des catégories.
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="home-owner-tags">
+                            <span>Raconter</span>
+                            <span>Résister</span>
+                            <span>Rêver</span>
+                        </div>
+                        <div class="home-owner-tags-line"></div>
+                        <p class="home-owner-copy mt-5 leading-7 text-[#3257ea]" style="font-size:1.08rem;line-height:1.72;max-width:32rem;">
+                            Nous voulons accueillir une littérature de fiction et de poésie singulière, audacieuse et sensible, traversée par les vécus, les luttes, les mémoires et les imaginaires de nos territoires sans jamais enfermer les auteur.ice.s dans des cadres restrictifs.
+                        </p>
+                        <div class="mt-6 flex items-center justify-end gap-3">
+                            <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                                Je découvre le catalogue
+                            </a>
+                            <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="nouveautes" class="px-2 py-4">
+                <h2 class="font-semibold uppercase text-[#EB5A27]" style="font-size:1.45rem;letter-spacing:0.02em;line-height:1.15;">
+                    NOS NOUVEAUTÉS
+                </h2>
+
+                <div class="mt-6">
+                    <p class="italic text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                        Des parutions qui déplacent les regards et prolongent nos conversations.
+                    </p>
+
+                    <p class="home-owner-highlight mt-6 max-w-4xl" style="font-size:1.18rem;line-height:1.64;font-weight:600;">
+                        <span class="text-[#F59A16]">Nos livres s’inscrivent dans une ligne exigeante, sensible et engagée</span>
+                        <span class="text-[#5E74E9]"> qui fait dialoguer fiction, poésie, mémoire, résistance et imaginaire caribéen contemporain.</span>
+                    </p>
+
+                    <div class="mt-8 flex items-center gap-4">
+                        <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                            Voir tout le catalogue
+                        </a>
+                        <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                {% if featuredBooks|length > 0 %}
+                    <div class="home-owner-book-grid mt-10">
+                        {% for book in featuredBooks %}
+                            {{ include('components/book_card.html.twig', {
+                                book: book,
+                                variant: 'home',
+                                accentColor: accentPalette[loop.index0]
+                            }) }}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="mt-10 rounded-[2rem] border border-[rgba(6,27,176,0.1)] bg-white/70 p-8 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <p class="italic text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                            Les premières parutions arrivent.
+                        </p>
+                        <p class="mt-5 text-[#5E74E9]" style="font-size:1.05rem;line-height:1.75;">
+                            La collection se prépare. La homepage est déjà prête à accueillir les ouvrages dès leur publication.
+                        </p>
+                    </div>
+                {% endif %}
+            </section>
+
+            <section class="mt-8 bg-[#1735D0] px-6 py-10 text-white shadow-[0_18px_42px_rgba(6,27,176,0.18)] md:px-8 md:py-12" style="border-radius:2.4rem;">
+                <div class="leading-none text-[#F5D38B]" style="font-family: var(--font-display);font-size:5rem;">
+                    “
+                </div>
+                <p class="-mt-3 text-center text-white" style="font-family: var(--font-display);font-size:2rem;line-height:1.08;max-width:50rem;margin-left:auto;margin-right:auto;">
+                    « Nous croyons que la littérature peut être un espace de résistance et de libération. »
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in stagger-3">
-                    <a href="{{ path('app_catalog') }}" class="btn btn-primary px-8 py-4 text-base">
-                        Explorer le catalogue
-                        <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                    </a>
-                    <a href="#dernieres-parutions" class="btn btn-secondary px-8 py-4 text-base">
-                        Nouveautés
-                    </a>
+            </section>
+
+            <section class="px-2 py-8">
+                <div class="home-owner-grid-3">
+                    <article class="rounded-[2rem] bg-white px-6 py-6 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <div class="mb-4 h-1.5 w-14 rounded-full bg-[#F59A16]"></div>
+                        <h3 class="text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.05;">
+                            Sélection exigeante
+                        </h3>
+                        <p class="mt-4 text-[#5E74E9]" style="font-size:1rem;line-height:1.75;">
+                            Une ligne éditoriale affirmée, au service de textes singuliers, sensibles et engagés.
+                        </p>
+                    </article>
+
+                    <article class="rounded-[2rem] bg-white px-6 py-6 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <div class="mb-4 h-1.5 w-14 rounded-full bg-[#F59A16]"></div>
+                        <h3 class="text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.05;">
+                            Passion du livre
+                        </h3>
+                        <p class="mt-4 text-[#5E74E9]" style="font-size:1rem;line-height:1.75;">
+                            Une équipe investie pour accompagner les auteur.ice.s avec attention, soin et conviction.
+                        </p>
+                    </article>
+
+                    <article class="rounded-[2rem] bg-white px-6 py-6 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
+                        <div class="mb-4 h-1.5 w-14 rounded-full bg-[#F59A16]"></div>
+                        <h3 class="text-[#061BB0]" style="font-family:var(--font-display);font-size:2rem;line-height:1.05;">
+                            Livraison soignée
+                        </h3>
+                        <p class="mt-4 text-[#5E74E9]" style="font-size:1rem;line-height:1.75;">
+                            Des ouvrages préparés avec attention et expédiés dans le monde entier.
+                        </p>
+                    </article>
                 </div>
-            </div>
+            </section>
 
-            {# Visual - Books Stack #}
-            <div class="hidden lg:block order-1 lg:order-2">
-                <div class="relative h-[500px] animate-fade-in">
-                    {# Decorative Circle #}
-                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gold/10 rounded-full blur-3xl"></div>
-
-                    {# Books #}
-                    <div class="absolute top-[15%] left-[10%] w-44 h-64 rounded-lg shadow-2xl transform -rotate-12 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #722f37 0%, #8b3a42 100%);"></div>
-                    <div class="absolute top-[10%] left-[30%] w-44 h-64 rounded-lg shadow-2xl transform rotate-6 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #7d8471 0%, #6a7360 100%);"></div>
-                    <div class="absolute top-[20%] left-[55%] w-44 h-64 rounded-lg shadow-2xl transform -rotate-3 transition-transform duration-500 hover:rotate-0 hover:scale-105" style="background: linear-gradient(135deg, #c9a962 0%, #b8944d 100%);"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-{# Featured Books Section #}
-<section id="dernieres-parutions" class="py-20 lg:py-28 bg-white">
-    <div class="container">
-        {# Section Header #}
-        <div class="text-center mb-16">
-            <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
-                Nouveautés
-            </span>
-            <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-ink mb-4">
-                Dernières parutions
-            </h2>
-            <p class="text-lg text-ink/60 max-w-2xl mx-auto">
-                Les ouvrages récemment ajoutés à notre collection
-            </p>
-        </div>
-
-        {% if latestBooks|length > 0 %}
-            {# Books Grid #}
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-8">
-                {% for book in latestBooks %}
-                    <article class="group">
-                        <div class="card home-latest-card h-full flex flex-col">
-                            {# Cover #}
-                            <div class="relative aspect-book overflow-hidden bg-cream">
-                                {% if book.coverImage %}
-                                    <img
-                                        src="{{ book.coverImage }}"
-                                        alt="{{ book.title }}"
-                                        loading="lazy"
-                                        decoding="async"
-                                        referrerpolicy="no-referrer"
-                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    >
-                                {% else %}
-                                    <div class="w-full h-full flex items-center justify-center text-ink/20">
-                                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                                        </svg>
-                                    </div>
-                                {% endif %}
-
-                                {# Overlay #}
-                                <div class="absolute inset-0 bg-ink/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-gold px-6 py-3 text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                        Découvrir
-                                    </a>
-                                </div>
+            <section class="px-2 py-4">
+                <div class="home-owner-grid-2">
+                    <article class="overflow-hidden rounded-[2.4rem] bg-[#1735D0] text-white shadow-[0_18px_42px_rgba(6,27,176,0.16)]">
+                        <div class="grid h-full lg:grid-cols-[0.9fr_1.1fr]">
+                            <div class="px-6 py-8 lg:px-8 lg:py-10">
+                                <p class="text-xs uppercase tracking-[0.26em] text-white/65">Qui sommes-nous ?</p>
+                                <p class="mt-4 text-white" style="font-family:var(--font-display);font-size:2.15rem;line-height:1.05;">
+                                    Une maison qui pense le livre comme un espace de transmission.
+                                </p>
+                                <p class="mt-5 text-white/84" style="font-size:1rem;line-height:1.75;">
+                                    Notre manifeste, notre histoire et l’esprit Kaskòd vivent sur une page dédiée plus incarnée.
+                                </p>
+                                <a href="{{ path('app_about') }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-[#061BB0] transition hover:bg-[rgba(255,255,255,0.92)] max-width:15rem width:15rem;">
+                                    Découvrir Siyaj
+                                </a>
                             </div>
-
-                            {# Content #}
-                            <div class="p-3 sm:p-4 lg:p-5 flex flex-col flex-1">
-                                <h3 class="font-display text-base sm:text-lg font-semibold text-ink mb-1.5 line-clamp-2 group-hover:text-gold transition-colors duration-200">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}">
-                                        {{ book.title }}
-                                    </a>
-                                </h3>
-                                <p class="text-xs sm:text-sm text-ink/50 mb-3 sm:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
-
-                                <div class="mobile-book-meta mt-auto pt-3 sm:pt-4 border-t border-black/5 flex items-center justify-between gap-2 sm:px-0 sm:pb-0">
-                                    <span class="mobile-book-price font-display text-sm sm:text-lg lg:text-xl font-semibold text-ink">
-                                        {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
-                                    </span>
-
-                                    {% if book.isInStock %}
-                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post" class="shrink-0">
-                                            <button type="submit" class="mobile-book-add sm:w-9 sm:h-9 lg:w-11 lg:h-11 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
-                                                <svg class="sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <span class="text-[10px] sm:text-xs font-medium text-ink/40 uppercase tracking-wider">
-                                            Indisponible
-                                        </span>
-                                    {% endif %}
-                                </div>
+                            <div class="flex items-center px-6 py-8 lg:px-8 lg:py-10" style="background:linear-gradient(135deg,rgba(255,165,0,0.12),rgba(235,90,39,0.08));">
+                                <p class="text-white" style="font-family:var(--font-display);font-size:2rem;line-height:1.15;">
+                                    Première maison d’édition indépendante, féministe et décoloniale des Petites Antilles.
+                                </p>
                             </div>
                         </div>
                     </article>
-                {% endfor %}
-            </div>
 
-            {# CTA #}
-            <div class="text-center mt-12">
-                <a href="{{ path('app_catalog') }}" class="btn btn-secondary px-8 py-4 text-base">
-                    Voir tout le catalogue
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                </a>
-            </div>
-        {% else %}
-            {# Empty State #}
-            <div class="text-center py-16">
-                <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-cream flex items-center justify-center text-ink/20">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                    </svg>
+                    <article class="rounded-[2.4rem] bg-[#EB5A27] px-6 py-8 text-white shadow-[0_18px_42px_rgba(235,90,39,0.16)] lg:px-8 lg:py-10">
+                        <p class="text-xs uppercase tracking-[0.26em] text-white/68">Soumettre un manuscrit</p>
+                        <p class="mt-4 text-white" style="font-family:var(--font-display);font-size:2.15rem;line-height:1.05;">
+                            Un parcours clair pour envoyer votre projet.
+                        </p>
+                        <p class="mt-5 text-white/88" style="font-size:1rem;line-height:1.75;">
+                            Les consignes, le formulaire et la structure de soumission sont regroupés dans un espace dédié, pensé pour rassurer et guider.
+                        </p>
+                        <a href="{{ path('app_author_manuscript_submit') }}" class="mt-8 inline-flex items-center justify-center rounded-full border border-white/24 px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#EB5A27]">
+                            Soumettre un projet
+                        </a>
+                    </article>
                 </div>
-                <h3 class="font-display text-2xl font-semibold text-ink mb-2">Notre collection arrive bientôt</h3>
-                <p class="text-ink/60 max-w-md mx-auto">
-                    Nous préparons une sélection d'ouvrages exceptionnels pour vous.
-                </p>
-            </div>
-        {% endif %}
-    </div>
-</section>
+            </section>
 
-{# Values Section #}
-<section class="py-20 lg:py-28 bg-cream">
-    <div class="container">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {# Value 1 #}
-            <div class="text-center p-6 lg:p-8">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                        <path d="M2 17l10 5 10-5"/>
-                        <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                </div>
-                <h3 class="font-display text-xl font-semibold text-ink mb-3">Sélection exigeante</h3>
-                <p class="text-ink/60 leading-relaxed">
-                    Chaque ouvrage est choisi pour sa qualité littéraire et son apport au lecteur.
-                </p>
-            </div>
+            <section class="mt-8 bg-[#1735D0] px-6 py-10 text-white shadow-[0_18px_42px_rgba(6,27,176,0.18)] md:px-8 md:py-12" style="border-radius:2.4rem;">
+                <p class="text-xs uppercase tracking-[0.26em] text-white/64">Newsletter</p>
+                <div class="home-owner-grid-2 mt-6 items-center">
+                    <div>
+                        <p style="font-family:var(--font-display);font-size:2.2rem;line-height:1.08;">
+                            Recevoir les parutions, appels et nouvelles de la maison.
+                        </p>
+                        <p class="mt-5 text-white/80" style="font-size:1rem;line-height:1.75;">
+                            On garde le lien direct avec les lectrices, lecteurs, auteurs et allié.e.s de Siyaj.
+                        </p>
+                    </div>
 
-            {# Value 2 #}
-            <div class="text-center p-6 lg:p-8">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
+                    <div class="rounded-[2rem] border border-white/10 p-5" style="background:rgba(255,255,255,0.08);backdrop-filter: blur(10px);">
+                        {{ form_start(newsletterForm, {'attr': {'class': 'space-y-4'}}) }}
+                            {{ form_widget(newsletterForm.email, {'attr': {'class': '!rounded-full !px-5 !py-4 !text-white', 'style': 'border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);', 'placeholder': 'Votre adresse email'}}) }}
+                            <div aria-hidden="true">
+                                {{ form_widget(newsletterForm.company) }}
+                            </div>
+                            <button type="submit" class="inline-flex w-full items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] transition hover:bg-[rgba(255,255,255,0.92)]" style="color:#061BB0;">
+                                S'inscrire à la newsletter
+                            </button>
+                        {{ form_end(newsletterForm) }}
+                    </div>
                 </div>
-                <h3 class="font-display text-xl font-semibold text-ink mb-3">Passion du livre</h3>
-                <p class="text-ink/60 leading-relaxed">
-                    Une équipe de passionnés au service de la littérature et des auteurs.
-                </p>
-            </div>
-
-            {# Value 3 #}
-            <div class="text-center p-6 lg:p-8">
-                <div class="w-16 h-16 mx-auto mb-6 rounded-2xl bg-white shadow-lg flex items-center justify-center text-gold">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                        <rect x="1" y="3" width="15" height="13"/>
-                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-                        <circle cx="5.5" cy="18.5" r="2.5"/>
-                        <circle cx="18.5" cy="18.5" r="2.5"/>
-                    </svg>
-                </div>
-                <h3 class="font-display text-xl font-semibold text-ink mb-3">Livraison soignée</h3>
-                <p class="text-ink/60 leading-relaxed">
-                    Vos commandes préparées avec soin et expédiées rapidement.
-                </p>
-            </div>
+            </section>
         </div>
     </div>
-</section>
-
-{# Newsletter Section #}
-<section class="py-20 lg:py-28 bg-ink text-white relative overflow-hidden">
-    {# Background Pattern #}
-    <div class="absolute inset-0 opacity-5">
-        <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=&quot;60&quot; height=&quot;60&quot; viewBox=&quot;0 0 60 60&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;%3E%3Cg fill=&quot;none&quot; fill-rule=&quot;evenodd&quot;%3E%3Cg fill=&quot;%23ffffff&quot; fill-opacity=&quot;1&quot;%3E%3Cpath d=&quot;M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z&quot;/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
-    </div>
-
-    <div class="container relative">
-        <div class="max-w-2xl mx-auto text-center">
-            <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-4">
-                Newsletter
-            </span>
-            <h2 class="font-display text-3xl sm:text-4xl font-semibold mb-4">
-                Restez informé
-            </h2>
-            <p class="text-white/60 mb-8 leading-relaxed">
-                Inscrivez-vous pour recevoir nos nouveautés, recommandations et offres exclusives.
-            </p>
-            {{ form_start(newsletterForm, {'attr': {'class': 'flex flex-col sm:flex-row gap-3 max-w-md mx-auto'}}) }}
-                {{ form_widget(newsletterForm.email) }}
-                <div aria-hidden="true">
-                    {{ form_widget(newsletterForm.company) }}
-                </div>
-                <button type="submit" class="btn btn-gold px-6 py-3.5 whitespace-nowrap">
-                    S'inscrire
-                </button>
-            {{ form_end(newsletterForm) }}
-        </div>
-    </div>
-</section>
 {% endblock %}

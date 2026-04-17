@@ -4,7 +4,7 @@
 
 {% block body %}
 {# Header #}
-<section class="bg-gradient-to-br from-paper to-cream py-12 lg:py-16">
+<section class="bg-[#F7F4ED] py-12 lg:py-16">
     <div class="container text-center">
         <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
             Votre sélection
@@ -16,7 +16,7 @@
 </section>
 
 {# Content #}
-<section class="py-12 lg:py-16">
+<section class="bg-[#F7F4ED] py-12 lg:py-16">
     <div class="container">
         {% if cart is empty %}
             {# Empty Cart #}
@@ -40,7 +40,7 @@
                 {# Cart Items #}
                 <div class="lg:col-span-2 space-y-4">
                     {% for item in cart %}
-                        <article class="bg-white rounded-2xl border border-black/5 p-4 sm:p-6 transition-shadow duration-200 hover:shadow-lg">
+                        <article class="rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white p-4 shadow-sm transition-shadow duration-200 hover:shadow-md sm:p-6">
                             <div class="flex gap-4 sm:gap-6">
                                 {# Cover #}
                                 <div class="flex-shrink-0 w-20 h-28 sm:w-24 sm:h-32 rounded-lg overflow-hidden bg-cream">
@@ -117,7 +117,7 @@
 
                 {# Summary Sidebar #}
                 <aside class="lg:sticky lg:top-24">
-                    <div class="bg-white rounded-2xl border border-black/5 p-6 shadow-sm">
+                    <div class="rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white p-6 shadow-sm">
                         <h2 class="font-display text-xl font-semibold text-ink mb-6 pb-4 border-b border-black/5">
                             Récapitulatif
                         </h2>

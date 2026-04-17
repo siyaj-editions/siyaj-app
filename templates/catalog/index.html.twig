@@ -42,17 +42,42 @@
 
 {% block body %}
 {# Header #}
-<section class="bg-gradient-to-br from-paper to-cream py-16 lg:py-20">
-    <div class="container text-center">
-        <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
-            Notre collection
-        </span>
-        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold text-ink mb-4">
-            Catalogue
-        </h1>
-        <p class="text-lg text-ink/60 max-w-2xl mx-auto">
-            Explorez notre sélection d'ouvrages littéraires
-        </p>
+<section class="py-6 md:py-10">
+    <div class="container">
+        <div class="overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
+            <div class="relative overflow-hidden px-6 py-10 text-center md:px-8 md:py-12 lg:px-10 lg:py-16" style="min-height:22rem;">
+                <img
+                    src="{{ asset('images/home/hero-home.jpg') }}"
+                    alt="Univers éditorial du catalogue SIYAJ"
+                    class="absolute inset-0 h-full w-full object-cover"
+                    loading="eager"
+                    decoding="async"
+                >
+                <div class="absolute inset-0 bg-[rgba(0,0,0,0.58)]"></div>
+                <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.18),rgba(0,0,0,0.48))]"></div>
+
+                <div class="relative z-10 mx-auto flex min-h-[15rem] max-w-3xl flex-col items-center justify-center">
+                    <p class="text-white/75" style="font-size:11px;letter-spacing:0.06em;">
+                        Notre collection
+                    </p>
+                    <h1 class="mt-2 text-[#EB5A27]" style="font-family: var(--font-display);font-size:3.2rem;line-height:0.95;">
+                        Catalogue
+                    </h1>
+                    <p class="mt-5 max-w-2xl text-white/88" style="font-size:1.02rem;line-height:1.8;">
+                        Explorez notre sélection d’ouvrages littéraires et laissez-vous guider par des voix, des formes et des imaginaires qui prolongent la ligne éditoriale de la maison.
+                    </p>
+
+                    <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+                        <a href="#search" class="inline-flex items-center justify-center rounded-full bg-[#0C4EDD] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#061BB0]">
+                            Rechercher
+                        </a>
+                        <a href="#catalog-grid" class="inline-flex items-center justify-center rounded-full border border-white/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#061BB0]">
+                            Voir les ouvrages
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -241,85 +266,12 @@
 
         {% if books|length > 0 %}
             {# Books Grid #}
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
+            <div id="catalog-grid" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-12">
                 {% for book in books %}
-                    <article class="group">
-                        <div class="card catalog-book-card h-full flex flex-col">
-                            {# Cover #}
-                            <div class="relative aspect-book overflow-hidden bg-cream">
-                                {% if book.coverImage %}
-                                    <img
-                                        src="{{ book.coverImage }}"
-                                        alt="{{ book.title }}"
-                                        loading="lazy"
-                                        decoding="async"
-                                        referrerpolicy="no-referrer"
-                                        class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                    >
-                                {% else %}
-                                    <div class="w-full h-full flex items-center justify-center text-ink/20">
-                                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
-                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                                        </svg>
-                                    </div>
-                                {% endif %}
-
-                                {# Format Badge #}
-                                {% if book.format.value == 'digital' %}
-                                    <span class="absolute top-3 left-3 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider bg-ink text-white rounded-md z-10">
-                                        Numérique
-                                    </span>
-                                {% endif %}
-
-                                {# Overlay #}
-                                <div class="absolute inset-0 bg-ink/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}" class="btn btn-gold px-5 py-2.5 text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                        Découvrir
-                                    </a>
-                                </div>
-                            </div>
-
-                            {# Content #}
-                            <div class="p-3 sm:p-4 lg:p-5 flex flex-col flex-1">
-                                <h3 class="font-display text-base lg:text-lg font-semibold text-ink mb-1 line-clamp-2 group-hover:text-gold transition-colors duration-200">
-                                    <a href="{{ path('app_book_show', {slug: book.slug}) }}">
-                                        {{ book.title }}
-                                    </a>
-                                </h3>
-                                <p class="text-xs lg:text-sm text-ink/50 mb-3 lg:mb-4 line-clamp-1">{{ book.authorsNames }}</p>
-                                {% if book.genres|length > 0 %}
-                                    <div class="mb-3 flex flex-wrap gap-1.5">
-                                        {% for genre in book.genres|slice(0, 2) %}
-                                            <span class="inline-flex rounded-full bg-cream px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-ink/60">
-                                                {{ genre.name }}
-                                            </span>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-
-                                <div class="mobile-book-meta mt-auto pt-3 lg:pt-4 border-t border-black/5 flex items-center justify-between gap-2 sm:px-0 sm:pb-0">
-                                    <span class="mobile-book-price font-display text-sm sm:text-base lg:text-xl font-semibold text-ink">
-                                        {{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €
-                                    </span>
-
-                                    {% if book.isInStock %}
-                                        <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post" class="shrink-0">
-                                            <button type="submit" class="mobile-book-add sm:w-9 sm:h-9 lg:w-10 lg:h-10 rounded-full border-2 border-ink text-ink hover:bg-ink hover:text-white flex items-center justify-center transition-all duration-200" title="Ajouter au panier">
-                                                <svg class="sm:w-4 sm:h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <span class="text-[10px] lg:text-xs font-medium text-ink/40 uppercase tracking-wider">
-                                            Indisponible
-                                        </span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                    </article>
+                    {{ include('components/book_card.html.twig', {
+                        book: book,
+                        variant: 'catalog'
+                    }) }}
                 {% endfor %}
             </div>
 

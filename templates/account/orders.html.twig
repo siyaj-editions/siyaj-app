@@ -4,7 +4,7 @@
 
 {% block body %}
 {# Header #}
-<section class="bg-gradient-to-br from-paper to-cream py-12 lg:py-16">
+<section class="bg-[#F7F4ED] py-12 lg:py-16">
     <div class="container">
         <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
             Espace personnel
@@ -19,59 +19,17 @@
 </section>
 
 {# Content #}
-<section class="py-12 lg:py-16">
+<section class="bg-[#F7F4ED] py-12 lg:py-16">
     <div class="container">
         <div class="grid lg:grid-cols-4 gap-8 lg:gap-12 items-start">
-            {# Sidebar Navigation #}
-            <aside class="lg:sticky lg:top-24">
-                <nav class="bg-white rounded-2xl border border-black/5 overflow-hidden">
-                    <a href="{{ path('app_account') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                            <polyline points="9 22 9 12 15 12 15 22"/>
-                        </svg>
-                        Tableau de bord
-                    </a>
-                    <a href="{{ path('app_account_profile') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                        Mon profil
-                    </a>
-                    <a href="{{ path('app_account_orders') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium bg-ink text-white border-b border-black/5 transition-all duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                        </svg>
-                        Mes commandes
-                    </a>
-                    <a href="{{ path('app_account_address') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-ink/70 hover:text-ink hover:bg-cream border-b border-black/5 transition-all duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                            <path d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"/>
-                            <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        Mon adresse
-                    </a>
-                    <a href="{{ path('app_logout') }}" class="flex items-center gap-3 px-5 py-4 text-sm font-medium text-wine hover:bg-wine/5 transition-all duration-200">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                            <polyline points="16 17 21 12 16 7"/>
-                            <line x1="21" y1="12" x2="9" y2="12"/>
-                        </svg>
-                        Déconnexion
-                    </a>
-                </nav>
-            </aside>
+            {{ include('account/_sidebar.html.twig') }}
 
             {# Main Content #}
             <main class="lg:col-span-3">
                 {% if orders|length > 0 %}
                     <div class="space-y-4">
                         {% for order in orders %}
-                            <div class="bg-white rounded-2xl border border-black/5 overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                            <div class="overflow-hidden rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white shadow-sm transition-shadow duration-300 hover:shadow-md">
                                 {# Order Header #}
                                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-black/5">
                                     <div>
@@ -124,7 +82,7 @@
                     </div>
                 {% else %}
                     {# Empty State #}
-                    <div class="text-center py-16 bg-white rounded-2xl border border-black/5">
+                    <div class="rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white py-16 text-center shadow-sm">
                         <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-cream flex items-center justify-center text-ink/20">
                             <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>

@@ -3,121 +3,102 @@
 {% block title %}Connexion - SIYAJ Éditions{% endblock %}
 
 {% block body %}
-<section class="min-h-[calc(100vh-200px)] flex items-center py-12 lg:py-16 bg-paper">
-    <div class="container">
-        <div class="grid lg:grid-cols-2 max-w-5xl mx-auto bg-white rounded-2xl overflow-hidden shadow-2xl">
-            {# Form Side #}
-            <div class="p-8 lg:p-12">
-                <div class="mb-8">
-                    <h1 class="font-display text-3xl lg:text-4xl font-semibold text-ink mb-2">Connexion</h1>
-                    <p class="text-ink/60">Accédez à votre espace personnel</p>
+    <div class="bg-[#F7F4ED] text-[#061BB0]">
+        <section class="container py-12 lg:py-16">
+            <div class="mx-auto grid max-w-6xl overflow-hidden rounded-[2.5rem] border border-[rgba(6,27,176,0.08)] bg-white shadow-[0_24px_54px_rgba(6,27,176,0.08)] lg:grid-cols-[0.95fr_1.05fr]">
+                <div class="p-8 lg:p-10">
+                    <div class="mb-8">
+                        <p class="section-kicker">Connexion</p>
+                        <h1 class="editorial-title-md mt-3 text-[3.4rem]">Votre espace lecture</h1>
+                        <p class="editorial-copy-soft mt-4">Accédez à votre espace personnel et à votre suivi de commandes.</p>
+                    </div>
+
+                    {% if error %}
+                        <div class="mb-6 flex items-start gap-3 rounded-[1.25rem] border border-[rgba(235,90,39,0.24)] bg-[rgba(235,90,39,0.08)] p-4 text-sm text-[#EB5A27]">
+                            <svg class="mt-0.5 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" class="space-y-5">
+                        <div>
+                            <label for="inputEmail" class="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]">
+                                Adresse email
+                            </label>
+                            <input
+                                type="email"
+                                value="{{ last_username }}"
+                                name="_username"
+                                id="inputEmail"
+                                class="w-full"
+                                autocomplete="email"
+                                required
+                                autofocus
+                                placeholder="votre@email.com"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="inputPassword" class="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]">
+                                Mot de passe
+                            </label>
+                            <input
+                                type="password"
+                                name="_password"
+                                id="inputPassword"
+                                class="w-full"
+                                autocomplete="current-password"
+                                required
+                                placeholder="Votre mot de passe"
+                            >
+                        </div>
+
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                        <button type="submit" class="editorial-cta-primary w-full">
+                            Se connecter
+                        </button>
+                    </form>
+
+                    <div class="mt-8 border-t border-[rgba(6,27,176,0.08)] pt-6 text-center">
+                        <p class="text-sm text-[rgba(6,27,176,0.55)]">Vous n'avez pas de compte ?</p>
+                        <a href="{{ path('app_register') }}" class="mt-2 inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-[#EB5A27] transition hover:text-[#061BB0]">
+                            Créer un compte
+                        </a>
+                    </div>
                 </div>
 
-                {% if error %}
-                    <div class="flex items-center gap-3 p-4 mb-6 bg-wine/10 border border-wine/20 rounded-xl text-wine text-sm">
-                        <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <line x1="12" y1="8" x2="12" y2="12"/>
-                            <line x1="12" y1="16" x2="12.01" y2="16"/>
-                        </svg>
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
+                <div class="relative hidden overflow-hidden lg:block p-10 text-white">
+                    <img
+                        src="{{ asset('images/auth/login-panel.jpg') }}"
+                        alt="Univers de lecture Siyaj"
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                    <div class="absolute inset-0 bg-[rgba(6,27,176,0.5)]"></div>
+                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.26),rgba(0,0,0,0.44))]"></div>
+                    <div class="relative z-10 flex h-full flex-col justify-between">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.24em] text-white/60">SIYAJ Éditions</p>
+                            <h2 class="mt-5 text-4xl">Un accès simple à votre univers de lecture.</h2>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(6,27,176,0.28);backdrop-filter:blur(10px);">
+                                <p class="text-sm leading-7 text-white/82">Suivez vos commandes, retrouvez vos achats et gardez un accès fluide à votre espace lecteur.</p>
+                            </div>
+                            <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(6,27,176,0.28);backdrop-filter:blur(10px);">
+                                <p class="text-sm leading-7 text-white/82">Une expérience claire, soignée et cohérente avec le reste du site.</p>
+                            </div>
+                        </div>
                     </div>
-                {% endif %}
-
-                <form method="post" class="space-y-5">
-                    <div>
-                        <label for="inputEmail" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
-                            Adresse email
-                        </label>
-                        <input
-                            type="email"
-                            value="{{ last_username }}"
-                            name="_username"
-                            id="inputEmail"
-                            class="w-full px-4 py-3.5 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none"
-                            autocomplete="email"
-                            required
-                            autofocus
-                            placeholder="votre@email.com"
-                        >
-                    </div>
-
-                    <div>
-                        <label for="inputPassword" class="block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2">
-                            Mot de passe
-                        </label>
-                        <input
-                            type="password"
-                            name="_password"
-                            id="inputPassword"
-                            class="w-full px-4 py-3.5 rounded-xl border border-black/10 bg-paper focus:bg-white focus:border-gold focus:ring-2 focus:ring-gold/20 transition-all duration-200 outline-none"
-                            autocomplete="current-password"
-                            required
-                            placeholder="Votre mot de passe"
-                        >
-                    </div>
-
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-                    <button type="submit" class="btn btn-primary w-full py-4 justify-center text-base">
-                        Se connecter
-                    </button>
-                </form>
-
-                <div class="mt-8 pt-6 border-t border-black/5 text-center">
-                    <p class="text-sm text-ink/50 mb-2">Vous n'avez pas de compte ?</p>
-                    <a href="{{ path('app_register') }}" class="text-gold font-semibold hover:text-ink transition-colors duration-200">
-                        Créer un compte
-                    </a>
                 </div>
             </div>
-
-            {# Visual Side #}
-            <div class="hidden lg:flex items-center justify-center p-12 bg-gradient-to-br from-ink to-ink/90 relative overflow-hidden">
-                {# Pattern Background #}
-                <div class="absolute inset-0 opacity-5">
-                    <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
-                        </pattern>
-                        <rect width="100%" height="100%" fill="url(#grid)" />
-                    </svg>
-                </div>
-
-                <div class="relative z-10 text-white text-center max-w-sm">
-                    <span class="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-gold mb-4">
-                        SIYAJ Éditions
-                    </span>
-                    <h2 class="font-display text-2xl lg:text-3xl font-semibold mb-4">
-                        Votre espace lecture
-                    </h2>
-                    <p class="text-white/70 leading-relaxed mb-8">
-                        Connectez-vous pour accéder à votre historique de commandes, suivre vos achats et profiter d'une expérience personnalisée.
-                    </p>
-
-                    <ul class="space-y-3 text-left">
-                        <li class="flex items-center gap-3 text-sm text-white/80">
-                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                            Suivez vos commandes
-                        </li>
-                        <li class="flex items-center gap-3 text-sm text-white/80">
-                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                            Paiement sécurisé
-                        </li>
-                        <li class="flex items-center gap-3 text-sm text-white/80">
-                            <svg class="w-5 h-5 text-gold flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                <polyline points="20 6 9 17 4 12"/>
-                            </svg>
-                            Accès à vos achats numériques
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        </section>
     </div>
-</section>
 {% endblock %}

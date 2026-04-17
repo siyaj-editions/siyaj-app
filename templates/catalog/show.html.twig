@@ -2,84 +2,121 @@
 
 {% block title %}{{ book.title }} - SIYAJ{% endblock %}
 
-{% block body %}
-<section class="relative py-12 md:py-16">
-    <div class="container">
-        <div class="mb-8">
-            <a href="{{ path('app_catalog') }}" class="inline-flex items-center gap-2 text-sm text-sage hover:text-gold transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Retour au catalogue
-            </a>
-        </div>
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .book-shell {
+            --book-blue: #061BB0;
+            --book-blue-soft: #0C4EDD;
+            --book-orange: #EB5A27;
+            --book-gold: #8B6B2E;
+            --book-cream: #F7F4ED;
+            --book-title: 'Cormorant Garamond', Georgia, serif;
+            --book-body: 'Outfit', system-ui, sans-serif;
+            background: var(--book-cream);
+            color: var(--book-blue);
+        }
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12">
-            <div class="lg:col-span-5">
-                <div class="sticky top-28">
-                    {% if book.coverImage %}
-                        <div class="card overflow-hidden">
-                            <img src="{{ book.coverImage }}" alt="{{ book.title }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="w-full aspect-book object-cover">
-                        </div>
-                    {% else %}
-                        <div class="card aspect-book bg-cream flex items-center justify-center text-sage">
-                            <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.483 9.246 5 7.5 5S4.168 5.483 3 6.253v13C4.168 18.483 5.754 18 7.5 18s3.332.483 4.5 1.253m0-13C13.168 5.483 14.754 5 16.5 5s3.332.483 4.5 1.253v13C19.832 18.483 18.246 18 16.5 18s-3.332.483-4.5 1.253"></path>
-                            </svg>
-                        </div>
-                    {% endif %}
-                </div>
+        .book-shell h1,
+        .book-shell h2,
+        .book-shell h3 {
+            font-family: var(--book-title);
+        }
+
+        .book-shell p,
+        .book-shell a,
+        .book-shell span,
+        .book-shell button {
+            font-family: var(--book-body);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="book-shell">
+        <section class="container py-12 lg:py-20">
+            <div class="mb-8">
+                <a href="{{ path('app_catalog') }}" class="inline-flex items-center gap-2 text-sm text-[rgba(6,27,176,0.6)] transition hover:text-[var(--book-orange)]">
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Retour au catalogue
+                </a>
             </div>
 
-            <div class="lg:col-span-7">
-                <article class="card p-6 md:p-8 xl:p-10 space-y-6">
-                    <header class="space-y-3">
-                        <p class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-cream text-sage">{{ book.format.label }}</p>
-                        <h1 class="text-4xl md:text-5xl text-ink">{{ book.title }}</h1>
-                        <p class="text-lg text-sage">Par {{ book.authorsNames }}</p>
+            <div class="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
+                <div>
+                    <div class="sticky top-28 overflow-hidden rounded-[2.4rem] border border-[rgba(6,27,176,0.08)] bg-white p-4 shadow-2xl">
+                        {% if book.coverImage %}
+                            <img src="{{ book.coverImage }}" alt="{{ book.title }}" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="aspect-[4/5] w-full rounded-[1.9rem] object-cover">
+                        {% else %}
+                            <div class="flex aspect-[4/5] items-center justify-center rounded-[1.9rem] bg-[rgba(6,27,176,0.06)] text-[rgba(6,27,176,0.24)]">
+                                <svg class="h-24 w-24" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.483 9.246 5 7.5 5S4.168 5.483 3 6.253v13C4.168 18.483 5.754 18 7.5 18s3.332.483 4.5 1.253m0-13C13.168 5.483 14.754 5 16.5 5s3.332.483 4.5 1.253v13C19.832 18.483 18.246 18 16.5 18s-3.332.483-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <article class="rounded-[2.4rem] border border-[rgba(6,27,176,0.08)] bg-white/82 p-8 shadow-xl lg:p-10">
+                    <header class="space-y-4">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <p class="inline-flex items-center rounded-full bg-[rgba(6,27,176,0.08)] px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--book-blue)]">
+                                {{ book.format.label }}
+                            </p>
+                            {% if book.genres|length > 0 %}
+                                {% for genre in book.genres|slice(0, 2) %}
+                                    <span class="inline-flex rounded-full border border-[rgba(6,27,176,0.1)] bg-[rgba(247,244,237,0.85)] px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.65)]">
+                                        {{ genre.name }}
+                                    </span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+
+                        <h1 class="text-5xl leading-[0.96] text-[var(--book-blue)] md:text-6xl">{{ book.title }}</h1>
+                        <p class="text-lg text-[color:rgba(6,27,176,0.72)]">Par {{ book.authorsNames }}</p>
                     </header>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                        <div class="rounded-xl bg-paper px-4 py-3 text-ink/80">
-                            <span class="text-ink/50">ISBN:</span> {{ book.isbn ?? 'N/A' }}
+                    <div class="mt-8 grid gap-3 text-sm sm:grid-cols-2">
+                        <div class="rounded-[1.4rem] bg-[rgba(247,244,237,0.9)] px-5 py-4 text-[rgba(6,27,176,0.78)]">
+                            <span class="block text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.46)]">ISBN</span>
+                            <span class="mt-2 block">{{ book.isbn ?? 'À venir' }}</span>
                         </div>
-                        <div class="rounded-xl bg-paper px-4 py-3 text-ink/80">
-                            <span class="text-ink/50">Disponibilité:</span> {{ book.isInStock ? 'En stock' : 'Rupture' }}
+                        <div class="rounded-[1.4rem] bg-[rgba(247,244,237,0.9)] px-5 py-4 text-[rgba(6,27,176,0.78)]">
+                            <span class="block text-[10px] font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.46)]">Disponibilité</span>
+                            <span class="mt-2 block">{{ book.isInStock ? 'En stock' : 'Rupture' }}</span>
                         </div>
                     </div>
 
-                    <div class="pt-1">
-                        <p class="text-4xl text-gold">{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</p>
+                    <div class="mt-8">
+                        <p class="text-4xl text-[var(--book-gold)]">{{ (book.priceCents / 100)|number_format(2, ',', ' ') }} €</p>
                     </div>
 
                     {% if book.description %}
-                        <section class="space-y-3">
-                            <h2 class="text-2xl text-ink">Description</h2>
-                            <div class="prose prose-sm max-w-none text-ink/80">
+                        <section class="mt-10 space-y-4">
+                            <h2 class="text-3xl text-[var(--book-blue)]">Description</h2>
+                            <div class="max-w-none text-base leading-8 text-[color:rgba(6,27,176,0.78)]">
                                 <p>{{ book.description|nl2br }}</p>
                             </div>
                         </section>
                     {% endif %}
 
-                    <div class="pt-2">
+                    <div class="mt-10">
                         {% if book.isInStock %}
                             <form action="{{ path('app_cart_add', {id: book.id}) }}" method="post">
-                                <button type="submit" class="btn btn-primary w-full sm:w-auto px-8 py-4">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2m0 0L7 13h10l3-8H5.4zM7 13l-1.34 2.68A1 1 0 006.55 17h10.9a1 1 0 00.89-1.45L17 13M7 13h10M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"></path>
-                                    </svg>
+                                <button type="submit" class="inline-flex w-full items-center justify-center rounded-full bg-[var(--book-blue-soft)] px-8 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-white shadow-lg shadow-[rgba(12,78,221,0.2)] transition hover:bg-[var(--book-blue)] sm:w-auto">
                                     Ajouter au panier
                                 </button>
                             </form>
                         {% else %}
-                            <button class="btn w-full sm:w-auto px-8 py-4 bg-ink/10 text-ink/45 cursor-not-allowed" disabled>
+                            <button class="inline-flex w-full cursor-not-allowed items-center justify-center rounded-full bg-[rgba(6,27,176,0.08)] px-8 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-[rgba(6,27,176,0.42)] sm:w-auto" disabled>
                                 Rupture de stock
                             </button>
                         {% endif %}
                     </div>
                 </article>
             </div>
-        </div>
+        </section>
     </div>
-</section>
 {% endblock %}

@@ -2,38 +2,413 @@
 
 {% block title %}À propos - SIYAJ Éditions{% endblock %}
 
-{% block body %}
-<section class="bg-gradient-to-br from-paper to-cream py-10 lg:py-10">
-    <div class="container text-center">
-        <img src="{{ asset('logo-v2.png') }}" alt="SIYAJ" class="h-24 lg:h-34 w-auto mx-auto mb-8" style="height: 15rem;">
-        <!-- <span class="inline-block text-xs font-semibold tracking-[0.25em] uppercase text-gold mb-3">
-            Notre maison
-        </span>-->
-        <h1 class="font-display text-4xl lg:text-5xl text-ink mb-4">À propos de SIYAJ Éditions</h1>
-        <p class="text-lg text-ink/60 max-w-2xl mx-auto">
-            Une maison d’édition indépendante dédiée à la littérature exigeante et vivante.
-        </p>
-    </div>
-</section>
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .about-owner-shell {
+            max-width: 30rem;
+        }
 
-<section class="py-14 lg:py-20">
-    <div class="container">
-        <div class="max-w-3xl mx-auto card p-8 lg:p-10 space-y-6">
-            <p class="text-ink/80 leading-relaxed">
-                SIYAJ Éditions publie des textes qui éclairent notre époque et transmettent des voix fortes.
-                Nous sélectionnons chaque ouvrage pour sa qualité d’écriture, sa profondeur et sa capacité
-                à créer un lien durable avec les lectrices et les lecteurs.
-            </p>
-            <p class="text-ink/80 leading-relaxed">
-                Notre ligne éditoriale repose sur trois engagements: accompagner les auteurs avec rigueur,
-                proposer des livres soignés dans leur fond comme dans leur forme, et offrir une expérience
-                de lecture accessible, en papier comme en numérique.
-            </p>
-            <p class="text-ink/80 leading-relaxed">
-                Chez SIYAJ, nous croyons qu’un livre peut ouvrir un horizon, transmettre une mémoire
-                et transformer un regard. C’est cette conviction qui guide chaque publication.
-            </p>
+        .about-owner-hero {
+            min-height: 22rem;
+        }
+
+        .about-owner-hero-content {
+            min-height: 17rem;
+        }
+
+        .about-owner-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .about-owner-grid-founders {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        .about-owner-grid-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .about-owner-founders-copy {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .about-owner-founders-lead {
+            font-size: 1.12rem;
+            line-height: 1.65;
+            font-weight: 600;
+            max-width: 28rem;
+        }
+
+        @media (min-width: 768px) {
+            .about-owner-shell {
+                max-width: 46rem;
+                padding-top: 2.5rem;
+                padding-bottom: 3rem;
+            }
+
+            .about-owner-hero {
+                min-height: 25rem;
+            }
+
+            .about-owner-hero-content {
+                min-height: 20rem;
+            }
+
+            .about-owner-hero-title {
+                font-size: 4.1rem !important;
+            }
+
+            .about-owner-hero-subtitle {
+                max-width: 30rem;
+                font-size: 0.82rem !important;
+                line-height: 1.7 !important;
+            }
+
+            .about-owner-section {
+                padding-left: 0.35rem;
+                padding-right: 0.35rem;
+            }
+
+            .about-owner-grid-2 {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+
+            .about-owner-grid-founders {
+                grid-template-columns: 1fr;
+                gap: 1.4rem;
+            }
+
+            .about-owner-grid-cards {
+                grid-template-columns: 0.92fr 1.08fr;
+            }
+
+            .about-owner-founders-lead {
+                font-size: 1.28rem;
+                line-height: 1.7;
+            }
+
+            .about-owner-body-lg {
+                font-size: 1.16rem !important;
+                line-height: 1.65 !important;
+            }
+
+            .about-owner-body-md {
+                font-size: 1rem !important;
+                line-height: 1.8 !important;
+            }
+
+            .about-owner-mini {
+                font-size: 0.86rem !important;
+                line-height: 1.72 !important;
+            }
+
+            .about-owner-card-image {
+                height: 12rem !important;
+            }
+
+            .about-owner-card-image-small {
+                height: 12.5rem !important;
+            }
+
+            .about-owner-quote {
+                padding: 3rem 2.25rem;
+            }
+
+            .about-owner-quote-text {
+                font-size: 1.55rem !important;
+                line-height: 1.65 !important;
+            }
+
+            .about-owner-final-title {
+                max-width: 34rem;
+                font-size: 1.35rem !important;
+                line-height: 1.8 !important;
+            }
+
+            .about-owner-final-copy {
+                max-width: 38rem;
+                font-size: 0.92rem !important;
+                line-height: 1.75 !important;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .about-owner-shell {
+                max-width: 72rem;
+                padding-top: 3.25rem;
+                padding-bottom: 4.25rem;
+            }
+
+            .about-owner-hero {
+                min-height: 32rem;
+            }
+
+            .about-owner-hero-content {
+                min-height: 25rem;
+            }
+
+            .about-owner-hero-title {
+                font-size: 5.2rem !important;
+            }
+
+            .about-owner-hero-subtitle {
+                max-width: 34rem;
+                font-size: 0.9rem !important;
+            }
+
+            .about-owner-section {
+                padding-left: 0.6rem;
+                padding-right: 0.6rem;
+            }
+
+            .about-owner-grid-2 {
+                gap: 3.5rem;
+            }
+
+            .about-owner-grid-founders {
+                grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+                gap: 2.5rem;
+                align-items: stretch;
+            }
+
+            .about-owner-grid-cards {
+                gap: 1.2rem;
+            }
+
+            .about-owner-founders-copy {
+                min-height: 100%;
+                justify-content: flex-start;
+                padding-right: 1.25rem;
+            }
+
+            .about-owner-founders-lead {
+                font-size: 1.6rem;
+                line-height: 1.72;
+                max-width: 30rem;
+            }
+
+            .about-owner-body-lg {
+                font-size: 1.5rem !important;
+                line-height: 1.45 !important;
+            }
+
+            .about-owner-body-md {
+                font-size: 1.08rem !important;
+                line-height: 1.85 !important;
+            }
+
+            .about-owner-mini {
+                font-size: 0.95rem !important;
+                line-height: 1.8 !important;
+            }
+
+            .about-owner-card-image {
+                height: 17rem !important;
+            }
+
+            .about-owner-card-image-small {
+                height: 17.5rem !important;
+            }
+
+            .about-owner-quote {
+                margin-top: 4rem;
+                padding: 4.5rem 3.75rem;
+            }
+
+            .about-owner-quote-text {
+                font-size: 2.3rem !important;
+                line-height: 1.5 !important;
+            }
+
+            .about-owner-final {
+                padding-top: 4.5rem;
+                padding-bottom: 4.5rem;
+            }
+
+            .about-owner-final-title {
+                max-width: 52rem;
+                font-size: 1.9rem !important;
+                line-height: 1.8 !important;
+            }
+
+            .about-owner-final-copy {
+                max-width: 56rem;
+                font-size: 1.05rem !important;
+                line-height: 1.8 !important;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div style="background:#F7F4ED;color:#061BB0;">
+        <div class="about-owner-shell mx-auto px-4 py-6 md:px-6 md:py-10">
+            <section class="overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
+                <div class="about-owner-hero relative overflow-hidden px-6 py-8 text-center md:px-8 md:py-10">
+                    <img
+                        src="{{ asset('images/about/about-owner-hero.jpg') }}"
+                        alt="Univers végétal de Siyaj Éditions"
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="eager"
+                        decoding="async"
+                    >
+                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.56)]"></div>
+                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.2),rgba(0,0,0,0.45))]"></div>
+
+                    <div class="about-owner-hero-content relative z-10 flex flex-col items-center justify-center">
+                        <p class="about-owner-hero-subtitle text-white/75" style="font-size:11px;letter-spacing:0.06em;">
+                            La première maison d'édition indépendante, féministe et décoloniale des Petites Antilles
+                        </p>
+                        <h1 class="about-owner-hero-title mt-2 text-[#EB5A27]" style="font-family: var(--font-display);font-size:3rem;line-height:0.95;">
+                            Rêver & résister
+                        </h1>
+
+                        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                            <a href="{{ path('app_catalog') }}" class="inline-flex items-center justify-center rounded-full bg-[#0C4EDD] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#061BB0]">
+                                Notre sélection
+                            </a>
+                            <a href="{{ path('app_contact') }}" class="inline-flex items-center justify-center rounded-full border border-white/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#061BB0]">
+                                Nous contacter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-owner-section px-2 py-8">
+                <p class="font-semibold uppercase text-[#EB5A27]" style="font-size:0.82rem;letter-spacing:0.06em;">
+                    SA NOU YÉ ?
+                </p>
+
+                <div class="about-owner-grid-2 mt-4">
+                    <div>
+                        <p class="about-owner-body-lg font-semibold uppercase text-[#061BB0]" style="font-size:1.02rem;line-height:1.5;">
+                            SIYAJ, la première maison d’édition indépendante antillaise, féministe et décoloniale, dédiée à la fiction et à la poésie contemporaines.
+                        </p>
+                        <p class="about-owner-body-md mt-4 font-semibold leading-7 text-[#F59A16]" style="font-size:0.95rem;">
+                            Nous voulons publier des ouvrages pour raconter, explorer, rêver, loin des injonctions à justifier ou expliquer nos existences.
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="flex gap-4 font-semibold text-[#5E74E9]" style="font-size:11px;">
+                            <span>Transmission</span>
+                            <span>Résister</span>
+                            <span>Rêver</span>
+                        </div>
+                        <p class="about-owner-body-md mt-4 leading-7 text-[#5E74E9]" style="font-size:0.92rem;">
+                            Une voix née sur un espace de création, de transmission et de résistance, qui accompagne des auteur.ice.s et artistes afro-descendant.e.s dans leurs récits.
+                        </p>
+                        <div class="mt-6 flex items-center justify-end gap-3">
+                            <a href="{{ path('app_author_manuscript_submit') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                                Je soumets mon manuscrit
+                            </a>
+                            <a href="{{ path('app_author_manuscript_submit') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-owner-section px-2 py-4">
+                <h2 class="font-semibold uppercase text-[#EB5A27]" style="font-size:1.45rem;letter-spacing:0.02em;line-height:1.15;">
+                    VOS COMPLICES DU MANUSCRIT À LA PUBLICATION
+                </h2>
+
+                <div class="about-owner-grid-founders mt-6">
+                    <div class="about-owner-founders-copy">
+                        <p class="italic text-[rgba(122,127,208,0.85)]" style="font-family:var(--font-display);font-size:1.05rem;line-height:1.35;">
+                            “Soutirèz : complice, entremetteur.ouse.<br>Soutirè : encourager, receler, aire de connivence.”
+                        </p>
+
+                        <p class="about-owner-founders-lead">
+                            <span class="text-[#F59A16]">Derrière Siyaj, il y a deux femmes qui se rêvent complices et facilitatrices</span>
+                            <span class="text-[#5E74E9]"> de l’émergence d’une littérature impertinente qui subliment nos réels et nous fournit des outils pour rêver nos futurs.</span>
+                        </p>
+
+                        <div class="flex items-center gap-4">
+                            <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                                Je parcours le catalogue
+                            </a>
+                            <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                                </svg>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="about-owner-grid-cards">
+                        <article class="overflow-hidden bg-[#F59A16] text-white" style="border-radius:1.7rem;">
+                            <img
+                                src="{{ asset('images/team/oriane-prevost.jpg') }}"
+                                alt="Oriane Prévost"
+                                class="about-owner-card-image w-full object-cover object-center"
+                                style="height:9rem;"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                            <div class="px-5 py-5 lg:px-6 lg:py-6">
+                                <p class="uppercase tracking-[0.14em] text-white/75" style="font-size:10px;">Oriane Prévost</p>
+                                <p class="mt-3 text-white" style="font-size:1rem;line-height:1.85;font-weight:500;">
+                                    Éditrice passionnée, j’aime les livres contemplatifs, qui explorent l’intime, ceux qui interrogent l’âme humaine et font résonner les émotions. Entre les pages de grands formats et de belles marges, je compte bien accompagner des auteurs de chez nous et d’ailleurs pour leur offrir un espace d’expression libre et exigeant.
+                                </p>
+                            </div>
+                        </article>
+
+                        <div class="grid gap-3">
+                            <article class="bg-[#EB5A27] px-5 py-5 text-white lg:px-6 lg:py-6" style="border-radius:1.7rem;">
+                                <p class="uppercase tracking-[0.14em] text-white/75" style="font-size:10px;">Réjane Pacquit</p>
+                                <p class="mt-3 text-white" style="font-size:1rem;line-height:1.85;font-weight:500;">
+                                    Artiste pluridisciplinaire et écrivaine, je suis convaincue que l’avenir des arts dans nos territoires se situe dans la création de ponts entre les disciplines mais aussi dans la visibilisation des voix minorisées et silenciées. Ma mission est d’accompagner des artistes et des auteur.ice.s dans l’élaboration de projets littéraires et artistiques qui cassent les codes et tracent de nouveaux sillons.
+                                </p>
+                            </article>
+
+                            <article class="overflow-hidden" style="border-radius:1.7rem;">
+                                <img
+                                    src="{{ asset('images/team/rejane-pacquit2.jpg') }}"
+                                    alt="Réjane Pacquit"
+                                    class="about-owner-card-image-small w-full object-cover object-center"
+                                    style="height:9.5rem;"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="about-owner-quote mt-8 bg-[#1735D0] px-6 py-10 text-white shadow-[0_18px_42px_rgba(6,27,176,0.18)] md:px-8 md:py-12" style="border-radius:2.4rem;">
+                <div class="leading-none text-[#F5D38B]" style="font-family: var(--font-display);font-size:5rem;">
+                    “
+                </div>
+                <p class="about-owner-quote-text -mt-3 text-center leading-8 text-white" style="font-family: var(--font-display);font-size:1.2rem;">
+                    “Vé pa, vé, on jou tout pèp ké kaskòdé.”
+                </p>
+            </section>
+
+            <section class="about-owner-final px-4 py-10 text-center">
+                <p class="about-owner-final-title mx-auto max-w-md italic leading-8 text-[#5E74E9]" style="font-family: var(--font-display);font-size:1.12rem;">
+                    En créole guadeloupéen, le verbe “kaskòdé” signifie “s’enfuir, sortir du système, prendre son indépendance”.
+                </p>
+                <p class="about-owner-final-copy mx-auto mt-6 max-w-lg leading-6 text-[#F59A16]" style="font-size:0.84rem;">
+                    Chez Siyaj, nous revendiquons un esprit “kaskòdé” : celui d’une démarche de subversion assumée des codes et des règles, de remise en question de nos biais dans une perspective d’émancipation.
+                </p>
+            </section>
         </div>
     </div>
-</section>
 {% endblock %}
