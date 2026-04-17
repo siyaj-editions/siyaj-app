@@ -1,0 +1,141 @@
+.manuscript-owner-shell {
+  max-width: 30rem;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  padding-block: 1.5rem;
+}
+
+.manuscript-owner-hero {
+  min-height: 22rem;
+}
+
+.manuscript-owner-hero-content {
+  min-height: 17rem;
+}
+
+.manuscript-owner-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.manuscript-owner-tags {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.manuscript-owner-tags span {
+  color: #3257ea;
+}
+
+.manuscript-owner-tags span:first-child {
+  color: #F59A16;
+}
+
+.manuscript-owner-tags-line {
+  position: relative;
+  margin-top: 0.7rem;
+  height: 3px;
+  width: 100%;
+  background: #3257ea;
+  border-radius: 999px;
+}
+
+.manuscript-owner-tags-line::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 5.5rem;
+  background: #F59A16;
+  border-radius: 999px;
+}
+
+.manuscript-owner-form {
+  margin-top: 2.5rem;
+}
+
+.manuscript-owner-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .manuscript-owner-shell {
+    max-width: 46rem;
+    padding-top: 2.5rem;
+    padding-bottom: 3rem;
+  }
+
+  .manuscript-owner-hero {
+    min-height: 24rem;
+  }
+
+  .manuscript-owner-hero-content {
+    min-height: 19rem;
+  }
+
+  .manuscript-owner-grid-2 {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .manuscript-owner-form-grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .manuscript-owner-tags {
+    gap: 1.8rem;
+  }
+
+  .manuscript-owner-hero-title {
+    font-size: 4.1rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .manuscript-owner-shell {
+    max-width: 72rem;
+    padding-top: 3.25rem;
+    padding-bottom: 4.25rem;
+  }
+
+  .manuscript-owner-hero {
+    min-height: 31rem;
+  }
+
+  .manuscript-owner-hero-content {
+    min-height: 24rem;
+  }
+
+  .manuscript-owner-hero-title {
+    font-size: 5.2rem !important;
+  }
+
+  .manuscript-owner-copy {
+    font-size: 1.12rem !important;
+    line-height: 1.82 !important;
+  }
+
+  .manuscript-owner-highlight {
+    font-size: 1.55rem !important;
+    line-height: 1.52 !important;
+  }
+
+  .manuscript-owner-tags {
+    gap: 2.4rem;
+    font-size: 1.35rem;
+  }
+
+  .manuscript-owner-tags-line::before {
+    width: 7rem;
+  }
+
+  .manuscript-owner-form {
+    margin-top: 3.25rem;
+  }
+}

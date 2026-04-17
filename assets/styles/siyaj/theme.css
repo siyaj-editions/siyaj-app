@@ -1,0 +1,16 @@
+/* SIYAJ Editorial Design System */
+@theme {
+  /* Colors */
+  --color-ink: #061BB0;
+  --color-paper: #F7F4ED;
+  --color-cream: #F7F4ED;
+  --color-gold: #8B6B2E;
+  --color-sage: #0C4EDD;
+  --color-wine: #EB5A27;
+  --color-sun: #FFA500;
+  --color-white: #ffffff;
+
+  /* Fonts */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Outfit', system-ui, sans-serif;
+}
