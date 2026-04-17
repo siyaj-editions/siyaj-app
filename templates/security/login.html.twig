@@ -72,18 +72,27 @@
                     </div>
                 </div>
 
-                <div class="hidden lg:block p-10 text-white" style="background:#061BB0;">
-                    <div class="flex h-full flex-col justify-between">
+                <div class="relative hidden overflow-hidden lg:block p-10 text-white">
+                    <img
+                        src="{{ asset('images/auth/login-panel.jpg') }}"
+                        alt="Univers de lecture Siyaj"
+                        class="absolute inset-0 h-full w-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                    >
+                    <div class="absolute inset-0 bg-[rgba(6,27,176,0.5)]"></div>
+                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.26),rgba(0,0,0,0.44))]"></div>
+                    <div class="relative z-10 flex h-full flex-col justify-between">
                         <div>
                             <p class="text-xs uppercase tracking-[0.24em] text-white/60">SIYAJ Éditions</p>
                             <h2 class="mt-5 text-4xl">Un accès simple à votre univers de lecture.</h2>
                         </div>
 
                         <div class="space-y-4">
-                            <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(255,255,255,0.08);">
+                            <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(6,27,176,0.28);backdrop-filter:blur(10px);">
                                 <p class="text-sm leading-7 text-white/82">Suivez vos commandes, retrouvez vos achats et gardez un accès fluide à votre espace lecteur.</p>
                             </div>
-                            <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(255,255,255,0.08);">
+                            <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(6,27,176,0.28);backdrop-filter:blur(10px);">
                                 <p class="text-sm leading-7 text-white/82">Une expérience claire, soignée et cohérente avec le reste du site.</p>
                             </div>
                         </div>
