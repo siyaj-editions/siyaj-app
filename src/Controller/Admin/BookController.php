@@ -6,6 +6,7 @@ use App\Entity\Book;
 use App\Form\BookFormType;
 use App\Service\AdminBookService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -36,10 +37,13 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $coverImageFile */
+            $coverImageFile = $form->get('coverImageFile')->getData();
             $adminBookService->createBook(
                 $book,
                 (array) $form->get('authorNames')->getData(),
-                (array) $form->get('genreNames')->getData()
+                (array) $form->get('genreNames')->getData(),
+                $coverImageFile
             );
 
             $this->addFlash('success', 'Le livre a été créé avec succès.');
@@ -64,10 +68,13 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile|null $coverImageFile */
+            $coverImageFile = $form->get('coverImageFile')->getData();
             $adminBookService->updateBook(
                 $book,
                 (array) $form->get('authorNames')->getData(),
-                (array) $form->get('genreNames')->getData()
+                (array) $form->get('genreNames')->getData(),
+                $coverImageFile
             );
 
             $this->addFlash('success', 'Le livre a été modifié avec succès.');

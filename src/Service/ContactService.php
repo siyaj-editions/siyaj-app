@@ -3,9 +3,9 @@
 namespace App\Service;
 
 use App\Model\ContactMessage;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class ContactService
 {
@@ -18,21 +18,29 @@ class ContactService
 
     public function send(ContactMessage $contactMessage): void
     {
-        $senderEmail = mb_strtolower(trim((string) $contactMessage->getEmail()));
-        $senderName = $contactMessage->getFullName();
+        $subjectLabel = $this->labelForSubject((string) $contactMessage->getSubject());
 
-        $email = (new TemplatedEmail())
+        $email = (new Email())
             ->from(new Address($this->mailerFromEmail, 'SIYAJ Editions'))
             ->to(new Address($this->contactEmail, 'SIYAJ Editions'))
-            ->replyTo(new Address($senderEmail, $senderName !== '' ? $senderName : $senderEmail))
-            ->subject(sprintf('[Contact] %s', $this->labelForSubject((string) $contactMessage->getSubject())))
-            ->htmlTemplate('emails/contact.html.twig')
-            ->context([
-                'contactMessage' => $contactMessage,
-                'subjectLabel' => $this->labelForSubject((string) $contactMessage->getSubject()),
-            ]);
+            ->subject(sprintf('[Contact] %s', $subjectLabel))
+            ->text($this->buildPlainTextBody($contactMessage, $subjectLabel));
 
         $this->mailer->send($email);
+    }
+
+    private function buildPlainTextBody(ContactMessage $contactMessage, string $subjectLabel): string
+    {
+        return implode("\n", [
+            'Nouveau message de contact',
+            '',
+            sprintf('Nom : %s', $contactMessage->getFullName()),
+            sprintf('Email : %s', (string) $contactMessage->getEmail()),
+            sprintf('Motif : %s', $subjectLabel),
+            '',
+            'Message :',
+            (string) $contactMessage->getMessage(),
+        ]);
     }
 
     private function labelForSubject(string $subject): string

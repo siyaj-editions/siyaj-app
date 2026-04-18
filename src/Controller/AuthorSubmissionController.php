@@ -7,6 +7,7 @@ use App\Form\ManuscriptSubmissionType;
 use App\Service\AuthorSubmissionService;
 use App\Service\HoneypotService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -28,7 +29,9 @@ class AuthorSubmissionController extends AbstractController
                 return $this->redirectToRoute('app_author_manuscript_submit');
             }
 
-            $authorSubmissionService->submit($submission);
+            /** @var UploadedFile|null $manuscriptFile */
+            $manuscriptFile = $form->get('manuscriptFile')->getData();
+            $authorSubmissionService->submit($submission, $manuscriptFile);
 
             $this->addFlash('success', 'Votre proposition a bien été envoyée. Notre comité éditorial vous répondra rapidement.');
 

@@ -9,6 +9,7 @@ use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\GenreRepository;
 use App\Service\AdminBookService;
+use App\Service\BookCoverStorage;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,8 @@ class AdminBookServiceTest extends TestCase
         $authorRepository = $this->createMock(AuthorRepository::class);
         $genreRepository = $this->createMock(GenreRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $service = new AdminBookService($bookRepository, $authorRepository, $genreRepository, $entityManager);
+        $bookCoverStorage = $this->createMock(BookCoverStorage::class);
+        $service = new AdminBookService($bookRepository, $authorRepository, $genreRepository, $entityManager, $bookCoverStorage);
         $book = new Book();
 
         $existingAuthor = (new Author())->setName('Maryse Conde');
@@ -70,7 +72,8 @@ class AdminBookServiceTest extends TestCase
         $authorRepository = $this->createMock(AuthorRepository::class);
         $genreRepository = $this->createMock(GenreRepository::class);
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $service = new AdminBookService($bookRepository, $authorRepository, $genreRepository, $entityManager);
+        $bookCoverStorage = $this->createMock(BookCoverStorage::class);
+        $service = new AdminBookService($bookRepository, $authorRepository, $genreRepository, $entityManager, $bookCoverStorage);
         $book = new Book();
         $firstAuthor = (new Author())->setName('Auteur 1');
         $secondAuthor = (new Author())->setName('Auteur 2');

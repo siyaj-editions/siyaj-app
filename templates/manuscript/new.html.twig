@@ -93,62 +93,88 @@
                     </p>
                 </div>
 
-                {{ form_start(submissionForm, {'attr': {'class': 'space-y-6 manuscript-owner-form'}}) }}
+                {{ form_start(submissionForm, {'attr': {'class': 'space-y-6 manuscript-owner-form', 'data-controller': 'form-feedback'}}) }}
                     <div class="manuscript-owner-form-grid-2">
                         <div>
-                            {{ form_label(submissionForm.firstname) }}
-                            {{ form_widget(submissionForm.firstname, {'attr': {'placeholder': 'Prénom'}}) }}
+                            <label for="{{ submissionForm.firstname.vars.id }}" class="owner-form-label">Prénom<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(submissionForm.firstname, {'attr': {'placeholder': 'Prénom', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.firstname) }}
                         </div>
                         <div>
-                            {{ form_label(submissionForm.lastname) }}
-                            {{ form_widget(submissionForm.lastname, {'attr': {'placeholder': 'Nom'}}) }}
+                            <label for="{{ submissionForm.lastname.vars.id }}" class="owner-form-label">Nom<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(submissionForm.lastname, {'attr': {'placeholder': 'Nom', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.lastname) }}
                         </div>
                     </div>
 
                     <div class="manuscript-owner-form-grid-2">
                         <div>
-                            {{ form_label(submissionForm.email) }}
-                            {{ form_widget(submissionForm.email, {'attr': {'placeholder': 'votre@email.com'}}) }}
+                            <label for="{{ submissionForm.email.vars.id }}" class="owner-form-label">Email<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(submissionForm.email, {'attr': {'placeholder': 'votre@email.com', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.email) }}
                         </div>
                         <div>
-                            {{ form_label(submissionForm.phone) }}
-                            {{ form_widget(submissionForm.phone, {'attr': {'placeholder': 'Téléphone'}}) }}
+                            <label for="{{ submissionForm.phone.vars.id }}" class="owner-form-label">Téléphone<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(submissionForm.phone, {'attr': {'placeholder': 'Téléphone', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.phone) }}
                         </div>
                     </div>
 
                     <div class="manuscript-owner-form-grid-2">
                         <div>
-                            {{ form_label(submissionForm.bookTitle) }}
-                            {{ form_widget(submissionForm.bookTitle, {'attr': {'placeholder': 'Titre du projet'}}) }}
+                            <label for="{{ submissionForm.bookTitle.vars.id }}" class="owner-form-label">Titre du manuscrit<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(submissionForm.bookTitle, {'attr': {'placeholder': 'Titre du projet', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.bookTitle) }}
                         </div>
                         <div>
-                            {{ form_label(submissionForm.genre) }}
-                            {{ form_widget(submissionForm.genre) }}
+                            <label for="{{ submissionForm.genre.vars.id }}" class="owner-form-label">Genre littéraire<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(submissionForm.genre, {'attr': {'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.genre) }}
                         </div>
                     </div>
 
                     <div>
-                        {{ form_label(submissionForm.synopsis) }}
-                        {{ form_widget(submissionForm.synopsis, {'attr': {'placeholder': 'Présentez votre manuscrit, son intention et sa forme.'}}) }}
+                        <label for="{{ submissionForm.synopsis.vars.id }}" class="owner-form-label">Résumé / note d’intention<span class="owner-form-asterisk">*</span></label>
+                        {{ form_widget(submissionForm.synopsis, {'attr': {'placeholder': 'Présentez votre manuscrit, son intention et sa forme.', 'class': 'owner-form-textarea'}}) }}
                         {{ form_errors(submissionForm.synopsis) }}
                     </div>
 
                     <div>
-                        {{ form_label(submissionForm.manuscriptUrl) }}
-                        {{ form_widget(submissionForm.manuscriptUrl, {'attr': {'placeholder': 'Lien de lecture (Drive, Dropbox, etc.)'}}) }}
-                        {{ form_errors(submissionForm.manuscriptUrl) }}
+                        <label for="{{ submissionForm.manuscriptFile.vars.id }}" class="owner-form-label">Manuscrit PDF<span class="owner-form-asterisk">*</span></label>
+                        <div
+                            class="manuscript-upload-zone mt-3"
+                            data-controller="upload-dropzone"
+                            data-upload-dropzone-target="zone"
+                            data-action="click->upload-dropzone#open dragover->upload-dropzone#dragOver dragleave->upload-dropzone#dragLeave drop->upload-dropzone#drop"
+                        >
+                            {{ form_widget(submissionForm.manuscriptFile, {
+                                'attr': {
+                                    'class': 'manuscript-upload-input owner-form-input',
+                                    'accept': 'application/pdf',
+                                    'data-upload-dropzone-target': 'input',
+                                    'data-action': 'change->upload-dropzone#updateLabel'
+                                }
+                            }) }}
+
+                            <div class="flex flex-col items-start gap-4 md:flex-row md:items-center">
+                                <div class="manuscript-upload-icon" aria-hidden="true">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.8">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0-4 4m4-4 4 4M4 16.5v1.75A1.75 1.75 0 0 0 5.75 20h12.5A1.75 1.75 0 0 0 20 18.25V16.5"/>
+                                    </svg>
+                                </div>
+                                <div class="space-y-2">
+                                    <p class="manuscript-upload-name" data-upload-dropzone-target="name">Glissez-déposez votre PDF ici ou cliquez pour le sélectionner</p>
+                                    <p class="manuscript-upload-help">Format accepté : PDF uniquement, 20 Mo maximum.</p>
+                                </div>
+                            </div>
+                        </div>
+                        {{ form_errors(submissionForm.manuscriptFile) }}
                     </div>
 
                     <div class="rounded-[1.75rem] border border-dashed border-[rgba(6,27,176,0.2)] bg-[rgba(255,255,255,0.55)] px-5 py-6">
                         <p class="text-xs uppercase tracking-[0.24em] text-[#8B6B2E]">Manuscrit</p>
                         <p class="mt-3 text-sm leading-7 text-[rgba(6,27,176,0.78)]">
-                            Pour le moment, la soumission se fait via un lien de lecture. Assurez-vous qu’il soit actif, accessible et lisible par notre comité.
+                            Déposez votre manuscrit directement dans la zone ci-dessus. Une fois envoyé, il sera disponible au téléchargement dans l’espace admin.
                         </p>
                     </div>
 

@@ -7,8 +7,9 @@ use App\Enum\BookFormat;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,6 +19,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Validator\Constraints\File;
 
 class BookFormType extends AbstractType
 {
@@ -38,10 +40,20 @@ class BookFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'form-control', 'rows' => 5],
             ])
-            ->add('coverImage', TextType::class, [
-                'label' => 'Image de couverture (URL)',
+            ->add('coverImageFile', FileType::class, [
+                'label' => 'Image de couverture',
+                'mapped' => false,
                 'required' => false,
-                'attr' => ['class' => 'form-control'],
+                'attr' => [
+                    'accept' => '.jpg,.jpeg,.png,.webp,.gif,image/jpeg,image/png,image/webp,image/gif',
+                ],
+                'constraints' => [
+                    new File(
+                        maxSize: '8M',
+                        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                        mimeTypesMessage: 'La couverture doit être une image JPG, PNG, WEBP ou GIF.'
+                    ),
+                ],
             ])
             ->add('priceCents', IntegerType::class, [
                 'label' => 'Prix (en centimes)',
@@ -63,11 +75,16 @@ class BookFormType extends AbstractType
                 'label' => 'Actif',
                 'required' => false,
             ])
-            ->add('publishedAt', DateTimeType::class, [
+            ->add('publishedAt', DateType::class, [
                 'label' => 'Date de publication',
                 'required' => false,
                 'widget' => 'single_text',
-                'attr' => ['class' => 'form-control'],
+                'input' => 'datetime_immutable',
+                'html5' => true,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'jj/mm/aaaa',
+                ],
             ])
             ->add('authorNames', CollectionType::class, [
                 'label' => 'Auteur(s)',

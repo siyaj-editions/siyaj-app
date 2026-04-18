@@ -5,11 +5,12 @@ namespace App\Form;
 use App\Entity\ManuscriptSubmission;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ManuscriptSubmissionType extends AbstractType
@@ -48,9 +49,18 @@ class ManuscriptSubmissionType extends AbstractType
                     new NotBlank(message: 'Le résumé est requis.'),
                 ],
             ])
-            ->add('manuscriptUrl', UrlType::class, [
-                'label' => 'Lien vers le manuscrit (Drive, Dropbox, PDF...)',
-                'required' => false,
+            ->add('manuscriptFile', FileType::class, [
+                'label' => 'Manuscrit (PDF)',
+                'mapped' => false,
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(message: 'Le manuscrit PDF est requis.'),
+                    new File(
+                        maxSize: '20M',
+                        extensions: ['pdf'],
+                        extensionsMessage: 'Le manuscrit doit être un fichier PDF.'
+                    ),
+                ],
             ])
             ->add('company', TextType::class, [
                 'label' => false,
