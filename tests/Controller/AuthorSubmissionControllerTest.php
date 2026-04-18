@@ -11,7 +11,7 @@ class AuthorSubmissionControllerTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/auteurs/soumettre-manuscrit');
 
-        $form = $crawler->selectButton('Envoyer ma proposition')->form([
+        $form = $crawler->selectButton('Envoyer le manuscrit')->form([
             'manuscript_submission[firstname]' => 'Ludwig',
             'manuscript_submission[lastname]' => 'Elatre',
             'manuscript_submission[email]' => 'user@example.com',
@@ -19,9 +19,13 @@ class AuthorSubmissionControllerTest extends WebTestCase
             'manuscript_submission[bookTitle]' => 'Mon manuscrit',
             'manuscript_submission[genre]' => 'Roman',
             'manuscript_submission[synopsis]' => 'Synopsis suffisamment long pour valider le formulaire.',
-            'manuscript_submission[manuscriptUrl]' => 'https://example.com/manuscrit.pdf',
             'manuscript_submission[company]' => 'bot-value',
         ]);
+        $tempFile = tempnam(sys_get_temp_dir(), 'manuscript');
+        file_put_contents($tempFile, '%PDF-1.4 fake pdf');
+        $pdfPath = $tempFile . '.pdf';
+        rename($tempFile, $pdfPath);
+        $form['manuscript_submission[manuscriptFile]']->upload($pdfPath);
 
         $client->submit($form);
 

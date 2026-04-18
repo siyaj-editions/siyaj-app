@@ -2,11 +2,72 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {{ form_row(bookForm.title) }}
         {{ form_row(bookForm.isbn) }}
-        {{ form_row(bookForm.coverImage) }}
+        <div class="space-y-3">
+            <div class="space-y-3">
+                {{ form_label(bookForm.coverImageFile) }}
+                <div
+                    class="upload-zone"
+                    data-controller="upload-dropzone"
+                    data-upload-dropzone-empty-label-value="Glissez-déposez votre image ici ou cliquez pour la sélectionner"
+                >
+                    <div
+                        class="space-y-3"
+                        data-upload-dropzone-target="zone"
+                        data-action="click->upload-dropzone#open dragover->upload-dropzone#dragOver dragleave->upload-dropzone#dragLeave drop->upload-dropzone#drop"
+                    >
+                        <div class="upload-zone-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16.5A2.5 2.5 0 016.5 14H7a5 5 0 019.7-1.5A3.5 3.5 0 0117.5 19H7a3 3 0 01-3-3z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v8m0-8l-3 3m3-3l3 3" />
+                            </svg>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="upload-zone-name" data-upload-dropzone-target="name">Glissez-déposez votre image ici ou cliquez pour la sélectionner</p>
+                            <p class="upload-zone-help">Formats acceptés : JPG, PNG, WEBP, GIF. Taille maximum : 8 Mo.</p>
+                        </div>
+                        <div class="hidden pt-2" data-upload-dropzone-target="preview">
+                            <img src="" alt="Aperçu de la couverture" class="h-28 w-20 rounded-xl object-cover shadow-sm" data-upload-dropzone-target="previewImage">
+                        </div>
+                    </div>
+                    {{ form_widget(bookForm.coverImageFile, {
+                        attr: {
+                            class: 'upload-zone-input',
+                            'data-upload-dropzone-target': 'input',
+                            'data-action': 'change->upload-dropzone#updateLabel change->upload-dropzone#updatePreview'
+                        }
+                    }) }}
+                </div>
+                {{ form_help(bookForm.coverImageFile) }}
+                {{ form_errors(bookForm.coverImageFile) }}
+            </div>
+            {% if bookForm.vars.data and bookForm.vars.data.coverImage %}
+                <div class="rounded-2xl border border-black/10 bg-paper/60 p-4">
+                    <p class="text-xs uppercase tracking-[0.16em] text-ink/60">Couverture actuelle</p>
+                    <img src="{{ bookForm.vars.data.coverImage }}" alt="{{ bookForm.vars.data.title }}" class="mt-3 h-40 w-28 rounded-xl object-cover">
+                </div>
+            {% endif %}
+        </div>
         {{ form_row(bookForm.priceCents) }}
         {{ form_row(bookForm.format) }}
         {{ form_row(bookForm.stock) }}
-        {{ form_row(bookForm.publishedAt) }}
+        <div class="space-y-3">
+            {{ form_label(bookForm.publishedAt) }}
+            <div class="date-field-shell" data-controller="date-picker">
+                {{ form_widget(bookForm.publishedAt, {
+                    attr: {
+                        class: 'date-field-input',
+                        'data-date-picker-target': 'input'
+                    }
+                }) }}
+                <button type="button" class="date-field-trigger" data-action="click->date-picker#open" aria-label="Choisir une date">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+                    </svg>
+                </button>
+            </div>
+            {{ form_help(bookForm.publishedAt) }}
+            {{ form_errors(bookForm.publishedAt) }}
+        </div>
     </div>
 
     {{ form_row(bookForm.description) }}
@@ -92,7 +153,11 @@
     </div>
 
     <div class="rounded-2xl border border-black/10 p-5">
-        {{ form_row(bookForm.isActive) }}
+        <div class="admin-checkbox-row">
+            {{ form_widget(bookForm.isActive) }}
+            {{ form_label(bookForm.isActive) }}
+        </div>
+        {{ form_errors(bookForm.isActive) }}
     </div>
 
     <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-black/5">

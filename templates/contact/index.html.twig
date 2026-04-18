@@ -87,36 +87,36 @@
                     </p>
                 </div>
 
-                {{ form_start(contactForm, {'attr': {'class': 'space-y-6 contact-owner-form'}}) }}
+                {{ form_start(contactForm, {'attr': {'class': 'space-y-6 contact-owner-form', 'data-controller': 'form-feedback'}}) }}
                     <div class="contact-owner-form-grid-2">
                         <div>
-                            {{ form_label(contactForm.firstname) }}
-                            {{ form_widget(contactForm.firstname, {'attr': {'placeholder': 'Prénom'}}) }}
+                            <label for="{{ contactForm.firstname.vars.id }}" class="owner-form-label">Prénom<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(contactForm.firstname, {'attr': {'placeholder': 'Prénom', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(contactForm.firstname) }}
                         </div>
                         <div>
-                            {{ form_label(contactForm.lastname) }}
-                            {{ form_widget(contactForm.lastname, {'attr': {'placeholder': 'Nom'}}) }}
+                            <label for="{{ contactForm.lastname.vars.id }}" class="owner-form-label">Nom<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(contactForm.lastname, {'attr': {'placeholder': 'Nom', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(contactForm.lastname) }}
                         </div>
                     </div>
 
                     <div class="contact-owner-form-grid-2">
                         <div>
-                            {{ form_label(contactForm.email) }}
-                            {{ form_widget(contactForm.email, {'attr': {'placeholder': 'votre@email.com'}}) }}
+                            <label for="{{ contactForm.email.vars.id }}" class="owner-form-label">Email<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(contactForm.email, {'attr': {'placeholder': 'votre@email.com', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(contactForm.email) }}
                         </div>
                         <div>
-                            {{ form_label(contactForm.subject) }}
-                            {{ form_widget(contactForm.subject) }}
+                            <label for="{{ contactForm.subject.vars.id }}" class="owner-form-label">Motif<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(contactForm.subject, {'attr': {'class': 'owner-form-select'}}) }}
                             {{ form_errors(contactForm.subject) }}
                         </div>
                     </div>
 
                     <div>
-                        {{ form_label(contactForm.message) }}
-                        {{ form_widget(contactForm.message, {'attr': {'placeholder': 'Décrivez votre demande...'}}) }}
+                        <label for="{{ contactForm.message.vars.id }}" class="owner-form-label">Message<span class="owner-form-asterisk">*</span></label>
+                        {{ form_widget(contactForm.message, {'attr': {'placeholder': 'Décrivez votre demande...', 'class': 'owner-form-textarea'}}) }}
                         {{ form_errors(contactForm.message) }}
                     </div>
 

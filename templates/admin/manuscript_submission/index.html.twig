@@ -45,9 +45,9 @@
                                         <p class="text-xs text-ink/60 mt-1">{{ item.genre }}</p>
                                     {% endif %}
                                     <p class="text-xs text-ink/70 mt-2 max-w-xl">{{ item.synopsis|slice(0, 220) }}{% if item.synopsis|length > 220 %}...{% endif %}</p>
-                                    {% if item.manuscriptUrl %}
-                                        <a href="{{ item.manuscriptUrl }}" target="_blank" rel="noopener noreferrer" class="inline-flex mt-2 text-xs text-gold hover:text-ink transition-colors">
-                                            Ouvrir le lien manuscrit
+                                    {% if item.manuscriptPath %}
+                                        <a href="{{ path('app_admin_manuscript_download', {id: item.id}) }}" class="inline-flex mt-2 text-xs text-gold hover:text-ink transition-colors">
+                                            Télécharger le manuscrit PDF
                                         </a>
                                     {% endif %}
                                 </td>

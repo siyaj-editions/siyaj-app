@@ -35,7 +35,7 @@ class ManuscriptSubmission
     private ?string $synopsis = null;
 
     #[ORM\Column(length: 500, nullable: true)]
-    private ?string $manuscriptUrl = null;
+    private ?string $manuscriptPath = null;
 
     #[ORM\Column(length: 30)]
     private string $status = 'new';
@@ -140,14 +140,14 @@ class ManuscriptSubmission
         return $this;
     }
 
-    public function getManuscriptUrl(): ?string
+    public function getManuscriptPath(): ?string
     {
-        return $this->manuscriptUrl;
+        return $this->manuscriptPath;
     }
 
-    public function setManuscriptUrl(?string $manuscriptUrl): static
+    public function setManuscriptPath(?string $manuscriptPath): static
     {
-        $this->manuscriptUrl = $manuscriptUrl;
+        $this->manuscriptPath = $manuscriptPath;
 
         return $this;
     }

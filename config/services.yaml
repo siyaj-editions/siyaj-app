@@ -12,6 +12,9 @@ parameters:
     stripe_webhook_secret: '%env(STRIPE_WEBHOOK_SECRET)%'
     contact_email: '%env(CONTACT_EMAIL)%'
     mailer_from_email: '%env(MAILER_FROM_EMAIL)%'
+    book_cover_public_prefix: '/uploads/books'
+    book_cover_upload_dir: '%kernel.project_dir%/public/uploads/books'
+    manuscript_upload_dir: '%kernel.project_dir%/var/uploads/manuscripts'
 
 services:
     # default configuration for services in *this* file
@@ -36,3 +39,13 @@ services:
         arguments:
             $contactEmail: '%contact_email%'
             $mailerFromEmail: '%mailer_from_email%'
+
+    App\Service\BookCoverStorage:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+            $bookCoverUploadDir: '%book_cover_upload_dir%'
+            $bookCoverPublicPrefix: '%book_cover_public_prefix%'
+
+    App\Service\ManuscriptStorage:
+        arguments:
+            $manuscriptUploadDir: '%manuscript_upload_dir%'

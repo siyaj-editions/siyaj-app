@@ -9,6 +9,7 @@ use App\Repository\AuthorRepository;
 use App\Repository\BookRepository;
 use App\Repository\GenreRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AdminBookService
@@ -17,7 +18,8 @@ class AdminBookService
         private readonly BookRepository $bookRepository,
         private readonly AuthorRepository $authorRepository,
         private readonly GenreRepository $genreRepository,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly BookCoverStorage $bookCoverStorage,
     ) {
     }
 
@@ -29,16 +31,18 @@ class AdminBookService
         return $this->bookRepository->findBy([], ['createdAt' => 'DESC']);
     }
 
-    public function createBook(Book $book, array $authorNames = [], array $genreNames = []): void
+    public function createBook(Book $book, array $authorNames = [], array $genreNames = [], ?UploadedFile $coverImageFile = null): void
     {
+        $this->syncCoverImage($book, $coverImageFile);
         $this->syncAuthors($book, $authorNames);
         $this->syncGenres($book, $genreNames);
         $this->entityManager->persist($book);
         $this->entityManager->flush();
     }
 
-    public function updateBook(Book $book, array $authorNames = [], array $genreNames = []): void
+    public function updateBook(Book $book, array $authorNames = [], array $genreNames = [], ?UploadedFile $coverImageFile = null): void
     {
+        $this->syncCoverImage($book, $coverImageFile);
         $this->syncAuthors($book, $authorNames);
         $this->syncGenres($book, $genreNames);
         $this->entityManager->flush();
@@ -46,6 +50,7 @@ class AdminBookService
 
     public function deleteBook(Book $book): void
     {
+        $this->bookCoverStorage->delete($book->getCoverImage());
         $this->entityManager->remove($book);
         $this->entityManager->flush();
     }
@@ -165,5 +170,16 @@ class AdminBookService
         $this->entityManager->persist($genre);
 
         return $genre;
+    }
+
+    private function syncCoverImage(Book $book, ?UploadedFile $coverImageFile): void
+    {
+        if (!$coverImageFile instanceof UploadedFile) {
+            return;
+        }
+
+        $previousCoverImage = $book->getCoverImage();
+        $book->setCoverImage($this->bookCoverStorage->upload($coverImageFile));
+        $this->bookCoverStorage->delete($previousCoverImage);
     }
 }
