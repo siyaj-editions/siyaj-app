@@ -14,8 +14,13 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 800;
   line-height: 1.2;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 800;
 }
 
 a,
@@ -133,7 +138,7 @@ label {
 
 :where(input, textarea, select):focus {
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 3px rgba(201, 169, 98, 0.15);
+  box-shadow: 0 0 0 3px rgba(245, 154, 22, 0.15);
 }
 
 :where(input, textarea)::placeholder {
@@ -186,6 +191,27 @@ label {
     transform: translateY(-1px);
     box-shadow: 0 12px 28px rgba(6, 27, 176, 0.14);
   }
+}
+
+@utility btn-card-paiment {
+  background: #5E74E9;
+  color: var(--color-white);
+  &:hover {
+    background: #061BB0;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 28px rgba(6, 27, 176, 0.14);
+  }
+}
+
+.btn-card-paiment {
+  background: #5E74E9;
+  color: var(--color-white);
+}
+
+.btn-card-paiment:hover {
+  background: #061BB0;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px rgba(6, 27, 176, 0.14);
 }
 
 @utility card {

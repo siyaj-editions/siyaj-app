@@ -11,12 +11,6 @@
 		<link
 		rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
-		{# Fonts - Modern editorial combination #}
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link
-		href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
 		{# Tailwind CSS #}
 		<link rel="stylesheet" href="{{ asset('styles/app.css') }}"> {% block stylesheets %}{% endblock %}
 		</head>
@@ -37,23 +31,23 @@
 						<div class="hidden lg:flex items-center gap-8 xl:gap-10">
 							<a href="{{ path('app_home') }}" class="text-[13px] font-medium text-[rgba(6,27,176,0.7)] hover:text-[#061BB0] uppercase tracking-[0.18em] transition-colors duration-200 relative group">
 								Accueil
-								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#8B6B2E] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#F59A16] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
 							<a href="{{ path('app_catalog') }}" class="text-[13px] font-medium text-[rgba(6,27,176,0.7)] hover:text-[#061BB0] uppercase tracking-[0.18em] transition-colors duration-200 relative group">
 								Catalogue
-								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#8B6B2E] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#F59A16] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
 							<a href="{{ path('app_author_manuscript_submit') }}" class="text-[13px] font-medium text-[rgba(6,27,176,0.7)] hover:text-[#061BB0] uppercase tracking-[0.18em] transition-colors duration-200 relative group">
-								Soumettre un manuscrit
-								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#8B6B2E] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+								Espace auteurs
+								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#F59A16] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
 							<a href="{{ path('app_about') }}" class="text-[13px] font-medium text-[rgba(6,27,176,0.7)] hover:text-[#061BB0] uppercase tracking-[0.18em] transition-colors duration-200 relative group">
 								À propos
-								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#8B6B2E] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#F59A16] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
 							<a href="{{ path('app_contact') }}" class="text-[13px] font-medium text-[rgba(6,27,176,0.7)] hover:text-[#061BB0] uppercase tracking-[0.18em] transition-colors duration-200 relative group">
 								Contact
-								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#8B6B2E] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+								<span class="absolute -bottom-1 left-0 w-full h-px bg-[#F59A16] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
 							</a>
 						</div>
 
@@ -225,7 +219,7 @@
 							</div>
 
 							<div>
-								<h5 class="mb-5 text-sm font-medium uppercase tracking-[0.22em] text-[#8B6B2E]">Navigation</h5>
+								<h5 class="mb-5 text-sm font-medium uppercase tracking-[0.22em] text-[#F59A16]">Navigation</h5>
 								<ul class="space-y-4">
 									<li>
 										<a href="{{ path('app_home') }}" class="text-base text-[rgba(6,27,176,0.82)] transition hover:text-[#EB5A27]">
@@ -251,7 +245,7 @@
 							</div>
 
 							<div>
-								<h5 class="mb-5 text-sm font-medium uppercase tracking-[0.22em] text-[#8B6B2E]">Contact</h5>
+								<h5 class="mb-5 text-sm font-medium uppercase tracking-[0.22em] text-[#F59A16]">Contact</h5>
 								<div class="space-y-4 text-base text-[rgba(6,27,176,0.82)]">
 									<p>{{ contact_email }}</p>
 									<p>Guadeloupe • Martinique • Monde</p>
@@ -265,13 +259,13 @@
 									&copy; {{ 'now'|date('Y') }} SIYAJ Éditions. Tous droits réservés.
 								</p>
 								<div class="flex flex-wrap items-center gap-5">
-									<a href="{{ path('app_legal_mentions') }}" class="text-xs text-[rgba(6,27,176,0.5)] transition hover:text-[#8B6B2E]">
+									<a href="{{ path('app_legal_mentions') }}" class="text-xs text-[rgba(6,27,176,0.5)] transition hover:text-[#F59A16]">
 										Mentions légales
 									</a>
-									<a href="{{ path('app_cgv') }}" class="text-xs text-[rgba(6,27,176,0.5)] transition hover:text-[#8B6B2E]">
+									<a href="{{ path('app_cgv') }}" class="text-xs text-[rgba(6,27,176,0.5)] transition hover:text-[#F59A16]">
 										CGV
 									</a>
-									<a href="{{ path('app_privacy') }}" class="text-xs text-[rgba(6,27,176,0.5)] transition hover:text-[#8B6B2E]">
+									<a href="{{ path('app_privacy') }}" class="text-xs text-[rgba(6,27,176,0.5)] transition hover:text-[#F59A16]">
 										Confidentialité
 									</a>
 								</div>

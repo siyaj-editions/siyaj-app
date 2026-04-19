@@ -1,0 +1,31 @@
+import { Controller } from '@hotwired/stimulus';
+
+export default class extends Controller {
+    static targets = ['tab', 'panel'];
+
+    connect() {
+        this.activate('raconter');
+    }
+
+    show(event) {
+        this.activate(event.params.key);
+    }
+
+    activate(key) {
+        this.tabTargets.forEach((tab) => {
+            const active = tab.dataset.editorialTabsKeyParam === key;
+            tab.classList.toggle('is-active', active);
+            tab.setAttribute('aria-pressed', active ? 'true' : 'false');
+
+            if (active) {
+                this.element.style.setProperty('--editorial-active-index', tab.dataset.editorialTabsIndexParam ?? '0');
+            }
+        });
+
+        this.panelTargets.forEach((panel) => {
+            const active = panel.dataset.key === key;
+            panel.classList.toggle('is-active', active);
+            panel.hidden = !active;
+        });
+    }
+}

@@ -42,25 +42,20 @@
 
 {% block body %}
 {# Header #}
-<section class="py-6 md:py-10">
+<section class="pb-6 pt-0 md:pb-10 md:pt-0">
     <div class="container">
-        <div class="overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
-            <div class="relative overflow-hidden px-6 py-10 text-center md:px-8 md:py-12 lg:px-10 lg:py-16" style="min-height:22rem;">
+        <div class="catalog-owner-hero-bleed overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]" style="border-radius:2.4rem;">
+            <div class="catalog-owner-hero relative overflow-hidden px-6 py-10 text-center md:px-8 md:py-12 lg:px-10 lg:py-16">
                 <img
-                    src="{{ asset('images/home/hero-home.jpg') }}"
+                    src="{{ asset('images/catalog/catalog-owner-hero-v2.jpg') }}"
                     alt="Univers éditorial du catalogue SIYAJ"
                     class="absolute inset-0 h-full w-full object-cover"
                     loading="eager"
                     decoding="async"
                 >
-                <div class="absolute inset-0 bg-[rgba(0,0,0,0.58)]"></div>
-                <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.18),rgba(0,0,0,0.48))]"></div>
-
-                <div class="relative z-10 mx-auto flex min-h-[15rem] max-w-3xl flex-col items-center justify-center">
-                    <p class="text-white/75" style="font-size:11px;letter-spacing:0.06em;">
-                        Notre collection
-                    </p>
-                    <h1 class="mt-2 text-[#EB5A27]" style="font-family: var(--font-display);font-size:3.2rem;line-height:0.95;">
+                <div class="absolute inset-0 bg-[rgba(0,0,0,0.42)]"></div>
+                <div class="catalog-owner-hero-content relative z-10 mx-auto flex max-w-3xl flex-col items-center justify-center">
+                    <h1 class="catalog-owner-hero-title mt-2 text-[#F59A16]">
                         Catalogue
                     </h1>
                     <p class="mt-5 max-w-2xl text-white/88" style="font-size:1.02rem;line-height:1.8;">
