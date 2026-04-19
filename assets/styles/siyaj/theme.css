@@ -1,16 +1,34 @@
+@font-face {
+  font-family: 'Garet';
+  src: url('/fonts/garet/Garet-Book.woff2') format('woff2'),
+       url('/fonts/garet/Garet-Book.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Garet';
+  src: url('/fonts/garet/Garet-Heavy.woff2') format('woff2'),
+       url('/fonts/garet/Garet-Heavy.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* SIYAJ Editorial Design System */
 @theme {
   /* Colors */
   --color-ink: #061BB0;
   --color-paper: #F7F4ED;
   --color-cream: #F7F4ED;
-  --color-gold: #8B6B2E;
+  --color-gold: #F59A16;
   --color-sage: #0C4EDD;
   --color-wine: #EB5A27;
   --color-sun: #FFA500;
   --color-white: #ffffff;
 
   /* Fonts */
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Outfit', system-ui, sans-serif;
+  --font-display: 'Garet', system-ui, sans-serif;
+  --font-body: 'Garet', system-ui, sans-serif;
 }

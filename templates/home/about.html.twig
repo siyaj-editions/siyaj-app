@@ -4,8 +4,8 @@
 
 {% block body %}
     <div class="about-owner-page">
-        <div class="about-owner-shell mx-auto px-4 py-6 md:px-6 md:py-10">
-            <section class="about-owner-hero-shell overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]">
+        <div class="about-owner-shell mx-auto px-4 pb-6 pt-0 md:px-6 md:pb-10 md:pt-0">
+            <section class="about-owner-hero-shell about-owner-hero-bleed overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]">
                 <div class="about-owner-hero relative overflow-hidden px-6 py-8 text-center md:px-8 md:py-10">
                     <img
                         src="{{ asset('images/about/about-owner-hero.jpg') }}"
@@ -14,15 +14,10 @@
                         loading="eager"
                         decoding="async"
                     >
-                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.56)]"></div>
-                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.2),rgba(0,0,0,0.45))]"></div>
-
+                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.42)]"></div>
                     <div class="about-owner-hero-content relative z-10 flex flex-col items-center justify-center">
-                        <p class="about-owner-hero-subtitle about-owner-hero-subtitle-base text-white/75">
-                            La première maison d'édition indépendante, féministe et décoloniale des Petites Antilles
-                        </p>
                         <h1 class="about-owner-hero-title about-owner-hero-title-base mt-2 text-[#EB5A27]">
-                            Rêver & résister
+                            <span style="color: #F59A16;">Rêver </span> & résister
                         </h1>
 
                         <div class="mt-5 flex flex-wrap items-center justify-center gap-3">

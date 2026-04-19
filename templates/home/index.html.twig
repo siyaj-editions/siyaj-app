@@ -6,71 +6,34 @@
     {% set featuredBooks = latestBooks|slice(0, 3) %}
     {% set accentPalette = ['#F59A16', '#EB5A27', '#1735D0'] %}
     <div class="home-owner-page">
-        <div class="home-owner-shell mx-auto px-4 py-6 md:px-6 md:py-10">
-            <section class="home-owner-hero-shell overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]">
-                <div class="home-owner-hero relative overflow-hidden px-6 py-8 text-center md:px-8 md:py-10">
+        <div class="home-owner-shell mx-auto px-4 pb-6 pt-0 md:px-6 md:pb-10 md:pt-0">
+            <section class="home-owner-hero-shell home-owner-hero-bleed overflow-hidden shadow-[0_18px_42px_rgba(6,27,176,0.12)]">
+                <div class="home-owner-hero relative overflow-hidden px-6 py-8 md:px-8 md:py-10">
                     <img
                         src="{{ asset('images/home/hero-home.jpg') }}"
                         alt="Paysage caribéen de SIYAJ Éditions"
-                        class="absolute inset-0 h-full w-full object-cover"
+                        class="absolute inset-0 h-full w-full object-cover object-center"
+                        style="object-position:center 44%;"
                         loading="eager"
                         decoding="async"
                     >
-                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.58)]"></div>
-                    <div class="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,27,176,0.18),rgba(0,0,0,0.48))]"></div>
-
-                    <div class="home-owner-hero-content relative z-10 flex flex-col items-center justify-center">
+                    <div class="absolute inset-0 bg-[rgba(0,0,0,0.42)]"></div>
+                    <div class="home-owner-hero-content home-owner-hero-layout relative z-10 flex flex-col justify-center">
                         <p class="home-owner-hero-subtitle text-white/75">
-                            La première maison d’édition indépendante, féministe et décoloniale des Petites Antilles
+                            la maison d’édition
                         </p>
-                        <h1 class="home-owner-hero-title home-owner-hero-title-base mt-2 text-[#EB5A27]">
-                            Une littérature<br>pour rêver & résister
+                        <h1 class="home-owner-hero-title home-owner-hero-title-base mt-2">
+                            <span class="text-[#F59A16]">Une littérature engagée</span><br>
+                            <span class="text-[#F59A16]">pour </span><span class="text-[#EB5A27]">rêver & résister</span>
                         </h1>
 
-                        <div class="mt-5 flex flex-wrap items-center justify-center gap-3">
+                        <p class="home-owner-hero-copy mt-5 max-w-5xl text-white/88">
+                            Chez Siyaj nous publions des romans et des ouvrages de poésie puissants issus de la littérature caribéenne contemporaine : plus qu’une maison d’édition, un espace de création et de dialogue foisonnant où nos auteur.ice.s et nos artistes n’ont pas à se traduire pour se faire entendre.
+                        </p>
+
+                        <div class="mt-7 flex flex-wrap items-center gap-3">
                             <a href="{{ path('app_catalog') }}" class="inline-flex items-center justify-center rounded-full bg-[#0C4EDD] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-[#061BB0]">
-                                Notre sélection
-                            </a>
-                            <a href="{{ path('app_about') }}" class="inline-flex items-center justify-center rounded-full border border-white/40 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-white transition hover:bg-white hover:text-[#061BB0]">
-                                Nous découvrir
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="px-2 py-8">
-                <div class="home-owner-grid-2">
-                    <div>
-                        <p class="owner-title-sm text-[#EB5A27]">
-                            Des voix vives,<br>des récits en mouvement
-                        </p>
-                        <p class="home-owner-display-note mt-4 text-[rgba(122,127,208,0.85)]">
-                            Notre maison, notre ligne, nos résonances.
-                        </p>
-                        <p class="home-owner-copy home-owner-body-warm mt-5 text-[#F59A16]">
-                            Chez Siyaj, nous publions des romans et des ouvrages de poésie puissants, portés par des imaginaires caribéens contemporains, des mémoires vives et des écritures qui refusent l’étroitesse des catégories.
-                        </p>
-                    </div>
-
-                    <div>
-                        <div class="home-owner-tags">
-                            <span>Raconter</span>
-                            <span>Résister</span>
-                            <span>Rêver</span>
-                        </div>
-                        <div class="home-owner-tags-line"></div>
-                        <p class="home-owner-copy home-owner-body-cool mt-5 leading-7 text-[#3257ea]">
-                            Nous voulons accueillir une littérature de fiction et de poésie singulière, audacieuse et sensible, traversée par les vécus, les luttes, les mémoires et les imaginaires de nos territoires sans jamais enfermer les auteur.ice.s dans des cadres restrictifs.
-                        </p>
-                        <div class="mt-6 flex items-center justify-end gap-3">
-                            <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
-                                Je découvre le catalogue
-                            </a>
-                            <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
-                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
-                                </svg>
+                                Découvrir le catalogue
                             </a>
                         </div>
                     </div>
@@ -87,21 +50,10 @@
                         Des parutions qui déplacent les regards et prolongent nos conversations.
                     </p>
 
-                    <p class="home-owner-highlight home-owner-highlight-base mt-6 max-w-4xl">
+                    <p class="home-owner-highlight home-owner-highlight-base mt-6 max-w-8xl">
                         <span class="text-[#F59A16]">Nos livres s’inscrivent dans une ligne exigeante, sensible et engagée</span>
                         <span class="text-[#5E74E9]"> qui fait dialoguer fiction, poésie, mémoire, résistance et imaginaire caribéen contemporain.</span>
                     </p>
-
-                    <div class="mt-8 flex items-center gap-4">
-                        <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
-                            Voir tout le catalogue
-                        </a>
-                        <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
-                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
-                            </svg>
-                        </a>
-                    </div>
                 </div>
 
                 {% if featuredBooks|length > 0 %}
@@ -113,6 +65,16 @@
                                 accentColor: accentPalette[loop.index0]
                             }) }}
                         {% endfor %}
+                    </div>
+                        <div class="mt-8 flex items-center gap-4">
+                        <a href="{{ path('app_catalog') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
+                            Voir tout le catalogue
+                        </a>
+                        <a href="{{ path('app_catalog') }}" class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#F59A16] text-white">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6 6 6-6 6"/>
+                            </svg>
+                        </a>
                     </div>
                 {% else %}
                     <div class="mt-10 rounded-[2rem] border border-[rgba(6,27,176,0.1)] bg-white/70 p-8 shadow-[0_18px_42px_rgba(6,27,176,0.08)]">
@@ -131,7 +93,7 @@
                     “
                 </div>
                 <p class="home-owner-quote-text -mt-3 text-center text-white">
-                    « Nous croyons que la littérature peut être un espace de résistance et de libération. »
+                    Nous croyons que la littérature peut être un espace de résistance et de libération. »
                 </p>
             </section>
 
@@ -172,11 +134,11 @@
             <section class="px-2 py-4">
                 <div class="home-owner-grid-2">
                     <article class="overflow-hidden rounded-[2.4rem] bg-[#1735D0] text-white shadow-[0_18px_42px_rgba(6,27,176,0.16)]">
-                        <div class="grid h-full lg:grid-cols-[0.9fr_1.1fr]">
-                            <div class="px-6 py-8 lg:px-8 lg:py-10">
+                        <div class="grid h-full">
+                            <div class="px-8 py-8 lg:px-10 lg:py-10">
                                 <p class="text-xs uppercase tracking-[0.26em] text-white/65">Qui sommes-nous ?</p>
-                                <p class="mt-4 text-white" style="font-family:var(--font-display);font-size:2.15rem;line-height:1.05;">
-                                    Une maison qui pense le livre comme un espace de transmission.
+                                <p class="home-owner-panel-highlight mt-4 text-white">
+                                    Première maison d’édition indépendante, féministe et décoloniale des Petites Antilles.
                                 </p>
                                 <p class="mt-5 text-white/84" style="font-size:1rem;line-height:1.75;">
                                     Notre manifeste, notre histoire et l’esprit Kaskòd vivent sur une page dédiée plus incarnée.
@@ -184,11 +146,6 @@
                                 <a href="{{ path('app_about') }}" class="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.14em] text-[#061BB0] transition hover:bg-[rgba(255,255,255,0.92)] max-width:15rem width:15rem;">
                                     Découvrir Siyaj
                                 </a>
-                            </div>
-                            <div class="flex items-center px-6 py-8 lg:px-8 lg:py-10" style="background:linear-gradient(135deg,rgba(255,165,0,0.12),rgba(235,90,39,0.08));">
-                                <p class="text-white" style="font-family:var(--font-display);font-size:2rem;line-height:1.15;">
-                                    Première maison d’édition indépendante, féministe et décoloniale des Petites Antilles.
-                                </p>
                             </div>
                         </div>
                     </article>
@@ -222,7 +179,7 @@
 
                     <div class="rounded-[2rem] border border-white/10 p-5" style="background:rgba(255,255,255,0.08);backdrop-filter: blur(10px);">
                         {{ form_start(newsletterForm, {'attr': {'class': 'space-y-4'}}) }}
-                            {{ form_widget(newsletterForm.email, {'attr': {'class': '!rounded-full !px-5 !py-4 !text-white', 'style': 'border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.08);', 'placeholder': 'Votre adresse email'}}) }}
+                            {{ form_widget(newsletterForm.email, {'attr': {'class': '!rounded-full !px-5 !py-4 !text-white', 'style': 'border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.62);', 'placeholder': 'Votre adresse email'}}) }}
                             <div aria-hidden="true">
                                 {{ form_widget(newsletterForm.company) }}
                             </div>

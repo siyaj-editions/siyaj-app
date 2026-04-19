@@ -2,7 +2,7 @@
   max-width: 30rem;
   margin-inline: auto;
   padding-inline: 1rem;
-  padding-block: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .about-owner-hero {
@@ -21,6 +21,13 @@
 .about-owner-hero-shell,
 .about-owner-quote-shell {
   border-radius: 2.4rem;
+}
+
+.about-owner-hero-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 0;
 }
 
 .about-owner-hero-subtitle-base {
@@ -141,7 +148,6 @@
 @media (min-width: 768px) {
   .about-owner-shell {
     max-width: 46rem;
-    padding-top: 2.5rem;
     padding-bottom: 3rem;
   }
 
@@ -162,6 +168,10 @@
     gap: 1.4rem;
   }
 
+  .about-owner-hero-title-base {
+    font-size: 4.1rem !important;
+  }
+
   .about-owner-grid-cards {
     grid-template-columns: 0.92fr 1.08fr;
   }
@@ -175,16 +185,19 @@
 @media (min-width: 1024px) {
   .about-owner-shell {
     max-width: 72rem;
-    padding-top: 3.25rem;
     padding-bottom: 4.25rem;
   }
 
   .about-owner-hero {
-    min-height: 32rem;
+    min-height: 31rem;
   }
 
   .about-owner-hero-content {
-    min-height: 25rem;
+    min-height: 24rem;
+  }
+
+  .about-owner-hero-title-base {
+    font-size: 5.2rem !important;
   }
 
   .about-owner-grid-2 {
