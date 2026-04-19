@@ -34,11 +34,11 @@
 
             <section class="about-owner-section px-2 py-8">
                 <p class="about-owner-kicker font-semibold uppercase text-[#EB5A27]">
-                    SA NOU YÉ ?
+                    SA NOU YÉ
                 </p>
 
                 <div class="about-owner-grid-2 mt-4">
-                    <div>
+                    <div class="about-owner-copy-column">
                         <p class="about-owner-body-lg font-semibold uppercase text-[#061BB0]">
                             SIYAJ, la première maison d’édition indépendante antillaise, féministe et décoloniale, dédiée à la fiction et à la poésie contemporaines.
                         </p>
@@ -47,16 +47,61 @@
                         </p>
                     </div>
 
-                    <div>
-                        <div class="about-owner-tag-list flex gap-4 font-semibold text-[#5E74E9]">
-                            <span>Transmission</span>
-                            <span>Résister</span>
-                            <span>Rêver</span>
+                    <div class="about-owner-tabs" data-controller="editorial-tabs">
+                        <div class="editorial-tabs-nav" role="tablist" aria-label="Vision éditoriale Siyaj">
+                            <button
+                                type="button"
+                                class="editorial-tab-button is-active"
+                                data-editorial-tabs-target="tab"
+                                data-editorial-tabs-key-param="rever"
+                                data-editorial-tabs-index-param="0"
+                                data-action="click->editorial-tabs#show"
+                                aria-pressed="true"
+                            >
+                                Rêver
+                            </button>
+                            <button
+                                type="button"
+                                class="editorial-tab-button"
+                                data-editorial-tabs-target="tab"
+                                data-editorial-tabs-key-param="transmettre"
+                                data-editorial-tabs-index-param="1"
+                                data-action="click->editorial-tabs#show"
+                                aria-pressed="false"
+                            >
+                                Transmettre
+                            </button>
+                            <button
+                                type="button"
+                                class="editorial-tab-button"
+                                data-editorial-tabs-target="tab"
+                                data-editorial-tabs-key-param="resister"
+                                data-editorial-tabs-index-param="2"
+                                data-action="click->editorial-tabs#show"
+                                aria-pressed="false"
+                            >
+                                Résister
+                            </button>
                         </div>
-                        <p class="about-owner-body-md about-owner-body-md-cool mt-4 leading-7 text-[#5E74E9]">
-                            Une voix née sur un espace de création, de transmission et de résistance, qui accompagne des auteur.ice.s et artistes afro-descendant.e.s dans leurs récits.
-                        </p>
-                        <div class="mt-6 flex items-center justify-end gap-3">
+                        <div class="about-owner-tab-copy editorial-tab-panel mt-4 text-[#5E74E9] is-active" data-editorial-tabs-target="panel" data-key="rever">
+                            <p>
+                                Siyaj se veut un espace de création, de transmission et de liberté littéraire où se déploient dans leur singularité et leur multiplicité les voix silenciées des afro-descendant.e.s et leurs imaginaires.
+                            </p>
+                        </div>
+                        <div class="about-owner-tab-copy editorial-tab-panel mt-4 text-[#5E74E9]" data-editorial-tabs-target="panel" data-key="transmettre" hidden>
+                            <p>
+                                Siyaj est un hommage aux luttes passées, tout en imaginant les voies de demain, un lieu pour explorer et partager des récits qui touchent à l’universel à partir du singulier.
+                            </p>
+                            <p class="mt-4">
+                                Une plateforme pour amplifier les voix et les histoires trop peu entendues dans l’espace littéraire francophone.
+                            </p>
+                        </div>
+                        <div class="about-owner-tab-copy editorial-tab-panel mt-4 text-[#5E74E9]" data-editorial-tabs-target="panel" data-key="resister" hidden>
+                            <p>
+                                Nous croyons que la littérature peut être un espace de résistance et de libération. Une façon d’habiter le monde et de subvertir les systèmes qui cherchent à taire nos voix et écraser nos expériences en racontant nos vies, nos joies, nos rêves et nos colère.
+                            </p>
+                        </div>
+                        <div class="about-owner-tabs-cta mt-6 flex items-center justify-end gap-3">
                             <a href="{{ path('app_author_manuscript_submit') }}" class="text-[11px] font-semibold uppercase tracking-[0.08em] text-[#061BB0] underline underline-offset-4">
                                 Je soumets mon manuscrit
                             </a>
@@ -115,24 +160,22 @@
                             </div>
                         </article>
 
-                        <div class="grid gap-3">
-                            <article class="about-owner-card bg-[#EB5A27] px-5 py-5 text-white lg:px-6 lg:py-6">
+                        <article class="about-owner-card overflow-hidden bg-[#EB5A27] text-white">
+                            <div class="px-5 py-5 lg:px-6 lg:py-6">
                                 <p class="about-owner-card-label uppercase tracking-[0.14em] text-white/75">Réjane Pacquit</p>
                                 <p class="about-owner-card-copy mt-3 text-white">
                                     Artiste pluridisciplinaire et écrivaine, je suis convaincue que l’avenir des arts dans nos territoires se situe dans la création de ponts entre les disciplines mais aussi dans la visibilisation des voix minorisées et silenciées. Ma mission est d’accompagner des artistes et des auteur.ice.s dans l’élaboration de projets littéraires et artistiques qui cassent les codes et tracent de nouveaux sillons.
                                 </p>
-                            </article>
-
-                            <article class="about-owner-card overflow-hidden">
-                                <img
-                                    src="{{ asset('images/team/rejane-pacquit2.jpg') }}"
-                                    alt="Réjane Pacquit"
-                                    class="about-owner-card-image-small w-full object-cover object-center"
-                                    loading="lazy"
-                                    decoding="async"
-                                >
-                            </article>
-                        </div>
+                            </div>
+                            <img
+                                src="{{ asset('images/team/rejane-pacquit2.jpg') }}"
+                                alt="Réjane Pacquit"
+                                class="about-owner-card-image-small w-full object-cover"
+                                style="object-position:center 24%;"
+                                loading="lazy"
+                                decoding="async"
+                            >
+                        </article>
                     </div>
                 </div>
             </section>
@@ -142,15 +185,15 @@
                     “
                 </div>
                 <p class="about-owner-quote-text -mt-3 text-center leading-8 text-white">
-                    “Vé pa, vé, on jou tout pèp ké kaskòdé.”
+                    Vé pa, vé, on jou tout pèp ké kaskòdé.
                 </p>
             </section>
 
             <section class="about-owner-final px-4 py-10 text-center">
-                <p class="about-owner-final-title mx-auto max-w-md italic leading-8 text-[#5E74E9]">
+                <p class="about-owner-final-title mx-auto max-w-2xl italic leading-8 text-[#5E74E9]">
                     En créole guadeloupéen, le verbe “kaskòdé” signifie “s’enfuir, sortir du système, prendre son indépendance”.
                 </p>
-                <p class="about-owner-final-copy mx-auto mt-6 max-w-lg leading-6 text-[#F59A16]">
+                <p class="about-owner-final-copy mx-auto mt-6 max-w-xl leading-6 text-[#F59A16]">
                     Chez Siyaj, nous revendiquons un esprit “kaskòdé” : celui d’une démarche de subversion assumée des codes et des règles, de remise en question de nos biais dans une perspective d’émancipation.
                 </p>
             </section>

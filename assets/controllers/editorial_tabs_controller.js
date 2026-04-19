@@ -4,7 +4,10 @@ export default class extends Controller {
     static targets = ['tab', 'panel'];
 
     connect() {
-        this.activate('raconter');
+        const firstKey = this.tabTargets[0]?.dataset.editorialTabsKeyParam;
+        if (firstKey) {
+            this.activate(firstKey);
+        }
     }
 
     show(event) {
