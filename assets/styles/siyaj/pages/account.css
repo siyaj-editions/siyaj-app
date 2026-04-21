@@ -1,0 +1,51 @@
+.owner-form-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(6, 27, 176, 0.78);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.owner-form-asterisk {
+  color: #EB5A27;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.account-address-form .owner-form-input,
+.account-address-form .owner-form-select {
+  width: 100%;
+  border: 1px solid rgba(6, 27, 176, 0.14);
+  background: rgba(255, 255, 255, 0.96);
+  color: #061BB0;
+  border-radius: 1.25rem;
+  padding: 1rem 1.1rem;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.account-address-form .owner-form-input:focus,
+.account-address-form .owner-form-select:focus {
+  outline: none;
+  border-color: rgba(12, 78, 221, 0.42);
+  box-shadow: 0 0 0 4px rgba(12, 78, 221, 0.08);
+}
+
+.account-address-form.form-attempted .owner-form-input:invalid,
+.account-address-form.form-attempted .owner-form-select:invalid,
+.account-address-form .owner-form-input.is-invalid,
+.account-address-form .owner-form-select.is-invalid {
+  border-color: rgba(220, 38, 38, 0.52);
+  background: rgba(254, 242, 242, 0.92);
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.08);
+}
+
+.account-address-form ul {
+  margin-top: 0.5rem;
+  color: #dc2626;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
