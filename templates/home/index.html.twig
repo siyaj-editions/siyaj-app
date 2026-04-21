@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Accueil - SIYAJ Éditions{% endblock %}
+{% block meta_description %}SIYAJ Éditions est une maison d’édition indépendante, féministe et décoloniale des Petites Antilles. Découvrez notre catalogue, notre ligne éditoriale et nos nouveautés.{% endblock %}
+{% block meta_image %}{{ absolute_url(asset('images/home/hero-home.jpg')) }}{% endblock %}
 
 {% block body %}
     {% set featuredBooks = latestBooks|slice(0, 3) %}

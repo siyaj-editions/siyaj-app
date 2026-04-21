@@ -1,18 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr" class="scroll-smooth">
 	<head>
+		{% set currentRoute = app.request ? app.request.attributes.get('_route') : '' %}
+		{% set robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' %}
+		{% if currentRoute starts with 'app_admin' or currentRoute starts with 'app_account' or currentRoute starts with 'app_checkout' or currentRoute in ['app_login', 'app_register', 'app_cart'] %}
+			{% set robotsContent = 'noindex,nofollow' %}
+		{% endif %}
+		{% set canonicalUrl = app.request ? app.request.schemeAndHttpHost ~ app.request.pathInfo : absolute_url(path('app_home')) %}
+		{% set seoDescription %}{% block meta_description %}SIYAJ Éditions, maison d’édition indépendante, féministe et décoloniale des Petites Antilles. Découvrez notre catalogue, nos auteur.ice.s et notre ligne éditoriale.{% endblock %}{% endset %}
+		{% set seoImage %}{% block meta_image %}{{ absolute_url(asset('logo.png')) }}{% endblock %}{% endset %}
+		{% set seoType %}{% block meta_og_type %}website{% endblock %}{% endset %}
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="description" content="SIYAJ Éditions - Maison d'édition indépendante. Découvrez notre catalogue de livres soigneusement sélectionnés.">
+		<meta name="description" content="{{ seoDescription|trim }}">
+		<meta name="robots" content="{% block meta_robots %}{{ robotsContent }}{% endblock %}">
 		<title>
 			{% block title %}SIYAJ Éditions
 			{% endblock %}
 		</title>
+		<link rel="canonical" href="{% block canonical_url %}{{ canonicalUrl }}{% endblock %}">
+		<link rel="sitemap" type="application/xml" title="Sitemap SIYAJ Éditions" href="{{ absolute_url(path('app_sitemap')) }}">
+		<meta property="og:locale" content="fr_FR">
+		<meta property="og:site_name" content="SIYAJ Éditions">
+		<meta property="og:title" content="{% block meta_title %}{{ block('title')|striptags|trim }}{% endblock %}">
+		<meta property="og:description" content="{{ seoDescription|trim }}">
+		<meta property="og:type" content="{{ seoType|trim }}">
+		<meta property="og:url" content="{{ canonicalUrl }}">
+		<meta property="og:image" content="{{ seoImage|trim }}">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="{% block twitter_title %}{{ block('title')|striptags|trim }}{% endblock %}">
+		<meta name="twitter:description" content="{{ seoDescription|trim }}">
+		<meta name="twitter:image" content="{{ seoImage|trim }}">
 		<link
 		rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
 		{# Tailwind CSS #}
 		<link rel="stylesheet" href="{{ asset('styles/app.css') }}"> {% block stylesheets %}{% endblock %}
+		{% block structured_data %}
+			{% if robotsContent starts with 'index' %}
+				<script type="application/ld+json">
+					{{ {
+						'@context': 'https://schema.org',
+						'@type': 'Organization',
+						name: 'SIYAJ Éditions',
+						url: absolute_url(path('app_home')),
+						logo: absolute_url(asset('logo.png')),
+						email: 'contact@siyaj-editions.com',
+						sameAs: ['https://www.instagram.com/siyaj.editions?igsh=MTIyeWpjYzU2ZXVpcw%3D%3D&utm_source=qr']
+					}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}
+				</script>
+				<script type="application/ld+json">
+					{{ {
+						'@context': 'https://schema.org',
+						'@type': 'WebSite',
+						name: 'SIYAJ Éditions',
+						url: absolute_url(path('app_home'))
+					}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}
+				</script>
+			{% endif %}
+		{% endblock %}
 		</head>
 	<body
 			class="min-h-screen flex flex-col antialiased"
