@@ -22,6 +22,11 @@ export default class extends Controller {
 
             if (active) {
                 this.element.style.setProperty('--editorial-active-index', tab.dataset.editorialTabsIndexParam ?? '0');
+                const nav = tab.closest('.editorial-tabs-nav');
+                if (nav) {
+                    this.element.style.setProperty('--editorial-active-width', `${tab.offsetWidth}px`);
+                    this.element.style.setProperty('--editorial-active-offset', `${tab.offsetLeft}px`);
+                }
             }
         });
 

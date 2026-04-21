@@ -49,11 +49,11 @@ h1, h2, h3, h4, h5, h6 {
   left: 0;
   bottom: 0;
   height: 3px;
-  width: calc(100% / var(--editorial-tab-count));
+  width: var(--editorial-active-width, calc(100% / var(--editorial-tab-count)));
   background: #F59A16;
   border-radius: 999px;
-  transform: translateX(calc(var(--editorial-active-index, 0) * 100%));
-  transition: transform 220ms ease;
+  transform: translateX(var(--editorial-active-offset, calc(var(--editorial-active-index, 0) * 100%)));
+  transition: transform 220ms ease, width 220ms ease;
   z-index: 1;
 }
 

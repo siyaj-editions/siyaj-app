@@ -51,7 +51,7 @@
                                     {% if not address.isDefault %}
                                         <form method="post" action="{{ path('app_account_address_default', {id: address.id}) }}">
                                             <input type="hidden" name="_token" value="{{ csrf_token('default_address_' ~ address.id) }}">
-                                            <button type="submit" class="text-xs text-gold hover:underline">Définir par défaut</button>
+                                            <button type="submit" class="text-xs text-gold hover:underline" style="width: 7rem;">Définir par défaut</button>
                                         </form>
                                     {% endif %}
                                     <form method="post" action="{{ path('app_account_address_delete', {id: address.id}) }}" onsubmit="return confirm('Supprimer cette adresse ?');">
@@ -68,53 +68,53 @@
                     {% endfor %}
                 </div>
 
-                <div id="address-form-panel" class="hidden rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white p-6 shadow-sm">
+                <div id="address-form-panel" class="{{ addressForm.vars.submitted and not addressForm.vars.valid ? '' : 'hidden ' }}account-address-form-panel rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white p-6 shadow-sm">
                     <h3 class="font-display text-xl text-ink mb-4">Nouvelle adresse</h3>
-                    {{ form_start(addressForm, {'attr': {'class': 'space-y-4'}}) }}
+                    {{ form_start(addressForm, {'attr': {'class': 'space-y-4 account-address-form', 'data-controller': 'form-feedback', 'novalidate': 'novalidate'}}) }}
                     <div class="grid sm:grid-cols-2 gap-4">
                         <div>
-                            {{ form_label(addressForm.firstname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.firstname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            <label for="{{ addressForm.firstname.vars.id }}" class="owner-form-label">Prénom<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(addressForm.firstname, {'attr': {'class': 'owner-form-input', 'placeholder': 'Prénom'}}) }}
                             {{ form_errors(addressForm.firstname) }}
                         </div>
                         <div>
-                            {{ form_label(addressForm.lastname, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.lastname, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            <label for="{{ addressForm.lastname.vars.id }}" class="owner-form-label">Nom<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(addressForm.lastname, {'attr': {'class': 'owner-form-input', 'placeholder': 'Nom'}}) }}
                             {{ form_errors(addressForm.lastname) }}
                         </div>
                         <div class="sm:col-span-2">
-                            {{ form_label(addressForm.numero, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.numero, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper', 'placeholder': '06 12 34 56 78'}}) }}
+                            <label for="{{ addressForm.numero.vars.id }}" class="owner-form-label">Numéro (téléphone)</label>
+                            {{ form_widget(addressForm.numero, {'attr': {'class': 'owner-form-input', 'placeholder': '06 12 34 56 78'}}) }}
                             {{ form_errors(addressForm.numero) }}
                         </div>
                         <div class="sm:col-span-2">
-                            {{ form_label(addressForm.street, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.street, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            <label for="{{ addressForm.street.vars.id }}" class="owner-form-label">Adresse<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(addressForm.street, {'attr': {'class': 'owner-form-input'}}) }}
                             {{ form_errors(addressForm.street) }}
                         </div>
                         <div class="sm:col-span-2">
-                            {{ form_label(addressForm.street2, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.street2, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            <label for="{{ addressForm.street2.vars.id }}" class="owner-form-label">Complément</label>
+                            {{ form_widget(addressForm.street2, {'attr': {'class': 'owner-form-input'}}) }}
                             {{ form_errors(addressForm.street2) }}
                         </div>
                         <div>
-                            {{ form_label(addressForm.postalCode, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.postalCode, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            <label for="{{ addressForm.postalCode.vars.id }}" class="owner-form-label">Code postal<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(addressForm.postalCode, {'attr': {'class': 'owner-form-input'}}) }}
                             {{ form_errors(addressForm.postalCode) }}
                         </div>
                         <div>
-                            {{ form_label(addressForm.city, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
-                            {{ form_widget(addressForm.city, {'attr': {'class': 'w-full px-4 py-3 rounded-xl border border-black/10 bg-paper'}}) }}
+                            <label for="{{ addressForm.city.vars.id }}" class="owner-form-label">Ville<span class="owner-form-asterisk">*</span></label>
+                            {{ form_widget(addressForm.city, {'attr': {'class': 'owner-form-input'}}) }}
                             {{ form_errors(addressForm.city) }}
                         </div>
                         <div class="sm:col-span-2">
-                            {{ form_label(addressForm.country, null, {'label_attr': {'class': 'block text-xs font-semibold uppercase tracking-wider text-ink/50 mb-2'}}) }}
+                            <label for="{{ addressForm.country.vars.id }}" class="owner-form-label">Pays<span class="owner-form-asterisk">*</span></label>
                             <div
                                 class="relative"
                                 data-controller="autocomplete"
                                 data-autocomplete-choices-value='{{ addressForm.vars.country_choices|json_encode|e('html_attr') }}'
                             >
-                                {{ form_widget(addressForm.country, {'attr': {'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close'}}) }}
+                                {{ form_widget(addressForm.country, {'attr': {'class': 'owner-form-input', 'data-autocomplete-target': 'input', 'data-action': 'input->autocomplete#update focus->autocomplete#open click->autocomplete#open blur->autocomplete#close'}}) }}
                                 <div class="absolute left-0 right-0 top-full z-20 mt-2 hidden overflow-hidden rounded-2xl border border-black/10 bg-white shadow-[0_18px_40px_rgba(17,24,39,0.08)]" data-autocomplete-target="menu" data-action="mousedown->autocomplete#handleMouseDown click->autocomplete#select"></div>
                             </div>
                             {{ form_errors(addressForm.country) }}
@@ -146,6 +146,10 @@
     btn.addEventListener('click', function () {
         panel.classList.toggle('hidden');
     });
+
+    if (!panel.classList.contains('hidden')) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 })();
 </script>
 {% endblock %}
