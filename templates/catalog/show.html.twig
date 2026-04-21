@@ -1,6 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ book.title }} - SIYAJ{% endblock %}
+{% block meta_description %}{% if book.description %}{{ book.description|striptags|replace({'\n':' '})|slice(0, 155)|trim }}{% else %}Découvrez {{ book.title }} publié par SIYAJ Éditions.{% endif %}{% endblock %}
+{% block meta_image %}{% if book.coverImage %}{{ absolute_url(book.coverImage) }}{% else %}{{ absolute_url(asset('logo.png')) }}{% endif %}{% endblock %}
+{% block meta_og_type %}book{% endblock %}
+{% block structured_data %}
+    {{ parent() }}
+    {% set authorsSchema = [] %}
+    {% for author in book.authors %}
+        {% set authorsSchema = authorsSchema|merge([{
+            '@type': 'Person',
+            name: author.fullName
+        }]) %}
+    {% endfor %}
+    <script type="application/ld+json">
+        {{ {
+            '@context': 'https://schema.org',
+            '@type': 'Book',
+            name: book.title,
+            author: authorsSchema,
+            image: book.coverImage ? [absolute_url(book.coverImage)] : [absolute_url(asset('logo.png'))],
+            isbn: book.isbn,
+            description: book.description,
+            url: absolute_url(path('app_book_show', {slug: book.slug})),
+            bookFormat: book.format.value ?? null,
+            publisher: {
+                '@type': 'Organization',
+                name: 'SIYAJ Éditions'
+            },
+            offers: {
+                '@type': 'Offer',
+                priceCurrency: book.currency,
+                price: (book.priceCents / 100)|number_format(2, '.', ''),
+                availability: book.isInStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                url: absolute_url(path('app_book_show', {slug: book.slug}))
+            }
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}
+    </script>
+{% endblock %}
 
 {% block body %}
     <div class="book-shell">
