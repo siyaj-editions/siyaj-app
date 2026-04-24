@@ -3,7 +3,7 @@
 	<head>
 		{% set currentRoute = app.request ? app.request.attributes.get('_route') : '' %}
 		{% set robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' %}
-		{% if currentRoute starts with 'app_admin' or currentRoute starts with 'app_account' or currentRoute starts with 'app_checkout' or currentRoute in ['app_login', 'app_register', 'app_cart'] %}
+		{% if currentRoute starts with 'app_admin' or currentRoute starts with 'app_account' or currentRoute starts with 'app_checkout' or currentRoute in ['app_login', 'app_register', 'app_cart', 'app_forgot_password', 'app_reset_password'] %}
 			{% set robotsContent = 'noindex,nofollow' %}
 		{% endif %}
 		{% set canonicalUrl = app.request ? app.request.schemeAndHttpHost ~ app.request.pathInfo : absolute_url(path('app_home')) %}
