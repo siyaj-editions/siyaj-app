@@ -98,6 +98,11 @@
                                     </svg>
                                 </button>
                             </div>
+                            <div class="mt-3 text-right">
+                                <a href="{{ path('app_forgot_password') }}" class="text-sm font-medium text-[rgba(6,27,176,0.68)] transition hover:text-[#F59A16]">
+                                    Mot de passe oublié ?
+                                </a>
+                            </div>
                         </div>
 
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">

@@ -40,6 +40,11 @@ services:
             $contactEmail: '%contact_email%'
             $mailerFromEmail: '%mailer_from_email%'
 
+    App\Service\PasswordResetService:
+        arguments:
+            $mailerFromEmail: '%mailer_from_email%'
+            $appSecret: '%kernel.secret%'
+
     App\Service\BookCoverStorage:
         arguments:
             $projectDir: '%kernel.project_dir%'
