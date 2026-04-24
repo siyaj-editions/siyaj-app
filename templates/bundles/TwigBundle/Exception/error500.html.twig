@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Erreur serveur - SIYAJ Éditions</title>
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+        <style>
+            body { margin: 0; min-height: 100vh; background: #F7F4ED; color: #061BB0; font-family: 'Garet', system-ui, sans-serif; }
+            .error-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+            .error-card { width: min(100%, 72rem); border: 1px solid rgba(6, 27, 176, 0.08); border-radius: 2rem; background: #fff; box-shadow: 0 24px 54px rgba(6, 27, 176, 0.08); overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr); }
+            .error-copy { padding: 3rem; }
+            .error-kicker { margin: 0; color: #F59A16; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; }
+            .error-code { margin: 1rem 0 0; color: #EB5A27; font-size: clamp(3.4rem, 8vw, 6rem); font-weight: 800; line-height: 0.95; }
+            .error-title { margin: 1rem 0 0; color: #061BB0; font-size: clamp(2.1rem, 4vw, 3.6rem); font-weight: 800; line-height: 1.02; }
+            .error-body { margin: 1.5rem 0 0; max-width: 40rem; color: rgba(6, 27, 176, 0.8); font-size: 1.05rem; line-height: 1.8; }
+            .error-actions { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 0.9rem; }
+            .error-link { display: inline-flex; align-items: center; justify-content: center; min-height: 3.4rem; padding: 0 1.5rem; border-radius: 999px; border: 1px solid rgba(6, 27, 176, 0.18); color: #061BB0; text-decoration: none; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; transition: 0.2s ease; }
+            .error-link:hover { border-color: #F59A16; color: #F59A16; }
+            .error-link--primary { background: #061BB0; color: #fff; border-color: transparent; }
+            .error-link--primary:hover { background: #F59A16; color: #fff; }
+            .error-visual { position: relative; min-height: 100%; padding: 3rem; color: #fff; background: linear-gradient(rgba(6, 27, 176, 0.18), rgba(6, 27, 176, 0.18)), url('{{ asset('images/home/homepage-hero.jpg') }}') center 58% / cover no-repeat; display: flex; flex-direction: column; justify-content: space-between; }
+            .error-visual::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 27, 176, 0.22) 0%, rgba(6, 27, 176, 0.52) 100%); }
+            .error-visual-inner { position: relative; z-index: 1; }
+            .error-logo { height: 3rem; width: auto; }
+            .error-visual-title { margin: 0; font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; }
+            .error-visual-copy { margin: 1rem 0 0; max-width: 22rem; color: rgba(255, 255, 255, 0.9); line-height: 1.75; }
+            @media (max-width: 960px) { .error-card { grid-template-columns: 1fr; } .error-copy, .error-visual { padding: 2rem; } .error-visual { min-height: 22rem; } }
+        </style>
+    </head>
+    <body>
+        <main class="error-shell">
+            <section class="error-card">
+                <div class="error-copy">
+                    <p class="error-kicker">Erreur serveur</p>
+                    <p class="error-code">500</p>
+                    <h1 class="error-title">Le serveur a rencontré un problème inattendu.</h1>
+                    <p class="error-body">La page n’a pas pu être affichée correctement. Tu peux réessayer dans un instant, revenir à l’accueil ou nous écrire si le souci persiste.</p>
+                    <div class="error-actions">
+                        <a href="{{ path('app_home') }}" class="error-link error-link--primary">Retour à l’accueil</a>
+                        <a href="{{ path('app_contact') }}" class="error-link">Nous contacter</a>
+                        <a href="{{ path('app_catalog') }}" class="error-link">Voir le catalogue</a>
+                    </div>
+                </div>
+                <div class="error-visual">
+                    <div class="error-visual-inner"><img src="{{ asset('navbar-logo.png') }}" alt="SIYAJ" class="error-logo"></div>
+                    <div class="error-visual-inner">
+                        <h2 class="error-visual-title">Le site reste lisible, même en cas d’incident.</h2>
+                        <p class="error-visual-copy">On te propose une sortie claire et utile pendant qu’on règle le problème côté serveur.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </body>
+</html>
