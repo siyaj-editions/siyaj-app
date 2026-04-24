@@ -10,7 +10,7 @@
     {% for author in book.authors %}
         {% set authorsSchema = authorsSchema|merge([{
             '@type': 'Person',
-            name: author.fullName
+            name: author.name
         }]) %}
     {% endfor %}
     <script type="application/ld+json">

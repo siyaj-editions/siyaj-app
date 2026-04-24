@@ -15,12 +15,12 @@
 
                     {% if error %}
                         <div class="mb-6 flex items-start gap-3 rounded-[1.25rem] border border-[rgba(235,90,39,0.24)] bg-[rgba(235,90,39,0.08)] p-4 text-sm text-[#EB5A27]">
-                            <svg class="mt-0.5 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                            <svg class="mt-0.5 h-5 w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round">
                                 <circle cx="12" cy="12" r="10"/>
                                 <line x1="12" y1="8" x2="12" y2="12"/>
-                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                <circle cx="12" cy="16" r="1.1" fill="currentColor" stroke="none"/>
                             </svg>
-                            <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                            <span>{{ error.messageKey|trans(error.messageData, 'security', 'fr') }}</span>
                         </div>
                     {% endif %}
 
