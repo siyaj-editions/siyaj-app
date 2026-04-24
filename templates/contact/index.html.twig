@@ -100,7 +100,7 @@
                     <div class="contact-owner-form-grid-2">
                         <div>
                             <label for="{{ contactForm.email.vars.id }}" class="owner-form-label">Email<span class="owner-form-asterisk">*</span></label>
-                            {{ form_widget(contactForm.email, {'attr': {'placeholder': 'votre@email.com', 'class': 'owner-form-input'}}) }}
+                            {{ form_widget(contactForm.email, {'attr': {'placeholder': 'ton@email.com', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(contactForm.email) }}
                         </div>
                         <div>
@@ -112,7 +112,7 @@
 
                     <div>
                         <label for="{{ contactForm.message.vars.id }}" class="owner-form-label">Message<span class="owner-form-asterisk">*</span></label>
-                        {{ form_widget(contactForm.message, {'attr': {'placeholder': 'Décrivez votre demande...', 'class': 'owner-form-textarea'}}) }}
+                        {{ form_widget(contactForm.message, {'attr': {'placeholder': 'Décris ta demande...', 'class': 'owner-form-textarea'}}) }}
                         {{ form_errors(contactForm.message) }}
                     </div>
 

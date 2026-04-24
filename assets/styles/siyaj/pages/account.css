@@ -49,3 +49,7 @@
   font-size: 0.9rem;
   line-height: 1.6;
 }
+
+.account-profile-password-label {
+  min-height: 2.5rem;
+}

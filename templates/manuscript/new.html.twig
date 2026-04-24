@@ -145,7 +145,7 @@
                     <div class="manuscript-owner-form-grid-2">
                         <div>
                             <label for="{{ submissionForm.email.vars.id }}" class="owner-form-label">Email<span class="owner-form-asterisk">*</span></label>
-                            {{ form_widget(submissionForm.email, {'attr': {'placeholder': 'votre@email.com', 'class': 'owner-form-input'}}) }}
+                            {{ form_widget(submissionForm.email, {'attr': {'placeholder': 'ton@email.com', 'class': 'owner-form-input'}}) }}
                             {{ form_errors(submissionForm.email) }}
                         </div>
                         <div>
@@ -170,7 +170,7 @@
 
                     <div>
                         <label for="{{ submissionForm.synopsis.vars.id }}" class="owner-form-label">Résumé / note d’intention<span class="owner-form-asterisk">*</span></label>
-                        {{ form_widget(submissionForm.synopsis, {'attr': {'placeholder': 'Présentez votre manuscrit, son intention et sa forme.', 'class': 'owner-form-textarea'}}) }}
+                        {{ form_widget(submissionForm.synopsis, {'attr': {'placeholder': 'Présente ton manuscrit, son intention et sa forme.', 'class': 'owner-form-textarea'}}) }}
                         {{ form_errors(submissionForm.synopsis) }}
                     </div>
 
