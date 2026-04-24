@@ -43,7 +43,7 @@ export default class extends Controller {
         const file = this.inputTarget.files?.[0];
         this.nameTarget.textContent = file
             ? file.name
-            : (this.emptyLabelValue || 'Glissez-déposez votre fichier ici ou cliquez pour le sélectionner');
+            : (this.emptyLabelValue || 'Glisse ton fichier ici ou cliquez pour le sélectionner');
     }
 
     updatePreview() {

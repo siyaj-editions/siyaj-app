@@ -5,6 +5,7 @@ import CookieConsentController from './controllers/cookie_consent_controller.js'
 import DatePickerController from './controllers/date_picker_controller.js';
 import EditorialTabsController from './controllers/editorial_tabs_controller.js';
 import FormFeedbackController from './controllers/form_feedback_controller.js';
+import PasswordToggleController from './controllers/password_toggle_controller.js';
 import UploadDropzoneController from './controllers/upload_dropzone_controller.js';
 
 const app = startStimulusApp();
@@ -15,4 +16,5 @@ app.register('cookie-consent', CookieConsentController);
 app.register('date-picker', DatePickerController);
 app.register('editorial-tabs', EditorialTabsController);
 app.register('form-feedback', FormFeedbackController);
+app.register('password-toggle', PasswordToggleController);
 app.register('upload-dropzone', UploadDropzoneController);

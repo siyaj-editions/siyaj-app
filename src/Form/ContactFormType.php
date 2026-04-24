@@ -48,6 +48,9 @@ class ContactFormType extends AbstractType
                     'Relations publiques' => 'relations_publiques',
                     'Communication' => 'communication',
                     'Médias' => 'medias',
+                    'Service éditorial' => 'service_editorial',
+                    'Relation libraires' => 'relation_libraires',
+                    'Suivi de commande' => 'suivi_de_commande',
                     'Autre' => 'autre',
                 ],
                 'constraints' => [
