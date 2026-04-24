@@ -73,6 +73,12 @@ class SeoController extends AbstractController
                 'changefreq' => 'yearly',
                 'priority' => '0.3',
             ],
+            [
+                'loc' => $this->generateUrl('app_cgu', [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'lastmod' => null,
+                'changefreq' => 'yearly',
+                'priority' => '0.3',
+            ],
         ];
 
         $bookPages = array_map(function ($book): array {
