@@ -63,6 +63,12 @@ class HomeController extends AbstractController
         return $this->render('home/cgv.html.twig');
     }
 
+    #[Route('/cgu', name: 'app_cgu')]
+    public function cgu(): Response
+    {
+        return $this->render('home/cgu.html.twig');
+    }
+
     #[Route('/confidentialite', name: 'app_privacy')]
     public function privacy(): Response
     {

@@ -17,19 +17,19 @@
                         <div class="grid gap-5 sm:grid-cols-2">
                             <div>
                                 {{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
-                                {{ form_widget(registrationForm.firstname, {'attr': {'placeholder': 'Votre prénom'}}) }}
+                                {{ form_widget(registrationForm.firstname, {'attr': {'placeholder': 'Ton prénom'}}) }}
                                 {{ form_errors(registrationForm.firstname) }}
                             </div>
                             <div>
                                 {{ form_label(registrationForm.lastname, 'Nom', {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
-                                {{ form_widget(registrationForm.lastname, {'attr': {'placeholder': 'Votre nom'}}) }}
+                                {{ form_widget(registrationForm.lastname, {'attr': {'placeholder': 'Ton nom'}}) }}
                                 {{ form_errors(registrationForm.lastname) }}
                             </div>
                         </div>
 
                         <div>
                             {{ form_label(registrationForm.email, 'Adresse email', {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
-                            {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'votre@email.com'}}) }}
+                            {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'Ton@email.com'}}) }}
                             {{ form_errors(registrationForm.email) }}
                         </div>
 
@@ -40,14 +40,98 @@
                         </div>
 
                         <div class="grid gap-5 sm:grid-cols-2">
-                            <div>
+                            <div data-controller="password-toggle">
                                 {{ form_label(registrationForm.plainPassword.first, 'Mot de passe', {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
-                                {{ form_widget(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Minimum 8 caractères'}}) }}
+                                <div class="relative">
+                                    {{ form_widget(registrationForm.plainPassword.first, {'attr': {'placeholder': 'Minimum 8 caractères', 'class': 'w-full pr-16', 'data-password-toggle-target': 'input'}}) }}
+                                    <button
+                                        type="button"
+                                        class="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-[rgba(6,27,176,0.6)] transition hover:text-[#F59A16]"
+                                        data-action="click->password-toggle#toggle"
+                                        data-password-toggle-target="label"
+                                        aria-label="Afficher le mot de passe"
+                                    >
+                                        <svg
+                                            data-password-toggle-target="showIcon"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.9"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="h-5 w-5"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                        <svg
+                                            data-password-toggle-target="hideIcon"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.9"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="hidden h-5 w-5"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="m3 3 18 18"/>
+                                            <path d="M10.584 10.587A2 2 0 0 0 10 12a2 2 0 0 0 2 2c.52 0 .993-.198 1.349-.523"/>
+                                            <path d="M9.363 5.365A9.466 9.466 0 0 1 12 5c4.478 0 8.268 2.943 9.542 7a11.05 11.05 0 0 1-4.03 5.145"/>
+                                            <path d="M6.228 6.228A11.013 11.013 0 0 0 2.458 12c1.274 4.057 5.064 7 9.542 7 1.27 0 2.48-.237 3.592-.67"/>
+                                        </svg>
+                                    </button>
+                                </div>
                                 {{ form_errors(registrationForm.plainPassword.first) }}
                             </div>
-                            <div>
+                            <div data-controller="password-toggle">
                                 {{ form_label(registrationForm.plainPassword.second, 'Confirmation', {'label_attr': {'class': 'mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]'}}) }}
-                                {{ form_widget(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Confirmez le mot de passe'}}) }}
+                                <div class="relative">
+                                    {{ form_widget(registrationForm.plainPassword.second, {'attr': {'placeholder': 'Confirme ton mot de passe', 'class': 'w-full pr-16', 'data-password-toggle-target': 'input'}}) }}
+                                    <button
+                                        type="button"
+                                        class="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-[rgba(6,27,176,0.6)] transition hover:text-[#F59A16]"
+                                        data-action="click->password-toggle#toggle"
+                                        data-password-toggle-target="label"
+                                        aria-label="Afficher le mot de passe"
+                                    >
+                                        <svg
+                                            data-password-toggle-target="showIcon"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.9"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="h-5 w-5"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"/>
+                                            <circle cx="12" cy="12" r="3"/>
+                                        </svg>
+                                        <svg
+                                            data-password-toggle-target="hideIcon"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            stroke-width="1.9"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            class="hidden h-5 w-5"
+                                            aria-hidden="true"
+                                        >
+                                            <path d="m3 3 18 18"/>
+                                            <path d="M10.584 10.587A2 2 0 0 0 10 12a2 2 0 0 0 2 2c.52 0 .993-.198 1.349-.523"/>
+                                            <path d="M9.363 5.365A9.466 9.466 0 0 1 12 5c4.478 0 8.268 2.943 9.542 7a11.05 11.05 0 0 1-4.03 5.145"/>
+                                            <path d="M6.228 6.228A11.013 11.013 0 0 0 2.458 12c1.274 4.057 5.064 7 9.542 7 1.27 0 2.48-.237 3.592-.67"/>
+                                        </svg>
+                                    </button>
+                                </div>
                                 {{ form_errors(registrationForm.plainPassword.second) }}
                             </div>
                         </div>
@@ -55,7 +139,17 @@
                         <div class="flex items-start gap-3 rounded-[1.25rem] border border-[rgba(6,27,176,0.08)] bg-[rgba(247,244,237,0.75)] p-4">
                             {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'mt-1 h-5 w-5 rounded border-[rgba(6,27,176,0.22)] text-[var(--register-blue-soft)] cursor-pointer'}}) }}
                             <div>
-                                {{ form_label(registrationForm.agreeTerms, "J'accepte les conditions générales d'utilisation", {'label_attr': {'class': 'text-sm leading-6 text-[rgba(6,27,176,0.75)] cursor-pointer'}}) }}
+                                <label for="{{ registrationForm.agreeTerms.vars.id }}" class="text-sm leading-6 text-[rgba(6,27,176,0.75)] cursor-pointer">
+                                    J'accepte les
+                                    <a
+                                        href="{{ path('app_cgu') }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="font-semibold text-[#061BB0] underline underline-offset-2 transition hover:text-[#F59A16]"
+                                    >
+                                        conditions générales d'utilisation
+                                    </a>
+                                </label>
                                 {{ form_errors(registrationForm.agreeTerms) }}
                             </div>
                         </div>
@@ -66,7 +160,7 @@
                     {{ form_end(registrationForm) }}
 
                     <div class="mt-8 border-t border-[rgba(6,27,176,0.08)] pt-6 text-center">
-                        <p class="text-sm text-[rgba(6,27,176,0.55)]">Vous avez déjà un compte ?</p>
+                        <p class="text-sm text-[rgba(6,27,176,0.55)]">Tu as déjà un compte ?</p>
                         <a href="{{ path('app_login') }}" class="mt-2 inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-[#EB5A27] transition hover:text-[#061BB0]">
                             Se connecter
                         </a>

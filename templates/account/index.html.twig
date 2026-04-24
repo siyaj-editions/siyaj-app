@@ -12,7 +12,7 @@
             Bonjour, {{ user.firstname }}
         </h1>
         <p class="text-lg text-ink/60">
-            Gérez vos informations et suivez vos commandes
+            Gère tes informations et suis tes commandes
         </p>
     </div>
 </section>
@@ -54,8 +54,8 @@
                                 <polyline points="14 2 14 8 20 8"/>
                             </svg>
                         </div>
-                        <h3 class="font-display text-lg font-semibold text-ink mb-1">Mes commandes</h3>
-                        <p class="text-sm text-ink/50 mb-4">Consultez l'historique et le statut de vos commandes</p>
+                        <h3 class="font-display text-lg font-semibold text-ink mb-1">Tes commandes</h3>
+                        <p class="text-sm text-ink/50 mb-4">Consultez l'historique et le statut de tes commandes</p>
                         <a href="{{ path('app_account_orders') }}" class="inline-flex items-center gap-1.5 text-sm font-medium text-gold hover:gap-2.5 transition-all duration-200">
                             Voir tout
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
@@ -102,7 +102,7 @@
                         </div>
                     {% else %}
                         <div class="text-center py-12">
-                            <p class="text-ink/50 mb-4">Vous n'avez pas encore passé de commande.</p>
+                            <p class="text-ink/50 mb-4">Tu n'as pas encore passé de commande.</p>
                             <a href="{{ path('app_catalog') }}" class="btn btn-secondary px-6 py-3">
                                 Découvrir le catalogue
                             </a>

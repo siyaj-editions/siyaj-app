@@ -9,8 +9,8 @@
                 <div class="p-8 lg:p-10">
                     <div class="mb-8">
                         <p class="section-kicker">Connexion</p>
-                        <h1 class="editorial-title-md mt-3 text-[3.4rem]">Votre espace lecture</h1>
-                        <p class="editorial-copy-soft mt-4">Accédez à votre espace personnel et à votre suivi de commandes.</p>
+                        <h1 class="editorial-title-md mt-3 text-[3.4rem]">Ton espace lecture</h1>
+                        <p class="editorial-copy-soft mt-4">Accède à ton espace personnel et à ton suivi de commandes.</p>
                     </div>
 
                     {% if error %}
@@ -38,23 +38,66 @@
                                 autocomplete="email"
                                 required
                                 autofocus
-                                placeholder="votre@email.com"
+                                placeholder="Ton@email.com"
                             >
                         </div>
 
-                        <div>
+                        <div data-controller="password-toggle">
                             <label for="inputPassword" class="mb-2 block text-xs font-semibold uppercase tracking-[0.18em] text-[rgba(6,27,176,0.55)]">
                                 Mot de passe
                             </label>
+                            <div class="relative">
                             <input
                                 type="password"
                                 name="_password"
                                 id="inputPassword"
-                                class="w-full"
+                                class="w-full pr-16"
                                 autocomplete="current-password"
                                 required
-                                placeholder="Votre mot de passe"
+                                placeholder="Ton mot de passe"
+                                data-password-toggle-target="input"
                             >
+                                <button
+                                    type="button"
+                                    class="absolute right-3 top-1/2 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full text-[rgba(6,27,176,0.6)] transition hover:text-[#F59A16]"
+                                    data-action="click->password-toggle#toggle"
+                                    data-password-toggle-target="label"
+                                    aria-label="Afficher le mot de passe"
+                                >
+                                    <svg
+                                        data-password-toggle-target="showIcon"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.9"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="h-5 w-5"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7Z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                    <svg
+                                        data-password-toggle-target="hideIcon"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.9"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="hidden h-5 w-5"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="m3 3 18 18"/>
+                                        <path d="M10.584 10.587A2 2 0 0 0 10 12a2 2 0 0 0 2 2c.52 0 .993-.198 1.349-.523"/>
+                                        <path d="M9.363 5.365A9.466 9.466 0 0 1 12 5c4.478 0 8.268 2.943 9.542 7a11.05 11.05 0 0 1-4.03 5.145"/>
+                                        <path d="M6.228 6.228A11.013 11.013 0 0 0 2.458 12c1.274 4.057 5.064 7 9.542 7 1.27 0 2.48-.237 3.592-.67"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
@@ -65,7 +108,7 @@
                     </form>
 
                     <div class="mt-8 border-t border-[rgba(6,27,176,0.08)] pt-6 text-center">
-                        <p class="text-sm text-[rgba(6,27,176,0.55)]">Vous n'avez pas de compte ?</p>
+                        <p class="text-sm text-[rgba(6,27,176,0.55)]">Tu n'as pas de compte ?</p>
                         <a href="{{ path('app_register') }}" class="mt-2 inline-flex text-sm font-semibold uppercase tracking-[0.14em] text-[#EB5A27] transition hover:text-[#061BB0]">
                             Créer un compte
                         </a>
@@ -84,12 +127,12 @@
                     <div class="relative z-10 flex h-full flex-col justify-between">
                         <div>
                             <p class="text-xs uppercase tracking-[0.24em] text-white/60">SIYAJ Éditions</p>
-                            <h2 class="mt-5 text-4xl">Un accès simple à votre univers de lecture.</h2>
+                            <h2 class="mt-5 text-4xl">Un accès simple à ton univers de lecture.</h2>
                         </div>
 
                         <div class="space-y-4">
                             <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(6,27,176,0.28);backdrop-filter:blur(10px);">
-                                <p class="text-sm leading-7 text-white/82">Suivez vos commandes, retrouvez vos achats et gardez un accès fluide à votre espace lecteur.</p>
+                                <p class="text-sm leading-7 text-white/82">Suis tes commandes, retrouve tes achats et garde un accès fluide à ton espace lecteur.</p>
                             </div>
                             <div class="rounded-[1.6rem] border border-white/10 p-5" style="background:rgba(6,27,176,0.28);backdrop-filter:blur(10px);">
                                 <p class="text-sm leading-7 text-white/82">Une expérience claire, soignée et cohérente avec le reste du site.</p>
