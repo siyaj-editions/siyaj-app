@@ -12,6 +12,8 @@ services:
         condition: service_healthy
     volumes:
       - public_data:/var/www/html/public
+      - /home/ubuntu/siyaj/shared/uploads/books:/var/www/html/public/uploads/books
+      - /home/ubuntu/siyaj/shared/uploads/manuscripts:/var/www/html/var/uploads/manuscripts
 
   nginx:
     image: nginx:1.27-alpine
@@ -22,6 +24,7 @@ services:
       - "${HOST_HTTP_PORT:-8002}:80"
     volumes:
       - public_data:/usr/share/nginx/html:ro
+      - /home/ubuntu/siyaj/shared/uploads/books:/usr/share/nginx/html/uploads/books:ro
       - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
   database:
