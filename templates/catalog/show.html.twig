@@ -2,7 +2,7 @@
 
 {% block title %}{{ book.title }} - SIYAJ{% endblock %}
 {% block meta_description %}{% if book.description %}{{ book.description|striptags|replace({'\n':' '})|slice(0, 155)|trim }}{% else %}Découvrez {{ book.title }} publié par SIYAJ Éditions.{% endif %}{% endblock %}
-{% block meta_image %}{% if book.coverImage %}{{ absolute_url(book.coverImage) }}{% else %}{{ absolute_url(asset('logo.png')) }}{% endif %}{% endblock %}
+{% block meta_image %}{% if book.coverImage %}{{ canonical_origin|trim('/') ~ book.coverImage }}{% else %}{{ canonical_origin|trim('/') ~ asset('logo.png') }}{% endif %}{% endblock %}
 {% block meta_og_type %}book{% endblock %}
 {% block structured_data %}
     {{ parent() }}
@@ -19,10 +19,10 @@
             '@type': 'Book',
             name: book.title,
             author: authorsSchema,
-            image: book.coverImage ? [absolute_url(book.coverImage)] : [absolute_url(asset('logo.png'))],
+            image: book.coverImage ? [canonical_origin|trim('/') ~ book.coverImage] : [canonical_origin|trim('/') ~ asset('logo.png')],
             isbn: book.isbn,
             description: book.description,
-            url: absolute_url(path('app_book_show', {slug: book.slug})),
+            url: canonical_origin|trim('/') ~ path('app_book_show', {slug: book.slug}),
             bookFormat: book.format.value ?? null,
             publisher: {
                 '@type': 'Organization',
@@ -33,7 +33,7 @@
                 priceCurrency: book.currency,
                 price: (book.priceCents / 100)|number_format(2, '.', ''),
                 availability: book.isInStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-                url: absolute_url(path('app_book_show', {slug: book.slug}))
+                url: canonical_origin|trim('/') ~ path('app_book_show', {slug: book.slug})
             }
         }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}
     </script>

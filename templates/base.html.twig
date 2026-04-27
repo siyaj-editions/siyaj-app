@@ -2,13 +2,14 @@
 <html lang="fr" class="scroll-smooth">
 	<head>
 		{% set currentRoute = app.request ? app.request.attributes.get('_route') : '' %}
+		{% set canonicalOrigin = canonical_origin|trim('/') %}
 		{% set robotsContent = 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1' %}
 		{% if currentRoute starts with 'app_admin' or currentRoute starts with 'app_account' or currentRoute starts with 'app_checkout' or currentRoute in ['app_login', 'app_register', 'app_cart', 'app_forgot_password', 'app_reset_password'] %}
 			{% set robotsContent = 'noindex,nofollow' %}
 		{% endif %}
-		{% set canonicalUrl = app.request ? app.request.schemeAndHttpHost ~ app.request.pathInfo : absolute_url(path('app_home')) %}
+		{% set canonicalUrl = app.request ? canonicalOrigin ~ app.request.pathInfo : canonicalOrigin ~ path('app_home') %}
 		{% set seoDescription %}{% block meta_description %}SIYAJ Éditions, maison d’édition indépendante, féministe et décoloniale des Petites Antilles. Découvrez notre catalogue, nos auteur.ice.s et notre ligne éditoriale.{% endblock %}{% endset %}
-		{% set seoImage %}{% block meta_image %}{{ absolute_url(asset('logo.png')) }}{% endblock %}{% endset %}
+		{% set seoImage %}{% block meta_image %}{{ canonicalOrigin ~ asset('logo.png') }}{% endblock %}{% endset %}
 		{% set seoType %}{% block meta_og_type %}website{% endblock %}{% endset %}
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +20,7 @@
 			{% endblock %}
 		</title>
 		<link rel="canonical" href="{% block canonical_url %}{{ canonicalUrl }}{% endblock %}">
-		<link rel="sitemap" type="application/xml" title="Sitemap SIYAJ Éditions" href="{{ absolute_url(path('app_sitemap')) }}">
+		<link rel="sitemap" type="application/xml" title="Sitemap SIYAJ Éditions" href="{{ canonicalOrigin ~ path('app_sitemap') }}">
 		<meta property="og:locale" content="fr_FR">
 		<meta property="og:site_name" content="SIYAJ Éditions">
 		<meta property="og:title" content="{% block meta_title %}{{ block('title')|striptags|trim }}{% endblock %}">
@@ -43,8 +44,8 @@
 						'@context': 'https://schema.org',
 						'@type': 'Organization',
 						name: 'SIYAJ Éditions',
-						url: absolute_url(path('app_home')),
-						logo: absolute_url(asset('logo.png')),
+						url: canonicalOrigin ~ path('app_home'),
+						logo: canonicalOrigin ~ asset('logo.png'),
 						email: 'contact@siyaj-editions.com',
 						sameAs: ['https://www.instagram.com/siyaj.editions?igsh=MTIyeWpjYzU2ZXVpcw%3D%3D&utm_source=qr']
 					}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}
@@ -54,7 +55,7 @@
 						'@context': 'https://schema.org',
 						'@type': 'WebSite',
 						name: 'SIYAJ Éditions',
-						url: absolute_url(path('app_home'))
+						url: canonicalOrigin ~ path('app_home')
 					}|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_UNESCAPED_SLASHES'))|raw }}
 				</script>
 			{% endif %}
