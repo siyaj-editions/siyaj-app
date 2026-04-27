@@ -2,6 +2,7 @@ twig:
     file_name_pattern: '*.twig'
     globals:
         contact_email: '%env(CONTACT_EMAIL)%'
+        canonical_origin: '%env(DEFAULT_URI)%'
 
 when@test:
     twig:

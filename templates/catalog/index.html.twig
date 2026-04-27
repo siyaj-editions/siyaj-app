@@ -2,7 +2,7 @@
 
 {% block title %}Catalogue - SIYAJ Éditions{% endblock %}
 {% block meta_description %}Explorez le catalogue de SIYAJ Éditions : romans, poésie et ouvrages portés par une ligne éditoriale exigeante, sensible et engagée.{% endblock %}
-{% block meta_image %}{{ absolute_url(asset('images/catalog/catalog-owner-hero-v2.jpg')) }}{% endblock %}
+{% block meta_image %}{{ canonical_origin|trim('/') ~ asset('images/catalog/catalog-owner-hero-v2.jpg') }}{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}

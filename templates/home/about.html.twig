@@ -2,7 +2,7 @@
 
 {% block title %}À propos - SIYAJ Éditions{% endblock %}
 {% block meta_description %}Découvrez SIYAJ Éditions, première maison d’édition indépendante, féministe et décoloniale des Petites Antilles, et sa vision éditoriale tournée vers rêver, transmettre et résister.{% endblock %}
-{% block meta_image %}{{ absolute_url(asset('images/about/about-owner-hero.jpg')) }}{% endblock %}
+{% block meta_image %}{{ canonical_origin|trim('/') ~ asset('images/about/about-owner-hero.jpg') }}{% endblock %}
 
 {% block body %}
     <div class="about-owner-page">
