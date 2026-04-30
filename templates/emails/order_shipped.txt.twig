@@ -1,0 +1,12 @@
+Bonjour {{ order.user.firstname }},
+
+Votre commande {{ order.reference }} a été expédiée.
+
+Numéro de suivi : {{ order.trackingNumber }}
+Statut : {{ order.sendStatus.label }}
+
+Retrouver le détail de la commande :
+{{ orderUrl }}
+
+À bientôt,
+SIYAJ Éditions

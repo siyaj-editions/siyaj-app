@@ -43,4 +43,29 @@ class OrderController extends AbstractController
 
         return $this->redirectToRoute('app_admin_order_show', ['id' => $order->getId()]);
     }
+
+    #[Route('/{id}/tracking', name: 'app_admin_order_tracking', methods: ['POST'])]
+    public function updateTracking(
+        Request $request,
+        Order $order,
+        AdminOrderService $adminOrderService
+    ): Response {
+        if (!$this->isCsrfTokenValid('update_tracking_' . $order->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+
+            return $this->redirectToRoute('app_admin_order_show', ['id' => $order->getId()]);
+        }
+
+        $result = $adminOrderService->updateTrackingNumber($order, $request->request->get('tracking_number'));
+
+        if ($result === 'updated') {
+            $this->addFlash('success', 'Le numéro de suivi a été enregistré et la commande a été marquée comme envoyée.');
+        } elseif ($result === 'email_failed') {
+            $this->addFlash('warning', 'Le numéro de suivi a été enregistré, mais l’email client n’a pas pu être envoyé.');
+        } else {
+            $this->addFlash('error', 'Veuillez renseigner un numéro de suivi valide.');
+        }
+
+        return $this->redirectToRoute('app_admin_order_show', ['id' => $order->getId()]);
+    }
 }

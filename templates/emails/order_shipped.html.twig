@@ -1,0 +1,17 @@
+<div style="font-family: Arial, sans-serif; color: #061BB0; line-height: 1.6;">
+    <p>Bonjour {{ order.user.firstname }},</p>
+
+    <p>Bonne nouvelle : votre commande <strong>{{ order.reference }}</strong> a été expédiée.</p>
+
+    <p>
+        <strong>Numéro de suivi :</strong> {{ order.trackingNumber }}<br>
+        <strong>Statut :</strong> {{ order.sendStatus.label }}
+    </p>
+
+    <p>
+        Vous pouvez retrouver le détail de votre commande ici :<br>
+        <a href="{{ orderUrl }}">{{ orderUrl }}</a>
+    </p>
+
+    <p>À bientôt,<br>SIYAJ Éditions</p>
+</div>

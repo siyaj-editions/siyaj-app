@@ -5,13 +5,13 @@ namespace App\Service;
 use App\Entity\Order;
 use App\Enum\OrderStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Psr\Log\LoggerInterface;
 
 class StripeService
 {
@@ -20,7 +20,8 @@ class StripeService
         private string $stripeWebhookSecret,
         private UrlGeneratorInterface $urlGenerator,
         private EntityManagerInterface $entityManager,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private OrderNotificationService $orderNotificationService,
     ) {
         $this->validateConfig();
         Stripe::setApiKey($this->stripeSecretKey);
@@ -177,6 +178,7 @@ class StripeService
         }
 
         $this->entityManager->flush();
+        $this->notifyAdminsOrderPaid($order);
     }
 
     public function syncPaidOrderFromSession(Session $session): void
@@ -205,6 +207,18 @@ class StripeService
                 'message' => $e->getMessage(),
             ]);
             return null;
+        }
+    }
+
+    private function notifyAdminsOrderPaid(Order $order): void
+    {
+        try {
+            $this->orderNotificationService->sendPaidOrderAdminNotification($order);
+        } catch (\Throwable $exception) {
+            $this->logger->error('Unable to notify admins after order payment confirmation', [
+                'order_id' => $order->getId(),
+                'message' => $exception->getMessage(),
+            ]);
         }
     }
 }

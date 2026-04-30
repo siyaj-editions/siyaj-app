@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Enum\OrderSend;
 use App\Enum\OrderStatus;
 use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -54,6 +55,12 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeSessionId = null;
 
+    #[ORM\Column(type: 'string', enumType: OrderSend::class, options: ['default' => OrderSend::PROCESSING->value])]
+    private OrderSend $sendStatus = OrderSend::PROCESSING;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $trackingNumber = null;
+
     #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Address $shippingAddress = null;
@@ -79,6 +86,7 @@ class Order
         $this->orderItems = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
         $this->status = OrderStatus::PENDING;
+        $this->sendStatus = OrderSend::PROCESSING;
     }
 
     public function getId(): ?int
@@ -245,6 +253,31 @@ class Order
         return $this;
     }
 
+    public function getSendStatus(): OrderSend
+    {
+        return $this->sendStatus;
+    }
+
+    public function setSendStatus(OrderSend $sendStatus): static
+    {
+        $this->sendStatus = $sendStatus;
+
+        return $this;
+    }
+
+    public function getTrackingNumber(): ?string
+    {
+        return $this->trackingNumber;
+    }
+
+    public function setTrackingNumber(?string $trackingNumber): static
+    {
+        $normalizedTrackingNumber = $trackingNumber !== null ? trim($trackingNumber) : null;
+        $this->trackingNumber = $normalizedTrackingNumber !== '' ? $normalizedTrackingNumber : null;
+
+        return $this;
+    }
+
     public function getShippingAddress(): ?Address
     {
         return $this->shippingAddress;
@@ -341,5 +374,15 @@ class Order
     public function isPaid(): bool
     {
         return $this->status === OrderStatus::PAID;
+    }
+
+    public function isSent(): bool
+    {
+        return $this->sendStatus === OrderSend::SENT;
+    }
+
+    public function isReceived(): bool
+    {
+        return $this->sendStatus === OrderSend::RECEIVED;
     }
 }

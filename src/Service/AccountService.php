@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Address;
 use App\Entity\Order;
 use App\Entity\User;
+use App\Enum\OrderSend;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -126,6 +127,18 @@ class AccountService
         }
 
         return $order;
+    }
+
+    public function markOrderAsReceived(Order $order): bool
+    {
+        if ($order->getSendStatus() !== OrderSend::SENT) {
+            return false;
+        }
+
+        $order->setSendStatus(OrderSend::RECEIVED);
+        $this->entityManager->flush();
+
+        return true;
     }
 
     private function unsetDefaultAddressForUser(User $user, ?Address $except = null): void
