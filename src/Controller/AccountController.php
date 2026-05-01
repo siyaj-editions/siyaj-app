@@ -168,13 +168,20 @@ class AccountController extends AbstractController
     }
 
     #[Route('/commandes', name: 'app_account_orders')]
-    public function orders(AccountService $accountService): Response
+    public function orders(Request $request, AccountService $accountService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        $pagination = $accountService->getPaginatedUserOrders(
+            $user,
+            $request->query->getInt('page', 1)
+        );
 
         return $this->render('account/orders.html.twig', [
-            'orders' => $accountService->getUserOrders($user),
+            'orders' => $pagination['orders'],
+            'currentPage' => $pagination['currentPage'],
+            'totalPages' => $pagination['totalPages'],
+            'showPagination' => $pagination['totalOrders'] > $pagination['perPage'],
         ]);
     }
 

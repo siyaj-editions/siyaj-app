@@ -27,6 +27,16 @@
             {# Main Content #}
             <main class="lg:col-span-3">
                 {% if orders|length > 0 %}
+                    {% set paymentBadgeClasses = {
+                        pending: 'bg-gold/15 text-yellow-700',
+                        paid: 'bg-sage/15 text-sage',
+                        cancelled: 'bg-wine/10 text-wine'
+                    } %}
+                    {% set sendBadgeClasses = {
+                        processing: 'bg-ink/5 text-ink/65',
+                        sent: 'bg-[#061BB0]/10 text-[#061BB0]',
+                        received: 'bg-sage/15 text-sage'
+                    } %}
                     <div class="space-y-4">
                         {% for order in orders %}
                             <div class="overflow-hidden rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white shadow-sm transition-shadow duration-300 hover:shadow-md">
@@ -36,12 +46,14 @@
                                         <span class="text-[10px] font-semibold uppercase tracking-wider text-ink/40 block">Commande</span>
                                         <span class="font-display text-lg font-semibold text-ink">{{ order.reference }}</span>
                                     </div>
-                                    <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded self-start
-                                        {% if order.status.value == 'pending' %}bg-gold/15 text-yellow-700
-                                        {% elseif order.status.value == 'paid' %}bg-sage/15 text-sage
-                                        {% else %}bg-wine/10 text-wine{% endif %}">
-                                        {{ order.status.label }}
-                                    </span>
+                                    <div class="flex flex-wrap items-center gap-2 self-start">
+                                        <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded {{ paymentBadgeClasses[order.status.value] ?? 'bg-ink/5 text-ink/65' }}">
+                                            {{ order.status.label }}
+                                        </span>
+                                        <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded {{ sendBadgeClasses[order.sendStatus.value] ?? 'bg-ink/5 text-ink/65' }}">
+                                            {{ order.sendStatus.label }}
+                                        </span>
+                                    </div>
                                 </div>
 
                                 {# Order Body #}
@@ -80,6 +92,38 @@
                             </div>
                         {% endfor %}
                     </div>
+
+                    {% if showPagination %}
+                        <nav class="mt-8 flex flex-wrap items-center justify-center gap-2" aria-label="Pagination des commandes">
+                            {% if currentPage > 1 %}
+                                <a
+                                    href="{{ path('app_account_orders', {page: currentPage - 1}) }}"
+                                    class="inline-flex min-h-11 items-center justify-center rounded-full border border-[rgba(6,27,176,0.12)] bg-white px-4 text-sm font-medium text-ink transition-colors duration-200 hover:border-gold hover:text-gold"
+                                >
+                                    Précédent
+                                </a>
+                            {% endif %}
+
+                            {% for page in 1..totalPages %}
+                                <a
+                                    href="{{ path('app_account_orders', {page: page}) }}"
+                                    class="inline-flex h-11 min-w-11 items-center justify-center rounded-full border px-4 text-sm font-semibold transition-colors duration-200 {{ page == currentPage ? 'border-transparent bg-ink text-white' : 'border-[rgba(6,27,176,0.12)] bg-white text-ink hover:border-gold hover:text-gold' }}"
+                                    aria-current="{{ page == currentPage ? 'page' : 'false' }}"
+                                >
+                                    {{ page }}
+                                </a>
+                            {% endfor %}
+
+                            {% if currentPage < totalPages %}
+                                <a
+                                    href="{{ path('app_account_orders', {page: currentPage + 1}) }}"
+                                    class="inline-flex min-h-11 items-center justify-center rounded-full border border-[rgba(6,27,176,0.12)] bg-white px-4 text-sm font-medium text-ink transition-colors duration-200 hover:border-gold hover:text-gold"
+                                >
+                                    Suivant
+                                </a>
+                            {% endif %}
+                        </nav>
+                    {% endif %}
                 {% else %}
                     {# Empty State #}
                     <div class="rounded-[2rem] border border-[rgba(6,27,176,0.08)] bg-white py-16 text-center shadow-sm">

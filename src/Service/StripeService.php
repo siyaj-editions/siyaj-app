@@ -145,17 +145,24 @@ class StripeService
                 'order_id' => $session->metadata->order_id ?? null,
             ]);
             $this->handleCheckoutSessionCompleted($session);
+
+            return;
+        }
+
+        if ($event->type === 'checkout.session.expired') {
+            /** @var \Stripe\Checkout\Session $session */
+            $session = $event->data->object;
+            $this->logger->info('Stripe webhook checkout.session.expired', [
+                'session_id' => $session->id ?? null,
+                'order_id' => $session->metadata->order_id ?? null,
+            ]);
+            $this->handleCheckoutSessionExpired($session);
         }
     }
 
     private function handleCheckoutSessionCompleted(\Stripe\Checkout\Session $session): void
     {
-        $orderId = $session->metadata->order_id ?? null;
-        if (!$orderId) {
-            return;
-        }
-
-        $order = $this->entityManager->getRepository(Order::class)->find((int) $orderId);
+        $order = $this->findOrderFromSession($session);
         if (!$order) {
             return;
         }
@@ -179,6 +186,27 @@ class StripeService
 
         $this->entityManager->flush();
         $this->notifyAdminsOrderPaid($order);
+    }
+
+    private function handleCheckoutSessionExpired(\Stripe\Checkout\Session $session): void
+    {
+        $order = $this->findOrderFromSession($session);
+        if (!$order) {
+            return;
+        }
+
+        // Si la commande a déjà été payée ou déjà annulée, on ne touche plus à son statut.
+        if (\in_array($order->getStatus(), [OrderStatus::PAID, OrderStatus::CANCELED], true)) {
+            return;
+        }
+
+        // On n'annule automatiquement que les commandes encore en attente.
+        if ($order->getStatus() !== OrderStatus::PENDING) {
+            return;
+        }
+
+        $order->setStatus(OrderStatus::CANCELED);
+        $this->entityManager->flush();
     }
 
     public function syncPaidOrderFromSession(Session $session): void
@@ -220,5 +248,38 @@ class StripeService
                 'message' => $exception->getMessage(),
             ]);
         }
+    }
+
+    private function findOrderFromSession(\Stripe\Checkout\Session $session): ?Order
+    {
+        $orderId = $session->metadata->order_id ?? null;
+        if ($orderId) {
+            $order = $this->entityManager->getRepository(Order::class)->find((int) $orderId);
+
+            if ($order instanceof Order) {
+                return $this->isMatchingSession($order, $session) ? $order : null;
+            }
+        }
+
+        if (!empty($session->id)) {
+            $order = $this->entityManager->getRepository(Order::class)->findOneBy([
+                'stripeSessionId' => $session->id,
+            ]);
+
+            if ($order instanceof Order) {
+                return $order;
+            }
+        }
+
+        return null;
+    }
+
+    private function isMatchingSession(Order $order, \Stripe\Checkout\Session $session): bool
+    {
+        if (!$order->getStripeSessionId()) {
+            return true;
+        }
+
+        return $order->getStripeSessionId() === $session->id;
     }
 }
