@@ -16,6 +16,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 ENV APP_ENV=prod
 ENV APP_DEBUG=0
+ENV APP_SECRET=build-secret
 
 COPY composer.json composer.lock symfony.lock ./
 RUN composer install \
@@ -29,10 +30,12 @@ COPY . .
 
 RUN composer dump-autoload --classmap-authoritative --no-dev --no-interaction
 
-RUN mkdir -p /opt/public \
-    && cp -a public/. /opt/public/
-
 RUN mkdir -p var public assets/vendor \
+    && php bin/console importmap:install --env=prod \
+    && php bin/console tailwind:build --env=prod --minify \
+    && php bin/console asset-map:compile --env=prod \
+    && mkdir -p /opt/public \
+    && cp -a public/. /opt/public/ \
     && chown -R www-data:www-data var public assets
 
 USER www-data

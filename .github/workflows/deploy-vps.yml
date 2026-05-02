@@ -72,9 +72,6 @@ jobs:
 
             docker compose --env-file .env.prod -f compose.vps.yml up -d app
             docker compose --env-file .env.prod -f compose.vps.yml exec -T app sh -lc 'mkdir -p /var/www/html/public /var/www/html/public/uploads && find /var/www/html/public -mindepth 1 -maxdepth 1 ! -name uploads -exec rm -rf {} + && cp -a /opt/public/. /var/www/html/public/'
-            docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console importmap:install --env=prod
-            docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console tailwind:build --env=prod --minify
-            docker compose --env-file .env.prod -f compose.vps.yml exec -T app php bin/console asset-map:compile --env=prod
             docker compose --env-file .env.prod -f compose.vps.yml up -d nginx
             docker logout ghcr.io
             docker image prune -f
