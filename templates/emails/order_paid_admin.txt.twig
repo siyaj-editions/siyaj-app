@@ -1,0 +1,11 @@
+Bonjour,
+
+Une commande vient d’être confirmée comme payée.
+
+Commande : {{ order.reference }}
+Client : {{ order.user.fullName }}
+Email : {{ order.user.email }}
+Total : {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €
+
+Voir la commande dans l’admin :
+{{ adminOrderUrl }}

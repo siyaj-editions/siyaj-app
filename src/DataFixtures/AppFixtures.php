@@ -9,6 +9,7 @@ use App\Entity\Order;
 use App\Entity\OrderItem;
 use App\Entity\User;
 use App\Enum\BookFormat;
+use App\Enum\OrderSend;
 use App\Enum\OrderStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -134,6 +135,8 @@ class AppFixtures extends Fixture
         $order1->setShippingAddress($this->createAddressForUser($manager, $client, '12 rue de la Paix', '75002', 'Paris'));
         $order1->setBillingAddress($order1->getShippingAddress());
         $order1->setBillingSameAsShipping(true);
+        $order1->setSendStatus(OrderSend::RECEIVED);
+        $order1->setTrackingNumber('6A00000000001');
 
         $item1 = new OrderItem();
         $item1->setBook($books['Les Misérables']);
@@ -160,6 +163,8 @@ class AppFixtures extends Fixture
         $order2->setShippingAddress($this->createAddressForUser($manager, $client, '18 avenue de France', '75013', 'Paris'));
         $order2->setBillingAddress($order2->getShippingAddress());
         $order2->setBillingSameAsShipping(true);
+        $order2->setSendStatus(OrderSend::SENT);
+        $order2->setTrackingNumber('6A00000000002');
 
         $item3 = new OrderItem();
         $item3->setBook($books['Le Comte de Monte-Cristo']);
@@ -186,6 +191,7 @@ class AppFixtures extends Fixture
         $order3->setShippingAddress($this->createAddressForUser($manager, $client, '8 boulevard Voltaire', '75011', 'Paris'));
         $order3->setBillingAddress($order3->getShippingAddress());
         $order3->setBillingSameAsShipping(true);
+        $order3->setSendStatus(OrderSend::PROCESSING);
 
         $item5 = new OrderItem();
         $item5->setBook($books['L\'Étranger']);
@@ -205,6 +211,7 @@ class AppFixtures extends Fixture
         $order4->setShippingAddress($this->createAddressForUser($manager, $client, '3 rue des Lilas', '93100', 'Montreuil'));
         $order4->setBillingAddress($order4->getShippingAddress());
         $order4->setBillingSameAsShipping(true);
+        $order4->setSendStatus(OrderSend::PROCESSING);
 
         $item6 = new OrderItem();
         $item6->setBook($books['Madame Bovary']);
@@ -224,6 +231,8 @@ class AppFixtures extends Fixture
         $order5->setShippingAddress($this->createAddressForUser($manager, $client, '45 rue de Lyon', '69002', 'Lyon'));
         $order5->setBillingAddress($order5->getShippingAddress());
         $order5->setBillingSameAsShipping(true);
+        $order5->setSendStatus(OrderSend::RECEIVED);
+        $order5->setTrackingNumber('6A00000000003');
 
         $item7 = new OrderItem();
         $item7->setBook($books['La Peste']);

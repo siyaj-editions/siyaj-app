@@ -5,13 +5,13 @@ namespace App\Service;
 use App\Entity\Order;
 use App\Enum\OrderStatus;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 use Stripe\Exception\SignatureVerificationException;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Psr\Log\LoggerInterface;
 
 class StripeService
 {
@@ -20,7 +20,8 @@ class StripeService
         private string $stripeWebhookSecret,
         private UrlGeneratorInterface $urlGenerator,
         private EntityManagerInterface $entityManager,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private OrderNotificationService $orderNotificationService,
     ) {
         $this->validateConfig();
         Stripe::setApiKey($this->stripeSecretKey);
@@ -144,17 +145,24 @@ class StripeService
                 'order_id' => $session->metadata->order_id ?? null,
             ]);
             $this->handleCheckoutSessionCompleted($session);
+
+            return;
+        }
+
+        if ($event->type === 'checkout.session.expired') {
+            /** @var \Stripe\Checkout\Session $session */
+            $session = $event->data->object;
+            $this->logger->info('Stripe webhook checkout.session.expired', [
+                'session_id' => $session->id ?? null,
+                'order_id' => $session->metadata->order_id ?? null,
+            ]);
+            $this->handleCheckoutSessionExpired($session);
         }
     }
 
     private function handleCheckoutSessionCompleted(\Stripe\Checkout\Session $session): void
     {
-        $orderId = $session->metadata->order_id ?? null;
-        if (!$orderId) {
-            return;
-        }
-
-        $order = $this->entityManager->getRepository(Order::class)->find((int) $orderId);
+        $order = $this->findOrderFromSession($session);
         if (!$order) {
             return;
         }
@@ -176,6 +184,28 @@ class StripeService
             $book->decrementStock((int) $orderItem->getQuantity());
         }
 
+        $this->entityManager->flush();
+        $this->notifyAdminsOrderPaid($order);
+    }
+
+    private function handleCheckoutSessionExpired(\Stripe\Checkout\Session $session): void
+    {
+        $order = $this->findOrderFromSession($session);
+        if (!$order) {
+            return;
+        }
+
+        // Si la commande a déjà été payée ou déjà annulée, on ne touche plus à son statut.
+        if (\in_array($order->getStatus(), [OrderStatus::PAID, OrderStatus::CANCELED], true)) {
+            return;
+        }
+
+        // On n'annule automatiquement que les commandes encore en attente.
+        if ($order->getStatus() !== OrderStatus::PENDING) {
+            return;
+        }
+
+        $order->setStatus(OrderStatus::CANCELED);
         $this->entityManager->flush();
     }
 
@@ -206,5 +236,50 @@ class StripeService
             ]);
             return null;
         }
+    }
+
+    private function notifyAdminsOrderPaid(Order $order): void
+    {
+        try {
+            $this->orderNotificationService->sendPaidOrderAdminNotification($order);
+        } catch (\Throwable $exception) {
+            $this->logger->error('Unable to notify admins after order payment confirmation', [
+                'order_id' => $order->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+        }
+    }
+
+    private function findOrderFromSession(\Stripe\Checkout\Session $session): ?Order
+    {
+        $orderId = $session->metadata->order_id ?? null;
+        if ($orderId) {
+            $order = $this->entityManager->getRepository(Order::class)->find((int) $orderId);
+
+            if ($order instanceof Order) {
+                return $this->isMatchingSession($order, $session) ? $order : null;
+            }
+        }
+
+        if (!empty($session->id)) {
+            $order = $this->entityManager->getRepository(Order::class)->findOneBy([
+                'stripeSessionId' => $session->id,
+            ]);
+
+            if ($order instanceof Order) {
+                return $order;
+            }
+        }
+
+        return null;
+    }
+
+    private function isMatchingSession(Order $order, \Stripe\Checkout\Session $session): bool
+    {
+        if (!$order->getStripeSessionId()) {
+            return true;
+        }
+
+        return $order->getStripeSessionId() === $session->id;
     }
 }

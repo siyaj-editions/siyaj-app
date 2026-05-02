@@ -1,0 +1,17 @@
+<div style="font-family: Arial, sans-serif; color: #061BB0; line-height: 1.6;">
+    <p>Bonjour,</p>
+
+    <p>Une commande vient d’être confirmée comme payée.</p>
+
+    <p>
+        <strong>Commande :</strong> {{ order.reference }}<br>
+        <strong>Client :</strong> {{ order.user.fullName }}<br>
+        <strong>Email :</strong> {{ order.user.email }}<br>
+        <strong>Total :</strong> {{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €
+    </p>
+
+    <p>
+        Voir la commande dans l’admin :<br>
+        <a href="{{ adminOrderUrl }}">{{ adminOrderUrl }}</a>
+    </p>
+</div>

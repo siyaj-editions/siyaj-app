@@ -168,13 +168,20 @@ class AccountController extends AbstractController
     }
 
     #[Route('/commandes', name: 'app_account_orders')]
-    public function orders(AccountService $accountService): Response
+    public function orders(Request $request, AccountService $accountService): Response
     {
         /** @var User $user */
         $user = $this->getUser();
+        $pagination = $accountService->getPaginatedUserOrders(
+            $user,
+            $request->query->getInt('page', 1)
+        );
 
         return $this->render('account/orders.html.twig', [
-            'orders' => $accountService->getUserOrders($user),
+            'orders' => $pagination['orders'],
+            'currentPage' => $pagination['currentPage'],
+            'totalPages' => $pagination['totalPages'],
+            'showPagination' => $pagination['totalOrders'] > $pagination['perPage'],
         ]);
     }
 
@@ -192,6 +199,32 @@ class AccountController extends AbstractController
         return $this->render('account/order_show.html.twig', [
             'order' => $order,
         ]);
+    }
+
+    #[Route('/commandes/{id}/reception', name: 'app_account_order_mark_received', methods: ['POST'])]
+    public function markOrderAsReceived(int $id, Request $request, AccountService $accountService): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $order = $accountService->findUserOrderById($user, $id);
+
+        if (!$order) {
+            throw $this->createNotFoundException('Commande non trouvée.');
+        }
+
+        if (!$this->isCsrfTokenValid('mark_order_received_' . $order->getId(), (string) $request->request->get('_token'))) {
+            $this->addFlash('error', 'Jeton CSRF invalide.');
+
+            return $this->redirectToRoute('app_account_order_show', ['id' => $order->getId()]);
+        }
+
+        if ($accountService->markOrderAsReceived($order)) {
+            $this->addFlash('success', 'Merci. La commande a été marquée comme reçue.');
+        } else {
+            $this->addFlash('warning', 'Cette commande ne peut pas encore être marquée comme reçue.');
+        }
+
+        return $this->redirectToRoute('app_account_order_show', ['id' => $order->getId()]);
     }
 
     #[Route('/commandes/{id}/facture', name: 'app_account_order_invoice')]

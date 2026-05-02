@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Address;
 use App\Entity\Order;
 use App\Entity\User;
+use App\Enum\OrderSend;
 use App\Repository\AddressRepository;
 use App\Repository\OrderRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -118,6 +119,30 @@ class AccountService
         return $this->orderRepository->findByUser($user);
     }
 
+    /**
+     * @return array{
+     *     orders: Order[],
+     *     totalOrders: int,
+     *     currentPage: int,
+     *     totalPages: int,
+     *     perPage: int
+     * }
+     */
+    public function getPaginatedUserOrders(User $user, int $page, int $perPage = 10): array
+    {
+        $totalOrders = $this->orderRepository->countByUser($user);
+        $totalPages = max(1, (int) ceil($totalOrders / $perPage));
+        $currentPage = min(max(1, $page), $totalPages);
+
+        return [
+            'orders' => $this->orderRepository->findPaginatedByUser($user, $currentPage, $perPage),
+            'totalOrders' => $totalOrders,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'perPage' => $perPage,
+        ];
+    }
+
     public function findUserOrderById(User $user, int $id): ?Order
     {
         $order = $this->orderRepository->find($id);
@@ -126,6 +151,18 @@ class AccountService
         }
 
         return $order;
+    }
+
+    public function markOrderAsReceived(Order $order): bool
+    {
+        if ($order->getSendStatus() !== OrderSend::SENT) {
+            return false;
+        }
+
+        $order->setSendStatus(OrderSend::RECEIVED);
+        $this->entityManager->flush();
+
+        return true;
     }
 
     private function unsetDefaultAddressForUser(User $user, ?Address $except = null): void

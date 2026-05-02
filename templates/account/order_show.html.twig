@@ -69,6 +69,16 @@
                                 <span class="text-sm font-medium text-ink">{{ order.shippingDelayLabel }}</span>
                             </div>
                         {% endif %}
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-ink/60">Expédition</span>
+                            <span class="text-sm font-medium text-ink">{{ order.sendStatus.label }}</span>
+                        </div>
+                        {% if order.trackingNumber %}
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-ink/60">Numéro de suivi</span>
+                                <span class="text-sm font-medium text-ink">{{ order.trackingNumber }}</span>
+                            </div>
+                        {% endif %}
                         {% if order.shippingAddress %}
                             <div class="pt-3 border-t border-black/5 space-y-2">
                                 <p class="text-xs uppercase tracking-wider text-ink/40">Livraison</p>
@@ -173,6 +183,12 @@
 
         {# Actions #}
         <div class="flex flex-col sm:flex-row gap-3 justify-end">
+            {% if order.sendStatus.value == 'sent' %}
+                <form action="{{ path('app_account_order_mark_received', {id: order.id}) }}" method="post" class="contents">
+                    <input type="hidden" name="_token" value="{{ csrf_token('mark_order_received_' ~ order.id) }}">
+                    <button type="submit" class="btn btn-primary">Marquer comme reçue</button>
+                </form>
+            {% endif %}
             <a href="{{ path('app_account_order_invoice', {id: order.id}) }}" class="btn btn-secondary">
                 Editer la facture
             </a>
