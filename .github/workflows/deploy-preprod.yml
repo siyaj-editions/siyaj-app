@@ -13,6 +13,8 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    env:
+      PREPROD_APP_PATH: ${{ format('{0}-preprod', secrets.VPS_APP_PATH) }}
 
     steps:
       - name: Checkout
@@ -48,10 +50,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            test -n "${{ secrets.VPS_PREPROD_APP_PATH }}" || { echo "VPS_PREPROD_APP_PATH manquant"; exit 1; }
-            mkdir -p "${{ secrets.VPS_PREPROD_APP_PATH }}"
-            mkdir -p "${{ secrets.VPS_PREPROD_APP_PATH }}/shared/uploads/books"
-            mkdir -p "${{ secrets.VPS_PREPROD_APP_PATH }}/shared/uploads/manuscripts"
+            test -n "${{ env.PREPROD_APP_PATH }}" || { echo "PREPROD_APP_PATH manquant"; exit 1; }
+            mkdir -p "${{ env.PREPROD_APP_PATH }}"
+            mkdir -p "${{ env.PREPROD_APP_PATH }}/shared/uploads/books"
+            mkdir -p "${{ env.PREPROD_APP_PATH }}/shared/uploads/manuscripts"
 
       - name: Copy deployment files to VPS
         uses: appleboy/scp-action@v0.1.7
@@ -60,7 +62,7 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           source: "compose.preprod.yml,deploy/nginx/default.conf"
-          target: ${{ secrets.VPS_PREPROD_APP_PATH }}
+          target: ${{ env.PREPROD_APP_PATH }}
           strip_components: 0
 
       - name: Deploy on VPS
@@ -71,7 +73,7 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
-            cd ${{ secrets.VPS_PREPROD_APP_PATH }}
+            cd ${{ env.PREPROD_APP_PATH }}
             test -f .env.preprod || { echo ".env.preprod introuvable dans $PWD"; exit 1; }
 
             export APP_IMAGE=${{ env.IMAGE_NAME }}:${{ github.sha }}

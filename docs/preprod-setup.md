@@ -28,12 +28,15 @@ Secrets déjà réutilisés :
 - `VPS_HOST`
 - `VPS_USER`
 - `VPS_SSH_KEY`
+- `VPS_APP_PATH`
 
-Nouveau secret requis :
+Chemin préprod dérivé automatiquement par le workflow :
 
-- `VPS_PREPROD_APP_PATH`
+```text
+${VPS_APP_PATH}-preprod
+```
 
-Valeur conseillée :
+Avec la valeur actuelle de prod, cela donne :
 
 ```text
 /home/ubuntu/siyaj-preprod
