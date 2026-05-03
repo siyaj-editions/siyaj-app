@@ -58,6 +58,9 @@ class Book
      * @var Collection<int, Author>
      */
     #[ORM\ManyToMany(targetEntity: Author::class, inversedBy: 'books')]
+    #[ORM\JoinTable(name: 'book_author')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Collection $authors;
 
     /**
@@ -65,6 +68,8 @@ class Book
      */
     #[ORM\ManyToMany(targetEntity: Genre::class, inversedBy: 'books')]
     #[ORM\JoinTable(name: 'book_genre')]
+    #[ORM\JoinColumn(name: 'book_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: 'genre_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private Collection $genres;
 
     /**

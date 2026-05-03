@@ -18,7 +18,7 @@ class OrderItem
     private ?Order $order = null;
 
     #[ORM\ManyToOne(inversedBy: 'orderItems')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Book $book = null;
 
     #[ORM\Column(length: 255)]
