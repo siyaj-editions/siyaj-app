@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+APP_PATH="${APP_PATH:-/home/ubuntu/siyaj}"
+ENV_FILE="${ENV_FILE:-${APP_PATH}/.env.prod}"
+DB_CONTAINER="${DB_CONTAINER:-siyaj-database-1}"
+BACKUP_DIR="${BACKUP_DIR:-/home/ubuntu/backups/siyaj/postgres}"
+RETENTION_DAYS="${RETENTION_DAYS:-14}"
+RCLONE_REMOTE="${RCLONE_REMOTE:-}"
+
+if [[ ! -f "${ENV_FILE}" ]]; then
+  echo "Missing env file: ${ENV_FILE}" >&2
+  exit 1
+fi
+
+mkdir -p "${BACKUP_DIR}"
+
+set -a
+# shellcheck disable=SC1090
+source "${ENV_FILE}"
+set +a
+
+: "${POSTGRES_DB:?POSTGRES_DB is required}"
+: "${POSTGRES_USER:?POSTGRES_USER is required}"
+: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+
+timestamp="$(date '+%Y-%m-%d_%H-%M-%S')"
+filename="${POSTGRES_DB}_${timestamp}.sql.gz"
+tmp_file="${BACKUP_DIR}/.${filename}.tmp"
+final_file="${BACKUP_DIR}/${filename}"
+
+echo "[backup] Starting dump for ${POSTGRES_DB} into ${final_file}"
+
+docker exec \
+  -e PGPASSWORD="${POSTGRES_PASSWORD}" \
+  "${DB_CONTAINER}" \
+  pg_dump -U "${POSTGRES_USER}" "${POSTGRES_DB}" \
+  | gzip -9 > "${tmp_file}"
+
+mv "${tmp_file}" "${final_file}"
+
+find "${BACKUP_DIR}" -type f -name '*.sql.gz' -mtime +"${RETENTION_DAYS}" -delete
+
+if [[ -n "${RCLONE_REMOTE}" ]]; then
+  echo "[backup] Syncing ${final_file} to ${RCLONE_REMOTE}"
+  rclone copy "${final_file}" "${RCLONE_REMOTE}"
+fi
+
+echo "[backup] Done"
