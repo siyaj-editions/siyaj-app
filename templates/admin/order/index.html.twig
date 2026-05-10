@@ -22,6 +22,7 @@
                             <th class="text-left px-6 py-4">Client</th>
                             <th class="text-left px-6 py-4">Date</th>
                             <th class="text-left px-6 py-4">Statut</th>
+                            <th class="text-left px-6 py-4">Envoi</th>
                             <th class="text-left px-6 py-4">Total</th>
                             <th class="text-right px-6 py-4">Action</th>
                         </tr>
@@ -34,12 +35,20 @@
                                 'canceled': 'bg-rose-100 text-rose-800',
                                 'refunded': 'bg-slate-200 text-slate-700'
                             }[order.status.value]|default('bg-slate-100 text-slate-700') %}
+                            {% set sendStatusClass = {
+                                'processing': 'bg-sky-100 text-sky-800',
+                                'sent': 'bg-indigo-100 text-indigo-800',
+                                'received': 'bg-violet-100 text-violet-800'
+                            }[order.sendStatus.value]|default('bg-slate-100 text-slate-700') %}
                             <tr class="border-t border-black/5 hover:bg-paper/60 transition-colors">
                                 <td class="px-6 py-4 font-medium text-ink">{{ order.reference }}</td>
                                 <td class="px-6 py-4 text-ink/80">{{ order.user.fullName }}</td>
                                 <td class="px-6 py-4 text-ink/70">{{ order.createdAt|date('d/m/Y H:i') }}</td>
                                 <td class="px-6 py-4">
                                     <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ statusClass }}">{{ order.status.label }}</span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {{ sendStatusClass }}">{{ order.sendStatus.label }}</span>
                                 </td>
                                 <td class="px-6 py-4 text-ink">{{ (order.totalCents / 100)|number_format(2, ',', ' ') }} €</td>
                                 <td class="px-6 py-4 text-right">
@@ -48,7 +57,7 @@
                             </tr>
                         {% else %}
                             <tr class="border-t border-black/5">
-                                <td colspan="6" class="px-6 py-8 text-center text-sage">Aucune commande.</td>
+                                <td colspan="7" class="px-6 py-8 text-center text-sage">Aucune commande.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
