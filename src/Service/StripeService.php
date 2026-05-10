@@ -172,20 +172,32 @@ class StripeService
             return;
         }
 
+        $statusChanged = false;
+
         // Idempotence : si déjà payé, on ne redécrémente pas le stock
-        if ($order->getStatus() === OrderStatus::PAID) {
+        if ($order->getStatus() !== OrderStatus::PAID) {
+            $order->setStatus(OrderStatus::PAID);
+
+            foreach ($order->getOrderItems() as $orderItem) {
+                $book = $orderItem->getBook();
+                $book?->decrementStock((int) $orderItem->getQuantity());
+            }
+
+            $statusChanged = true;
+        }
+
+        if ($statusChanged) {
+            $this->entityManager->flush();
+        }
+
+        if ($order->getPaidNotificationSentAt() !== null) {
             return;
         }
 
-        $order->setStatus(OrderStatus::PAID);
-
-        foreach ($order->getOrderItems() as $orderItem) {
-            $book = $orderItem->getBook();
-            $book->decrementStock((int) $orderItem->getQuantity());
+        if ($this->notifyAdminsOrderPaid($order)) {
+            $order->setPaidNotificationSentAt(new \DateTimeImmutable());
+            $this->entityManager->flush();
         }
-
-        $this->entityManager->flush();
-        $this->notifyAdminsOrderPaid($order);
     }
 
     private function handleCheckoutSessionExpired(\Stripe\Checkout\Session $session): void
@@ -238,15 +250,23 @@ class StripeService
         }
     }
 
-    private function notifyAdminsOrderPaid(Order $order): void
+    private function notifyAdminsOrderPaid(Order $order): bool
     {
         try {
             $this->orderNotificationService->sendPaidOrderAdminNotification($order);
+            $this->logger->info('Admin notification sent after order payment confirmation', [
+                'order_id' => $order->getId(),
+                'reference' => $order->getReference(),
+            ]);
+
+            return true;
         } catch (\Throwable $exception) {
             $this->logger->error('Unable to notify admins after order payment confirmation', [
                 'order_id' => $order->getId(),
                 'message' => $exception->getMessage(),
             ]);
+
+            return false;
         }
     }
 

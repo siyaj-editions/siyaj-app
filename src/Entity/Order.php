@@ -61,6 +61,9 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $trackingNumber = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $paidNotificationSentAt = null;
+
     #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Address $shippingAddress = null;
@@ -274,6 +277,18 @@ class Order
     {
         $normalizedTrackingNumber = $trackingNumber !== null ? trim($trackingNumber) : null;
         $this->trackingNumber = $normalizedTrackingNumber !== '' ? $normalizedTrackingNumber : null;
+
+        return $this;
+    }
+
+    public function getPaidNotificationSentAt(): ?\DateTimeImmutable
+    {
+        return $this->paidNotificationSentAt;
+    }
+
+    public function setPaidNotificationSentAt(?\DateTimeImmutable $paidNotificationSentAt): static
+    {
+        $this->paidNotificationSentAt = $paidNotificationSentAt;
 
         return $this;
     }
