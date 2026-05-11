@@ -1,0 +1,16 @@
+Nouveau manuscrit reçu
+
+Une nouvelle soumission auteur vient d'être reçue sur le site.
+
+Auteur : {{ submission.fullName }}
+Email : {{ submission.email }}
+{% if submission.phone %}Téléphone : {{ submission.phone }}
+{% endif %}Titre du manuscrit : {{ submission.bookTitle }}
+{% if submission.genre %}Genre : {{ submission.genre }}
+{% endif %}Date : {{ submission.createdAt|date('d/m/Y H:i') }}
+
+Résumé / note d’intention :
+{{ submission.synopsis }}
+
+Voir les soumissions dans l’administration :
+{{ adminManuscriptUrl }}

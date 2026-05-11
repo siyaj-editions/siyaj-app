@@ -11,6 +11,7 @@ class AuthorSubmissionService
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
         private readonly ManuscriptStorage $manuscriptStorage,
+        private readonly ManuscriptSubmissionNotificationService $manuscriptSubmissionNotificationService,
     )
     {
     }
@@ -25,5 +26,7 @@ class AuthorSubmissionService
 
         $this->entityManager->persist($submission);
         $this->entityManager->flush();
+
+        $this->manuscriptSubmissionNotificationService->sendAdminNotification($submission);
     }
 }
