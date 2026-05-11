@@ -1,0 +1,23 @@
+<h1>Nouveau manuscrit reçu</h1>
+
+<p>Une nouvelle soumission auteur vient d'être reçue sur le site.</p>
+
+<ul>
+    <li><strong>Auteur :</strong> {{ submission.fullName }}</li>
+    <li><strong>Email :</strong> {{ submission.email }}</li>
+    {% if submission.phone %}
+        <li><strong>Téléphone :</strong> {{ submission.phone }}</li>
+    {% endif %}
+    <li><strong>Titre du manuscrit :</strong> {{ submission.bookTitle }}</li>
+    {% if submission.genre %}
+        <li><strong>Genre :</strong> {{ submission.genre }}</li>
+    {% endif %}
+    <li><strong>Date :</strong> {{ submission.createdAt|date('d/m/Y H:i') }}</li>
+</ul>
+
+<p><strong>Résumé / note d’intention :</strong></p>
+<p>{{ submission.synopsis|nl2br }}</p>
+
+<p>
+    <a href="{{ adminManuscriptUrl }}">Voir les soumissions dans l’administration</a>
+</p>
