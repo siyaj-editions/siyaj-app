@@ -28,14 +28,9 @@
             <main class="lg:col-span-3">
                 {% if orders|length > 0 %}
                     {% set paymentBadgeClasses = {
-                        pending: 'bg-gold/15 text-yellow-700',
-                        paid: 'bg-sage/15 text-sage',
+                        pending: 'bg-amber-100 text-amber-800',
+                        paid: 'bg-emerald-100 text-emerald-800',
                         cancelled: 'bg-wine/10 text-wine'
-                    } %}
-                    {% set sendBadgeClasses = {
-                        processing: 'bg-ink/5 text-ink/65',
-                        sent: 'bg-[#061BB0]/10 text-[#061BB0]',
-                        received: 'bg-sage/15 text-sage'
                     } %}
                     <div class="space-y-4">
                         {% for order in orders %}
@@ -50,7 +45,11 @@
                                         <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded {{ paymentBadgeClasses[order.status.value] ?? 'bg-ink/5 text-ink/65' }}">
                                             {{ order.status.label }}
                                         </span>
-                                        <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded {{ sendBadgeClasses[order.sendStatus.value] ?? 'bg-ink/5 text-ink/65' }}">
+                                        <span class="px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider rounded
+                                            {% if order.sendStatus.value == 'processing' %}bg-amber-100 text-amber-800
+                                            {% elseif order.sendStatus.value == 'sent' %}bg-blue-100 text-blue-700
+                                            {% elseif order.sendStatus.value == 'received' %}bg-emerald-100 text-emerald-800
+                                            {% else %}bg-ink/5 text-ink/65{% endif %}">
                                             {{ order.sendStatus.label }}
                                         </span>
                                     </div>
