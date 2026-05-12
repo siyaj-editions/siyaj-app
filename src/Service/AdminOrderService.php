@@ -33,7 +33,7 @@ class AdminOrderService
 
         $order->setStatus(OrderStatus::from($status));
 
-        if ($order->getStatus() === OrderStatus::CANCELED || $order->getStatus() === OrderStatus::REFUNDED) {
+        if ($order->getStatus() === OrderStatus::CANCELED) {
             $order->setSendStatus(OrderSend::CANCELED);
         }
 
