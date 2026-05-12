@@ -37,6 +37,18 @@ class AdminOrderService
         return true;
     }
 
+    public function updateOrderSendStatus(Order $order, ?string $sendStatus): bool
+    {
+        if (!$this->isAllowedSendStatus($sendStatus)) {
+            return false;
+        }
+
+        $order->setSendStatus(OrderSend::from($sendStatus));
+        $this->entityManager->flush();
+
+        return true;
+    }
+
     public function updateTrackingNumber(Order $order, ?string $trackingNumber): string
     {
         $normalizedTrackingNumber = $trackingNumber !== null ? trim($trackingNumber) : null;
@@ -69,5 +81,10 @@ class AdminOrderService
     private function isAllowedStatus(?string $status): bool
     {
         return $status !== null && in_array($status, ['pending', 'paid', 'canceled', 'refunded'], true);
+    }
+
+    private function isAllowedSendStatus(?string $sendStatus): bool
+    {
+        return $sendStatus !== null && in_array($sendStatus, ['processing', 'sent', 'received'], true);
     }
 }

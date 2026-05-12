@@ -44,6 +44,20 @@ class OrderController extends AbstractController
         return $this->redirectToRoute('app_admin_order_show', ['id' => $order->getId()]);
     }
 
+    #[Route('/{id}/send-status', name: 'app_admin_order_send_status', methods: ['POST'])]
+    public function updateSendStatus(
+        Request $request,
+        Order $order,
+        AdminOrderService $adminOrderService
+    ): Response {
+        $sendStatus = $request->request->get('send_status');
+        if ($adminOrderService->updateOrderSendStatus($order, is_string($sendStatus) ? $sendStatus : null)) {
+            $this->addFlash('success', 'Le statut d’envoi a été mis à jour.');
+        }
+
+        return $this->redirectToRoute('app_admin_order_show', ['id' => $order->getId()]);
+    }
+
     #[Route('/{id}/tracking', name: 'app_admin_order_tracking', methods: ['POST'])]
     public function updateTracking(
         Request $request,
