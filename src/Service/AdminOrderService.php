@@ -42,16 +42,29 @@ class AdminOrderService
         return true;
     }
 
-    public function updateOrderSendStatus(Order $order, ?string $sendStatus): bool
+    public function updateOrderSendStatus(Order $order, ?string $sendStatus): string
     {
         if (!$this->isAllowedSendStatus($sendStatus)) {
-            return false;
+            return 'invalid';
         }
 
-        $order->setSendStatus(OrderSend::from($sendStatus));
+        $newSendStatus = OrderSend::from($sendStatus);
+        $alreadySameStatus = $order->getSendStatus() === $newSendStatus;
+
+        $order->setSendStatus($newSendStatus);
         $this->entityManager->flush();
 
-        return true;
+        if ($alreadySameStatus || $newSendStatus !== OrderSend::READY_FOR_PICKUP) {
+            return 'updated';
+        }
+
+        try {
+            $this->orderNotificationService->sendReadyForPickupNotification($order);
+        } catch (\Throwable) {
+            return 'email_failed';
+        }
+
+        return 'updated';
     }
 
     public function updateTrackingNumber(Order $order, ?string $trackingNumber): string
@@ -90,6 +103,6 @@ class AdminOrderService
 
     private function isAllowedSendStatus(?string $sendStatus): bool
     {
-        return $sendStatus !== null && in_array($sendStatus, ['processing', 'sent', 'received'], true);
+        return $sendStatus !== null && in_array($sendStatus, ['processing', 'sent', 'ready_for_pickup', 'received'], true);
     }
 }
