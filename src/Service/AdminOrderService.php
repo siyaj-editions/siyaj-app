@@ -32,6 +32,11 @@ class AdminOrderService
         }
 
         $order->setStatus(OrderStatus::from($status));
+
+        if ($order->getStatus() === OrderStatus::CANCELED || $order->getStatus() === OrderStatus::REFUNDED) {
+            $order->setSendStatus(OrderSend::CANCELED);
+        }
+
         $this->entityManager->flush();
 
         return true;
