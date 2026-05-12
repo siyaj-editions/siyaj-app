@@ -79,8 +79,8 @@
                                     {% set paymentBadgeClass = {
                                         'pending': 'bg-amber-100 text-amber-800',
                                         'paid': 'bg-emerald-100 text-emerald-800',
-                                        'cancelled': 'bg-wine/10 text-wine',
-                                        'canceled': 'bg-wine/10 text-wine'
+                                        'cancelled': 'bg-rose-100 text-rose-800',
+                                        'canceled': 'bg-rose-100 text-rose-800'
                                     }[order.status.value]|default('bg-ink/5 text-ink/65') %}
                                     <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-3 mb-1">
@@ -97,6 +97,7 @@
                                             {% if order.sendStatus.value == 'processing' %}bg-amber-100 text-amber-800
                                             {% elseif order.sendStatus.value == 'sent' %}bg-blue-100 text-blue-700
                                             {% elseif order.sendStatus.value == 'received' %}bg-emerald-100 text-emerald-800
+                                            {% elseif order.sendStatus.value == 'canceled' %}bg-rose-100 text-rose-800
                                             {% else %}bg-ink/5 text-ink/65{% endif %}">
                                             {{ order.sendStatus.label }}
                                         </span>
