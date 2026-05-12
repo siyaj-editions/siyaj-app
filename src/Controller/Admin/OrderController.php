@@ -51,8 +51,14 @@ class OrderController extends AbstractController
         AdminOrderService $adminOrderService
     ): Response {
         $sendStatus = $request->request->get('send_status');
-        if ($adminOrderService->updateOrderSendStatus($order, is_string($sendStatus) ? $sendStatus : null)) {
+        $result = $adminOrderService->updateOrderSendStatus($order, is_string($sendStatus) ? $sendStatus : null);
+
+        if ($result === 'updated') {
             $this->addFlash('success', 'Le statut d’envoi a été mis à jour.');
+        } elseif ($result === 'email_failed') {
+            $this->addFlash('warning', 'Le statut d’envoi a été mis à jour, mais l’email client n’a pas pu être envoyé.');
+        } else {
+            $this->addFlash('error', 'Veuillez choisir un statut d’envoi valide.');
         }
 
         return $this->redirectToRoute('app_admin_order_show', ['id' => $order->getId()]);

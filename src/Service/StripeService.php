@@ -188,6 +188,7 @@ class StripeService
 
         if ($statusChanged) {
             $this->entityManager->flush();
+            $this->notifyUserOrderPaid($order);
         }
 
         if ($order->getPaidNotificationSentAt() !== null) {
@@ -262,6 +263,34 @@ class StripeService
             return true;
         } catch (\Throwable $exception) {
             $this->logger->error('Unable to notify admins after order payment confirmation', [
+                'order_id' => $order->getId(),
+                'message' => $exception->getMessage(),
+            ]);
+
+            return false;
+        }
+    }
+
+    private function notifyUserOrderPaid(Order $order): bool
+    {
+        $user = $order->getUser();
+        $userEmail = $user?->getEmail();
+
+        if (!$userEmail) {
+            return false;
+        }
+
+        try {
+            $this->orderNotificationService->sendPaidOrderCustomerNotification($order);
+            $this->logger->info('Customer confirmation email sent after order payment confirmation', [
+                'order_id' => $order->getId(),
+                'reference' => $order->getReference(),
+                'email' => $userEmail,
+            ]);
+
+            return true;
+        } catch (\Throwable $exception) {
+            $this->logger->error('Unable to notify customer after order payment confirmation', [
                 'order_id' => $order->getId(),
                 'message' => $exception->getMessage(),
             ]);
