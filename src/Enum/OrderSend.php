@@ -7,6 +7,7 @@ enum OrderSend: string
     case PROCESSING = 'processing';
     case SENT = 'sent';
     case RECEIVED = 'received';
+    case CANCELED = 'canceled';
 
     public function getLabel(): string
     {
@@ -14,6 +15,7 @@ enum OrderSend: string
             self::PROCESSING => 'En cours de traitement',
             self::SENT => 'Envoyée',
             self::RECEIVED => 'Reçue',
+            self::CANCELED => 'Annulée',
         };
     }
 }
