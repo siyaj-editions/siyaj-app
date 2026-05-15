@@ -33,6 +33,25 @@ final class NotificationMailer
         return $this->mailConfiguration->adminAddress($name);
     }
 
+    public function recipientAddress(string $email, ?string $name = null): Address
+    {
+        return $name !== null && $name !== ''
+            ? new Address($email, $name)
+            : new Address($email);
+    }
+
+    public function newAdminEmail(string $fromName = 'SIYAJ Éditions', string $adminName = 'Administration SIYAJ'): Email
+    {
+        return $this->newEmail($fromName)
+            ->to($this->adminAddress($adminName));
+    }
+
+    public function newAdminTemplatedEmail(string $fromName = 'SIYAJ Éditions', string $adminName = 'Administration SIYAJ'): TemplatedEmail
+    {
+        return $this->newTemplatedEmail($fromName)
+            ->to($this->adminAddress($adminName));
+    }
+
     public function send(RawMessage $message): void
     {
         $this->mailer->send($message);

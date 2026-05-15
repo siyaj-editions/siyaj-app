@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\Order;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OrderNotificationService
@@ -25,7 +24,7 @@ class OrderNotificationService
 
         $email = $this->notificationMailer
             ->newTemplatedEmail('SIYAJ Éditions')
-            ->to(new Address($userEmail, $user->getFullName()))
+            ->to($this->notificationMailer->recipientAddress($userEmail, $user->getFullName()))
             ->subject(sprintf('Votre commande %s a été expédiée', $order->getReference()))
             ->htmlTemplate('emails/order_shipped.html.twig')
             ->textTemplate('emails/order_shipped.txt.twig')
@@ -40,8 +39,7 @@ class OrderNotificationService
     public function sendPaidOrderAdminNotification(Order $order): void
     {
         $email = $this->notificationMailer
-            ->newTemplatedEmail('SIYAJ Éditions')
-            ->to($this->notificationMailer->adminAddress('Administration SIYAJ'))
+            ->newAdminTemplatedEmail('SIYAJ Éditions', 'Administration SIYAJ')
             ->subject(sprintf('Nouvelle commande payée : %s', $order->getReference()))
             ->htmlTemplate('emails/order_paid_admin.html.twig')
             ->textTemplate('emails/order_paid_admin.txt.twig')
@@ -64,7 +62,7 @@ class OrderNotificationService
 
         $email = $this->notificationMailer
             ->newEmail('SIYAJ Éditions')
-            ->to(new Address($userEmail, $user->getFullName()))
+            ->to($this->notificationMailer->recipientAddress($userEmail, $user->getFullName()))
             ->subject(sprintf('Nous avons bien reçu ta commande #%s', $order->getReference()))
             ->text(implode("\n", [
                 sprintf('Merci d’avoir passé commande sur le site Siyaj-Editions.com. Ta commande #%s est en cours de traitement.', $order->getReference()),
@@ -87,7 +85,7 @@ class OrderNotificationService
 
         $email = $this->notificationMailer
             ->newEmail('SIYAJ Éditions')
-            ->to(new Address($userEmail, $user->getFullName()))
+            ->to($this->notificationMailer->recipientAddress($userEmail, $user->getFullName()))
             ->subject(sprintf('Ta commande %s est prête à être retirée', $order->getReference()))
             ->text(implode("\n", [
                 'Bonjour,',

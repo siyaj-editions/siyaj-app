@@ -16,8 +16,7 @@ class ContactService
         $subjectLabel = $this->labelForSubject((string) $contactMessage->getSubject());
 
         $email = $this->notificationMailer
-            ->newEmail('SIYAJ Editions')
-            ->to($this->notificationMailer->adminAddress('SIYAJ Editions'))
+            ->newAdminEmail('SIYAJ Editions', 'SIYAJ Editions')
             ->subject(sprintf('[Contact] %s', $subjectLabel))
             ->text($this->buildPlainTextBody($contactMessage, $subjectLabel));
 

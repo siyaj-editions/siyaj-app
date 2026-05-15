@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Repository\PasswordResetCodeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PasswordResetService
@@ -48,7 +47,7 @@ class PasswordResetService
 
         $emailMessage = $this->notificationMailer
             ->newEmail('SIYAJ Editions')
-            ->to(new Address($normalizedEmail))
+            ->to($this->notificationMailer->recipientAddress($normalizedEmail))
             ->subject('Ton code de réinitialisation SIYAJ')
             ->text(implode("\n", [
                 'Bonjour,',

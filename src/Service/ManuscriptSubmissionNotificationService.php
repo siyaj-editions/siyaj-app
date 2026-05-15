@@ -16,8 +16,7 @@ class ManuscriptSubmissionNotificationService
     public function sendAdminNotification(ManuscriptSubmission $submission): void
     {
         $email = $this->notificationMailer
-            ->newTemplatedEmail('SIYAJ Éditions')
-            ->to($this->notificationMailer->adminAddress('Administration SIYAJ'))
+            ->newAdminTemplatedEmail('SIYAJ Éditions', 'Administration SIYAJ')
             ->subject(sprintf('Nouveau manuscrit reçu : %s', (string) $submission->getBookTitle()))
             ->htmlTemplate('emails/manuscript_submission_admin.html.twig')
             ->textTemplate('emails/manuscript_submission_admin.txt.twig')
