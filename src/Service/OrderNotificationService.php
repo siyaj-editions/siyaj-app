@@ -3,19 +3,14 @@
 namespace App\Service;
 
 use App\Entity\Order;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class OrderNotificationService
 {
     public function __construct(
-        private readonly MailerInterface $mailer,
+        private readonly NotificationMailer $notificationMailer,
         private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly string $mailerFromEmail,
-        private readonly string $contactEmail,
     ) {
     }
 
@@ -28,8 +23,8 @@ class OrderNotificationService
             return;
         }
 
-        $email = (new TemplatedEmail())
-            ->from(new Address($this->mailerFromEmail, 'SIYAJ Éditions'))
+        $email = $this->notificationMailer
+            ->newTemplatedEmail('SIYAJ Éditions')
             ->to(new Address($userEmail, $user->getFullName()))
             ->subject(sprintf('Votre commande %s a été expédiée', $order->getReference()))
             ->htmlTemplate('emails/order_shipped.html.twig')
@@ -39,14 +34,14 @@ class OrderNotificationService
                 'orderUrl' => $this->urlGenerator->generate('app_account_order_show', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);
 
-        $this->mailer->send($email);
+        $this->notificationMailer->send($email);
     }
 
     public function sendPaidOrderAdminNotification(Order $order): void
     {
-        $email = (new TemplatedEmail())
-            ->from(new Address($this->mailerFromEmail, 'SIYAJ Éditions'))
-            ->to(new Address($this->contactEmail, 'Administration SIYAJ'))
+        $email = $this->notificationMailer
+            ->newTemplatedEmail('SIYAJ Éditions')
+            ->to($this->notificationMailer->adminAddress('Administration SIYAJ'))
             ->subject(sprintf('Nouvelle commande payée : %s', $order->getReference()))
             ->htmlTemplate('emails/order_paid_admin.html.twig')
             ->textTemplate('emails/order_paid_admin.txt.twig')
@@ -55,7 +50,7 @@ class OrderNotificationService
                 'adminOrderUrl' => $this->urlGenerator->generate('app_admin_order_show', ['id' => $order->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);
 
-        $this->mailer->send($email);
+        $this->notificationMailer->send($email);
     }
 
     public function sendPaidOrderCustomerNotification(Order $order): void
@@ -67,8 +62,8 @@ class OrderNotificationService
             return;
         }
 
-        $email = (new Email())
-            ->from(new Address($this->mailerFromEmail, 'SIYAJ Éditions'))
+        $email = $this->notificationMailer
+            ->newEmail('SIYAJ Éditions')
             ->to(new Address($userEmail, $user->getFullName()))
             ->subject(sprintf('Nous avons bien reçu ta commande #%s', $order->getReference()))
             ->text(implode("\n", [
@@ -78,7 +73,7 @@ class OrderNotificationService
                 'L’équipe Siyaj Editions',
             ]));
 
-        $this->mailer->send($email);
+        $this->notificationMailer->send($email);
     }
 
     public function sendReadyForPickupNotification(Order $order): void
@@ -90,8 +85,8 @@ class OrderNotificationService
             return;
         }
 
-        $email = (new Email())
-            ->from(new Address($this->mailerFromEmail, 'SIYAJ Éditions'))
+        $email = $this->notificationMailer
+            ->newEmail('SIYAJ Éditions')
             ->to(new Address($userEmail, $user->getFullName()))
             ->subject(sprintf('Ta commande %s est prête à être retirée', $order->getReference()))
             ->text(implode("\n", [
@@ -104,6 +99,6 @@ class OrderNotificationService
                 'L’Equipe Siyaj',
             ]));
 
-        $this->mailer->send($email);
+        $this->notificationMailer->send($email);
     }
 }

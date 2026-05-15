@@ -7,9 +7,7 @@ use App\Entity\User;
 use App\Repository\PasswordResetCodeRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PasswordResetService
@@ -21,9 +19,8 @@ class PasswordResetService
         private readonly UserRepository $userRepository,
         private readonly PasswordResetCodeRepository $passwordResetCodeRepository,
         private readonly EntityManagerInterface $entityManager,
-        private readonly MailerInterface $mailer,
+        private readonly NotificationMailer $notificationMailer,
         private readonly UserPasswordHasherInterface $passwordHasher,
-        private readonly string $mailerFromEmail,
         private readonly string $appSecret,
     ) {
     }
@@ -49,8 +46,8 @@ class PasswordResetService
         $this->entityManager->persist($resetCode);
         $this->entityManager->flush();
 
-        $emailMessage = (new Email())
-            ->from(new Address($this->mailerFromEmail, 'SIYAJ Editions'))
+        $emailMessage = $this->notificationMailer
+            ->newEmail('SIYAJ Editions')
             ->to(new Address($normalizedEmail))
             ->subject('Ton code de réinitialisation SIYAJ')
             ->text(implode("\n", [
@@ -62,7 +59,7 @@ class PasswordResetService
                 'Si tu n’es pas à l’origine de cette demande, tu peux ignorer ce message.',
             ]));
 
-        $this->mailer->send($emailMessage);
+        $this->notificationMailer->send($emailMessage);
     }
 
     public function verifyCodeAndResetPassword(string $email, string $code, string $newPassword): string

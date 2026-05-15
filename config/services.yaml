@@ -35,25 +35,15 @@ services:
             $stripeSecretKey: '%stripe_secret_key%'
             $stripeWebhookSecret: '%stripe_webhook_secret%'
 
-    App\Service\ContactService:
+    App\Service\MailConfiguration:
         arguments:
-            $contactEmail: '%contact_email%'
             $mailerFromEmail: '%mailer_from_email%'
+            $contactEmail: '%contact_email%'
 
     App\Service\PasswordResetService:
         arguments:
-            $mailerFromEmail: '%mailer_from_email%'
             $appSecret: '%kernel.secret%'
 
-    App\Service\OrderNotificationService:
-        arguments:
-            $mailerFromEmail: '%mailer_from_email%'
-            $contactEmail: '%contact_email%'
-
-    App\Service\ManuscriptSubmissionNotificationService:
-        arguments:
-            $mailerFromEmail: '%mailer_from_email%'
-            $contactEmail: '%contact_email%'
 
     App\Service\BookCoverStorage:
         arguments:

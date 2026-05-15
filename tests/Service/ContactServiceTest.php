@@ -4,6 +4,8 @@ namespace App\Tests\Service;
 
 use App\Model\ContactMessage;
 use App\Service\ContactService;
+use App\Service\MailConfiguration;
+use App\Service\NotificationMailer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -38,7 +40,12 @@ class ContactServiceTest extends TestCase
                 return true;
             }));
 
-        $service = new ContactService($mailer, 'contact@siyaj-editions.fr', 'noreply@siyaj-editions.fr');
+        $notificationMailer = new NotificationMailer(
+            $mailer,
+            new MailConfiguration('noreply@siyaj-editions.fr', 'contact@siyaj-editions.fr')
+        );
+
+        $service = new ContactService($notificationMailer);
         $service->send($contactMessage);
     }
 }
