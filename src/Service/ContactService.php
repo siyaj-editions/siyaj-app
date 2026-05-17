@@ -3,16 +3,11 @@
 namespace App\Service;
 
 use App\Model\ContactMessage;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 
 class ContactService
 {
     public function __construct(
-        private readonly MailerInterface $mailer,
-        private readonly string $contactEmail,
-        private readonly string $mailerFromEmail,
+        private readonly NotificationMailer $notificationMailer,
     ) {
     }
 
@@ -20,13 +15,12 @@ class ContactService
     {
         $subjectLabel = $this->labelForSubject((string) $contactMessage->getSubject());
 
-        $email = (new Email())
-            ->from(new Address($this->mailerFromEmail, 'SIYAJ Editions'))
-            ->to(new Address($this->contactEmail, 'SIYAJ Editions'))
+        $email = $this->notificationMailer
+            ->newAdminEmail('SIYAJ Editions', 'SIYAJ Editions')
             ->subject(sprintf('[Contact] %s', $subjectLabel))
             ->text($this->buildPlainTextBody($contactMessage, $subjectLabel));
 
-        $this->mailer->send($email);
+        $this->notificationMailer->send($email);
     }
 
     private function buildPlainTextBody(ContactMessage $contactMessage, string $subjectLabel): string
