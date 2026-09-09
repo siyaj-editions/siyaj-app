@@ -15,6 +15,12 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ManuscriptSubmissionType extends AbstractType
 {
+    /**
+     * Taille maximale du manuscrit PDF. Les limites PHP (upload_max_filesize / post_max_size)
+     * doivent rester supérieures : voir php.ini (racine) et deploy/php/uploads.ini.
+     */
+    public const MAX_FILE_SIZE = '20M';
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -56,9 +62,12 @@ class ManuscriptSubmissionType extends AbstractType
                 'constraints' => [
                     new NotBlank(message: 'Le manuscrit PDF est requis.'),
                     new File(
-                        maxSize: '20M',
+                        maxSize: self::MAX_FILE_SIZE,
                         extensions: ['pdf'],
-                        extensionsMessage: 'Le manuscrit doit être un fichier PDF.'
+                        extensionsMessage: 'Le manuscrit doit être un fichier PDF.',
+                        maxSizeMessage: 'Le manuscrit est trop volumineux ({{ size }} {{ suffix }}). La taille maximale autorisée est de {{ limit }} {{ suffix }}.',
+                        uploadIniSizeErrorMessage: 'Le manuscrit est trop volumineux pour être envoyé. La taille maximale autorisée est de {{ limit }} {{ suffix }}.',
+                        uploadErrorMessage: 'Le manuscrit n\'a pas pu être envoyé. Merci de réessayer.',
                     ),
                 ],
             ])
@@ -79,6 +88,8 @@ class ManuscriptSubmissionType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ManuscriptSubmission::class,
+            // Affiché si la requête entière dépasse post_max_size (PHP vide alors $_POST et $_FILES).
+            'post_max_size_message' => 'Le fichier envoyé est trop volumineux. Merci de réessayer avec un manuscrit plus léger.',
         ]);
     }
 }
