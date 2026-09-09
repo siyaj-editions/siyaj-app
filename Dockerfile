@@ -11,6 +11,9 @@ RUN apk add --no-cache \
     unzip \
     && docker-php-ext-install -j"$(nproc)" intl pdo_pgsql zip opcache
 
+# Limites d'upload (manuscrits PDF jusqu'à 20 Mo) : l'image n'active aucun php.ini par défaut.
+COPY deploy/php/uploads.ini /usr/local/etc/php/conf.d/zz-siyaj-uploads.ini
+
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
