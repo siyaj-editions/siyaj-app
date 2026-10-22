@@ -1,6 +1,8 @@
 FROM composer:2 AS composer
 
-FROM php:8.4-fpm-alpine AS app
+# PHP épinglé sur 8.4.27 minimum : corrige CVE-2026-109618 / CVE-2026-109619 (« PHP2Shell », RCE).
+# Ne pas redescendre sous cette version.
+FROM php:8.4.27-fpm-alpine AS app
 
 RUN apk add --no-cache \
     bash \
