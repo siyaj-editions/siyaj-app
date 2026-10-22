@@ -30,6 +30,20 @@ make serve
 
 Application: `http://127.0.0.1:8000`
 
+### Limites d'upload PHP (manuscrits PDF jusqu'a 20 Mo)
+
+PHP bloque les uploads a 2 Mo par defaut. Le projet surcharge `upload_max_filesize` / `post_max_size`:
+
+- en local: `php.ini` a la racine, lu automatiquement par `symfony serve` (redemarrer le serveur apres modification)
+- en Docker: `deploy/php/uploads.ini`, copie dans l'image par le `Dockerfile`
+- nginx: `client_max_body_size` dans `deploy/nginx/default.conf`
+
+Si tu lances PHP sans le Symfony CLI, passe les valeurs a la main:
+
+```bash
+php -d upload_max_filesize=25M -d post_max_size=30M -S localhost:8000 -t public/
+```
+
 ## Stack
 
 - Symfony 8 / PHP 8.4

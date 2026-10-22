@@ -1,6 +1,8 @@
 FROM composer:2 AS composer
 
-FROM php:8.4-fpm-alpine AS app
+# PHP épinglé sur 8.4.27 minimum : corrige CVE-2026-109618 / CVE-2026-109619 (« PHP2Shell », RCE).
+# Ne pas redescendre sous cette version.
+FROM php:8.4.27-fpm-alpine AS app
 
 RUN apk add --no-cache \
     bash \
@@ -10,6 +12,9 @@ RUN apk add --no-cache \
     git \
     unzip \
     && docker-php-ext-install -j"$(nproc)" intl pdo_pgsql zip opcache
+
+# Limites d'upload (manuscrits PDF jusqu'à 20 Mo) : l'image n'active aucun php.ini par défaut.
+COPY deploy/php/uploads.ini /usr/local/etc/php/conf.d/zz-siyaj-uploads.ini
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
